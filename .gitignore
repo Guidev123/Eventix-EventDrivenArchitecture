@@ -361,3 +361,5 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/src/API/Eventix.Api/appsettings.Development.json
+/docker-compose.yml
