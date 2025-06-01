@@ -2,7 +2,6 @@
 using Eventix.Modules.Events.Api.Events;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -23,10 +22,7 @@ namespace Eventix.Modules.Events.Api
 
             services.AddDbContext<EventsDbContext>(options =>
             {
-                options.UseNpgsql(connectionString, npgsqlOptions =>
-                {
-                    npgsqlOptions.MigrationsHistoryTable(HistoryRepository.DefaultTableName, Schemas.Events);
-                });
+                options.UseSqlServer(connectionString);
 
                 options.LogTo(Console.WriteLine);
             });

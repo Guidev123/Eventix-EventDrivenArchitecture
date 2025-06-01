@@ -363,3 +363,4 @@ MigrationBackup/
 FodyWeavers.xsd
 /src/API/Eventix.Api/appsettings.Development.json
 /docker-compose.yml
+.containers
