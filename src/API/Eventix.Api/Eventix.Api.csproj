@@ -14,10 +14,7 @@
 		<PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.5" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.5" />
 		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.22.1-Preview.1" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<ProjectReference Include="..\..\Modules\Events\Eventix.Modules.Events.Api\Eventix.Modules.Events.Api.csproj" />
+		<PackageReference Include="Swashbuckle.AspNetCore" Version="8.1.2" />
 	</ItemGroup>
 
 </Project>

@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Eventix.Modules.Events.Api.Database;
+using Microsoft.EntityFrameworkCore;
 
 namespace Eventix.Api.Extensions
 {
@@ -8,7 +9,7 @@ namespace Eventix.Api.Extensions
         {
             using IServiceScope scope = app.ApplicationServices.CreateScope();
 
-            ApplyMigration<DbContext>(scope);
+            ApplyMigration<EventsDbContext>(scope);
         }
 
         private static void ApplyMigration<TDb>(this IServiceScope scope)

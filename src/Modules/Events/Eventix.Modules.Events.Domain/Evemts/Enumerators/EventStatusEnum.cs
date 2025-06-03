@@ -1,4 +1,4 @@
-﻿namespace Eventix.Modules.Events.Api.Events
+﻿namespace Eventix.Modules.Events.Domain.Evemts.Enumerators
 {
     public enum EventStatusEnum
     {

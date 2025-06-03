@@ -1,4 +1,4 @@
-﻿namespace Eventix.Modules.Events.Api.Database
+﻿namespace Eventix.Modules.Events.Infrastructure.Database
 {
     public static class Schemas
     {

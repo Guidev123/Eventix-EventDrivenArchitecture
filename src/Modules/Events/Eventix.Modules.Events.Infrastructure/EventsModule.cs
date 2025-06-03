@@ -1,11 +1,12 @@
-﻿using Eventix.Modules.Events.Api.Database;
-using Eventix.Modules.Events.Api.Events;
+﻿using Eventix.Modules.Events.Application.Events;
+using Eventix.Modules.Events.Infrastructure.Database;
+using Eventix.Modules.Events.Presentation.Events;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Eventix.Modules.Events.Api
+namespace Eventix.Modules.Events.Infrastructure
 {
     public static class EventsModule
     {
@@ -17,7 +18,7 @@ namespace Eventix.Modules.Events.Api
 
         public static IServiceCollection AddEventsModule(this IServiceCollection services, IConfiguration configuration)
         {
-            string connectionString = configuration.GetConnectionString("DefaultConnection")
+            var connectionString = configuration.GetConnectionString("DefaultConnection")
                 ?? throw new InvalidOperationException("Connection string 'DefaultConnection' is not configured.");
 
             services.AddDbContext<EventsDbContext>(options =>

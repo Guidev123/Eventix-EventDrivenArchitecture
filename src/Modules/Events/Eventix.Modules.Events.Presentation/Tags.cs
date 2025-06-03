@@ -1,4 +1,4 @@
-﻿namespace Eventix.Modules.Events.Api
+﻿namespace Eventix.Modules.Events.Presentation
 {
     internal static class Tags
     {
