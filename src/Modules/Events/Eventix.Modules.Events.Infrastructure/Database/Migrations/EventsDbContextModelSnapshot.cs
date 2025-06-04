@@ -25,14 +25,14 @@ namespace Eventix.Modules.Events.Api.Database.Migrations
 
             modelBuilder.Entity("Eventix.Modules.Events.Api.Events.Event", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<Guid>("EventId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
+                    b.HasKey("EventId");
 
                     b.ToTable("Events", "events");
                 });

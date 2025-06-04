@@ -1,4 +1,4 @@
-﻿namespace Eventix.Modules.Events.Domain.Evemts.ValueObjects
+﻿namespace Eventix.Modules.Events.Domain.Events.ValueObjects
 {
     public sealed record EventSpecification
     {

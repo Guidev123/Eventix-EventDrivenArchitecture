@@ -1,6 +1,6 @@
 using Eventix.Api.Configurations;
 using Eventix.Api.Extensions;
-using Eventix.Modules.Events.Api;
+using Eventix.Modules.Events.Infrastructure;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 

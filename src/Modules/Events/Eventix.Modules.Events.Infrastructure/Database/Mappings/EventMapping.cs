@@ -1,4 +1,5 @@
-﻿using Eventix.Modules.Events.Domain.Evemts.Entities;
+﻿using Eventix.Modules.Events.Domain.Events.Entities;
+using Eventix.Modules.Events.Domain.Events.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

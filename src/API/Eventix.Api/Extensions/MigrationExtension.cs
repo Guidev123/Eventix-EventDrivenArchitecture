@@ -1,4 +1,5 @@
 ﻿using Eventix.Modules.Events.Api.Database;
+using Eventix.Modules.Events.Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
 
 namespace Eventix.Api.Extensions
