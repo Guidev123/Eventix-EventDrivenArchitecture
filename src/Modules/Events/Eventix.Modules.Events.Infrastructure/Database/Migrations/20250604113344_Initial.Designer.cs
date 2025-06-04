@@ -9,10 +9,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace Eventix.Modules.Events.Api.Database.Migrations
+namespace Eventix.Modules.Events.Infrastructure.Database.Migrations
 {
     [DbContext(typeof(EventsDbContext))]
-    [Migration("20250602023106_Initial")]
+    [Migration("20250604113344_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -26,23 +26,23 @@ namespace Eventix.Modules.Events.Api.Database.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Eventix.Modules.Events.Api.Events.Event", b =>
+            modelBuilder.Entity("Eventix.Modules.Events.Domain.Events.Entities.Event", b =>
                 {
-                    b.Property<Guid>("EventId")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
-                    b.HasKey("EventId");
+                    b.HasKey("Id");
 
                     b.ToTable("Events", "events");
                 });
 
-            modelBuilder.Entity("Eventix.Modules.Events.Api.Events.Event", b =>
+            modelBuilder.Entity("Eventix.Modules.Events.Domain.Events.Entities.Event", b =>
                 {
-                    b.OwnsOne("Eventix.Modules.Events.Api.Events.DateRange", "DateRange", b1 =>
+                    b.OwnsOne("Eventix.Modules.Events.Domain.Events.ValueObjects.DateRange", "DateRange", b1 =>
                         {
                             b1.Property<Guid>("EventId")
                                 .HasColumnType("uniqueidentifier");
@@ -63,7 +63,7 @@ namespace Eventix.Modules.Events.Api.Database.Migrations
                                 .HasForeignKey("EventId");
                         });
 
-                    b.OwnsOne("Eventix.Modules.Events.Api.Events.EventSpecification", "Specification", b1 =>
+                    b.OwnsOne("Eventix.Modules.Events.Domain.Events.ValueObjects.EventSpecification", "Specification", b1 =>
                         {
                             b1.Property<Guid>("EventId")
                                 .HasColumnType("uniqueidentifier");
@@ -86,7 +86,7 @@ namespace Eventix.Modules.Events.Api.Database.Migrations
                                 .HasForeignKey("EventId");
                         });
 
-                    b.OwnsOne("Eventix.Modules.Events.Api.Events.Location", "Location", b1 =>
+                    b.OwnsOne("Eventix.Modules.Events.Domain.Events.ValueObjects.Location", "Location", b1 =>
                         {
                             b1.Property<Guid>("EventId")
                                 .HasColumnType("uniqueidentifier");

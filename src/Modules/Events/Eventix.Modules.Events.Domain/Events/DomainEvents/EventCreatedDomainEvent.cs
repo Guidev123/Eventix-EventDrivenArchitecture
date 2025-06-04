@@ -1,6 +1,6 @@
 ﻿using Eventix.Modules.Events.Domain.Shared;
 
-namespace Eventix.Modules.Events.Domain.Events.Entities
+namespace Eventix.Modules.Events.Domain.Events.DomainEvents
 {
     public sealed record EventCreatedDomainEvent : DomainEvent
     {

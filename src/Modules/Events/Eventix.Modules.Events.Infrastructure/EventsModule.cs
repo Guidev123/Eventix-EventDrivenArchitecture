@@ -1,7 +1,6 @@
 ﻿using Eventix.Modules.Events.Application.Abstractions;
 using Eventix.Modules.Events.Application.Abstractions.Data;
 using Eventix.Modules.Events.Domain.Events.Interfaces;
-using Eventix.Modules.Events.Infrastructure.Data;
 using Eventix.Modules.Events.Infrastructure.Database;
 using Eventix.Modules.Events.Infrastructure.Events;
 using Eventix.Modules.Events.Presentation.Events;
@@ -46,13 +45,6 @@ namespace Eventix.Modules.Events.Infrastructure
 
             services.AddScoped<IEventRepository, EventRepository>();
             services.AddScoped<IUnitOfWork>(sp => sp.GetRequiredService<EventsDbContext>());
-            services.AddSingleton(sp =>
-            {
-                var configuration = sp.GetRequiredService<IConfiguration>();
-                var connectionString = configuration.GetConnectionString(DEFAULT_CONNECTION)
-                                       ?? throw new ArgumentNullException(CONNECTION_ERROR_MESSAGE);
-                return new DbConnectionFactory(connectionString);
-            });
         }
     }
 }

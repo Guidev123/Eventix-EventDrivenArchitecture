@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace Eventix.Modules.Events.Api.Database.Migrations
+namespace Eventix.Modules.Events.Infrastructure.Database.Migrations
 {
     /// <inheritdoc />
     public partial class Initial : Migration

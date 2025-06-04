@@ -1,4 +1,5 @@
-﻿using Eventix.Modules.Events.Domain.Events.Enumerators;
+﻿using Eventix.Modules.Events.Domain.Events.DomainEvents;
+using Eventix.Modules.Events.Domain.Events.Enumerators;
 using Eventix.Modules.Events.Domain.Events.ValueObjects;
 using Eventix.Modules.Events.Domain.Shared;
 
