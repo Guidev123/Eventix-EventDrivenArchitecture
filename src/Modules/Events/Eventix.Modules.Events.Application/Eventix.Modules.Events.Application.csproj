@@ -17,4 +17,8 @@
     <PackageReference Include="MidR" Version="2.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="TicketTypes\" />
+  </ItemGroup>
+
 </Project>

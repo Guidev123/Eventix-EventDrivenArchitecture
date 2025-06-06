@@ -73,7 +73,7 @@ namespace Eventix.Modules.Events.Domain.Events.Entities
 
             Raise(new EventCancelledDomainEvent(Id));
 
-            return Result.Failure(EventErrors.NotDraft);
+            return Result.Success();
         }
     }
 }

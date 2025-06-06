@@ -1,12 +1,16 @@
 ﻿using Eventix.Modules.Events.Application.Abstractions;
 using Eventix.Modules.Events.Application.Abstractions.Clock;
 using Eventix.Modules.Events.Application.Abstractions.Data;
+using Eventix.Modules.Events.Domain.Categories.Interfaces;
 using Eventix.Modules.Events.Domain.Events.Interfaces;
+using Eventix.Modules.Events.Domain.TicketTypes.Interfaces;
+using Eventix.Modules.Events.Infrastructure.Categories;
 using Eventix.Modules.Events.Infrastructure.Clock;
-using Eventix.Modules.Events.Infrastructure.Data;
 using Eventix.Modules.Events.Infrastructure.Database;
 using Eventix.Modules.Events.Infrastructure.Events;
-using Eventix.Modules.Events.Presentation.Events;
+using Eventix.Modules.Events.Infrastructure.Factories;
+using Eventix.Modules.Events.Infrastructure.TicketTypes;
+using Eventix.Modules.Events.Presentation;
 using FluentValidation;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
@@ -39,6 +43,32 @@ namespace Eventix.Modules.Events.Infrastructure
 
         private static void AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
+            services.AddEntityFrameworkDbContext(configuration);
+            services.AddRepositories();
+            services.AddSqlConnectionFactory(configuration);
+        }
+
+        private static void AddRepositories(this IServiceCollection services)
+        {
+            services.AddScoped<IEventRepository, EventRepository>();
+            services.AddScoped<ITicketTypeRepository, TicketTypeRepository>();
+            services.AddScoped<ICategoryRepository, CategoryRepository>();
+            services.AddScoped<IUnitOfWork>(sp => sp.GetRequiredService<EventsDbContext>());
+        }
+
+        private static void AddSqlConnectionFactory(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddSingleton<ISqlConnectionFactory, SqlConnectionFactory>(sp =>
+            {
+                var connectionString = configuration.GetConnectionString(DEFAULT_CONNECTION)
+                    ?? throw new InvalidOperationException(CONNECTION_ERROR_MESSAGE);
+
+                return new SqlConnectionFactory(connectionString);
+            });
+        }
+
+        private static void AddEntityFrameworkDbContext(this IServiceCollection services, IConfiguration configuration)
+        {
             var connectionString = configuration.GetConnectionString(DEFAULT_CONNECTION)
                 ?? throw new InvalidOperationException(CONNECTION_ERROR_MESSAGE);
 
@@ -47,16 +77,6 @@ namespace Eventix.Modules.Events.Infrastructure
                 options.UseSqlServer(connectionString);
 
                 options.LogTo(Console.WriteLine);
-            });
-
-            services.AddScoped<IEventRepository, EventRepository>();
-            services.AddScoped<IUnitOfWork>(sp => sp.GetRequiredService<EventsDbContext>());
-            services.AddSingleton<ISqlConnectionFactory, SqlConnectionFactory>(sp =>
-            {
-                var connectionString = configuration.GetConnectionString(DEFAULT_CONNECTION)
-                    ?? throw new InvalidOperationException(CONNECTION_ERROR_MESSAGE);
-
-                return new SqlConnectionFactory(connectionString);
             });
         }
     }

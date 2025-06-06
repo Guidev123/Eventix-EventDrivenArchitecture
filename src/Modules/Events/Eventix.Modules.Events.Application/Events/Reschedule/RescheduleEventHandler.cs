@@ -13,7 +13,7 @@ namespace Eventix.Modules.Events.Application.Events.Reschedule
     {
         public async Task<Result> ExecuteAsync(RescheduleEventCommand request, CancellationToken cancellationToken = default)
         {
-            var @event = await eventRepository.GetByIdAsync(request.EventId);
+            var @event = await eventRepository.GetByIdAsync(request.EventId, cancellationToken);
 
             if (@event is null)
                 return Result.Failure(EventErrors.NotFound(request.EventId));

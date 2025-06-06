@@ -7,13 +7,13 @@ using Eventix.Modules.Events.Domain.TicketTypes.Interfaces;
 
 namespace Eventix.Modules.Events.Application.Events.Publish
 {
-    public sealed class PublishEventHandler(IEventRepository eventRepository,
-                                            ITickeTypeRepository tickeTypeRepository,
+    internal sealed class PublishEventHandler(IEventRepository eventRepository,
+                                            ITicketTypeRepository tickeTypeRepository,
                                             IUnitOfWork unitOfWork) : ICommandHandler<PublishEventCommand, PublishEventResponse>
     {
         public async Task<Result<PublishEventResponse>> ExecuteAsync(PublishEventCommand request, CancellationToken cancellationToken = default)
         {
-            var @event = await eventRepository.GetByIdAsync(request.EventId).ConfigureAwait(false);
+            var @event = await eventRepository.GetByIdAsync(request.EventId, cancellationToken).ConfigureAwait(false);
             if (@event is null)
                 return Result.Failure<PublishEventResponse>(EventErrors.NotFound(request.EventId));
 

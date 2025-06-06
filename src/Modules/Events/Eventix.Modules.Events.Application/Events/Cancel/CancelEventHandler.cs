@@ -13,13 +13,15 @@ namespace Eventix.Modules.Events.Application.Events.Cancel
     {
         public async Task<Result> ExecuteAsync(CancelEventCommand request, CancellationToken cancellationToken = default)
         {
-            var @event = await eventRepository.GetByIdAsync(request.EventId).ConfigureAwait(false);
+            var @event = await eventRepository.GetByIdAsync(request.EventId, cancellationToken).ConfigureAwait(false);
             if (@event is null)
                 return Result.Failure(EventErrors.NotFound(request.EventId));
 
             var result = @event.Cancel(dateTimeProvider.UtcNow);
             if (result.IsFailure)
                 return Result.Failure(result.Error);
+
+            eventRepository.Update(@event);
 
             var rows = await unitOfWork.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
 

@@ -1,4 +1,4 @@
-﻿using Eventix.Modules.Events.Application.Events.Create;
+﻿using Eventix.Modules.Events.Application.Events.Publish;
 using Eventix.Modules.Events.Presentation.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
@@ -7,17 +7,18 @@ using MidR.Interfaces;
 
 namespace Eventix.Modules.Events.Presentation.Events
 {
-    internal static class CreateEvent
+    internal static class PublishEvent
     {
         public static void MapEndpoint(IEndpointRouteBuilder app)
         {
-            app.MapPost("api/v1/events", async (CreateEventCommand command, IMediator mediator) =>
+            app.MapPut("api/v1/events/{id:guid}/publish", async (Guid id, IMediator mediator) =>
             {
                 return (await mediator
-                .DispatchAsync(command)
+                .DispatchAsync(new PublishEventCommand(id))
                 .ConfigureAwait(false))
-                .Match(Results.Created, ApiResults.Problem);
-            }).WithTags(Tags.Events);
+                .Match(Results.NoContent, ApiResults.Problem);
+            })
+            .WithTags(Tags.Events);
         }
     }
 }

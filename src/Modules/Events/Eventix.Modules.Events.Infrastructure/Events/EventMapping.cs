@@ -1,9 +1,10 @@
-﻿using Eventix.Modules.Events.Domain.Events.Entities;
+﻿using Eventix.Modules.Events.Domain.Categories.Entities;
+using Eventix.Modules.Events.Domain.Events.Entities;
 using Eventix.Modules.Events.Domain.Events.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Eventix.Modules.Events.Infrastructure.Database.Mappings
+namespace Eventix.Modules.Events.Infrastructure.Events
 {
     public sealed class EventMapping : IEntityTypeConfiguration<Event>
     {
@@ -61,6 +62,8 @@ namespace Eventix.Modules.Events.Infrastructure.Database.Mappings
                     .HasColumnName(nameof(Location.State))
                     .HasColumnType("VARCHAR(50)");
             });
+
+            builder.HasOne<Category>().WithMany();
         }
     }
 }

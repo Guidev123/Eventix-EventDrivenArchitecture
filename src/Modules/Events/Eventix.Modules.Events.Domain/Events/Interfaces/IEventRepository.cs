@@ -6,6 +6,8 @@ namespace Eventix.Modules.Events.Domain.Events.Interfaces
     {
         void Insert(Event @event);
 
-        Task<Event?> GetByIdAsync(Guid id);
+        void Update(Event @event);
+
+        Task<Event?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
     }
 }

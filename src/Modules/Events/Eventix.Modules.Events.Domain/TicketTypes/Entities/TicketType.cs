@@ -1,36 +1,34 @@
 ﻿using Eventix.Modules.Events.Domain.Shared;
+using Eventix.Modules.Events.Domain.TicketTypes.DomainEvents;
+using Eventix.Modules.Events.Domain.TicketTypes.ValueObjects;
 
 namespace Eventix.Modules.Events.Domain.TicketTypes.Entities
 {
     public sealed class TicketType : Entity
     {
-        private TicketType(Guid eventId, string name, decimal price, string currency, decimal quantity)
+        private TicketType(Guid eventId, string name, decimal price, string currency, int quantity)
         {
             EventId = eventId;
-            Name = name;
-            Price = price;
-            Currency = currency;
-            Quantity = quantity;
+            Specification = (name, quantity);
+            Price = (price, currency);
         }
 
         private TicketType()
         { }
 
         public Guid EventId { get; private set; }
-        public string Name { get; private set; } = null!;
-        public decimal Price { get; private set; }
-        public string Currency { get; private set; } = null!;
-        public decimal Quantity { get; private set; }
+        public TicketTypeSpecification Specification { get; private set; } = null!;
+        public Money Price { get; private set; } = null!;
 
-        public static TicketType Create(Guid eventId, string name, decimal price, string currency, decimal quantity)
+        public static TicketType Create(Guid eventId, string name, decimal price, string currency, int quantity)
             => new(eventId, name, price, currency, quantity);
 
         public void UpdatePrice(decimal price)
         {
-            if (Price == price) return;
-            Price = price;
+            if (Price.Amount == price) return;
+            Price = new Money(price, Price.Currency);
 
-            Raise(new TicketTypePriceChangedDomainEvent(Id, Price));
+            Raise(new TicketTypePriceChangedDomainEvent(Id, Price.Amount));
         }
     }
 }

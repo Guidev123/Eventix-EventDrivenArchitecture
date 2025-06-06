@@ -1,4 +1,5 @@
-﻿using Eventix.Modules.Events.Domain.Shared;
+﻿using Eventix.Modules.Events.Domain.Categories.DomainEvents;
+using Eventix.Modules.Events.Domain.Shared;
 
 namespace Eventix.Modules.Events.Domain.Categories.Entities
 {
@@ -13,7 +14,7 @@ namespace Eventix.Modules.Events.Domain.Categories.Entities
         private Category()
         { }
 
-        public string Name { get; private set; }
+        public string Name { get; private set; } = string.Empty;
 
         public bool IsArchived { get; private set; }
 

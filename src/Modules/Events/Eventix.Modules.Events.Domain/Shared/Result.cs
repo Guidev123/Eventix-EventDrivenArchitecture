@@ -39,7 +39,7 @@ namespace Eventix.Modules.Events.Domain.Shared
         [NotNull]
         public TValue Value => IsSuccess
             ? _value!
-            : throw new InvalidOperationException("Cannot access Value on a failed Result.");
+            : throw new InvalidOperationException("Cannot access Amount on a failed Result.");
 
         public static implicit operator Result<TValue>(TValue? value) =>
             value is not null ? Success(value) : Failure<TValue>(Error.None);

@@ -60,10 +60,8 @@ namespace Eventix.Modules.Events.Application.Events.Search
         private static async Task<int> GetTotalCountAsync(IDbConnection connection, SearchEventsParameters parameters)
         {
             const string sql = @"
-                SELECT SUM(s.row_count) FROM sys.dm_db_partition_stats AS s
-                WHERE OBJECT_NAME(object_id) = 'Events'
-                AND s.index_id IN (0, 1)
-                AND (@CategoryId IS NULL OR CategoryId = @CategoryId)
+                SELECT COUNT(*) FROM events.Events
+                WHERE (@CategoryId IS NULL OR CategoryId = @CategoryId)
                 AND (@StartDate IS NULL OR StartsAtUtc >= @StartDate)
                 AND (@EndDate IS NULL OR EndsAtUtc <= @EndDate);";
 
