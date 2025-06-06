@@ -1,6 +1,9 @@
 ﻿using Eventix.Modules.Events.Application.Abstractions;
+using Eventix.Modules.Events.Application.Abstractions.Clock;
 using Eventix.Modules.Events.Application.Abstractions.Data;
 using Eventix.Modules.Events.Domain.Events.Interfaces;
+using Eventix.Modules.Events.Infrastructure.Clock;
+using Eventix.Modules.Events.Infrastructure.Data;
 using Eventix.Modules.Events.Infrastructure.Database;
 using Eventix.Modules.Events.Infrastructure.Events;
 using Eventix.Modules.Events.Presentation.Events;
@@ -9,6 +12,7 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using MidR.DependencyInjection;
 
 namespace Eventix.Modules.Events.Infrastructure
@@ -25,6 +29,8 @@ namespace Eventix.Modules.Events.Infrastructure
         {
             services.AddMidR(AssemblyReference.Assembly);
             services.AddValidatorsFromAssembly(AssemblyReference.Assembly, includeInternalTypes: true);
+
+            services.TryAddSingleton<IDateTimeProvider, DateTimeProvider>();
 
             services.AddInfrastructure(configuration);
 
@@ -45,6 +51,13 @@ namespace Eventix.Modules.Events.Infrastructure
 
             services.AddScoped<IEventRepository, EventRepository>();
             services.AddScoped<IUnitOfWork>(sp => sp.GetRequiredService<EventsDbContext>());
+            services.AddSingleton<ISqlConnectionFactory, SqlConnectionFactory>(sp =>
+            {
+                var connectionString = configuration.GetConnectionString(DEFAULT_CONNECTION)
+                    ?? throw new InvalidOperationException(CONNECTION_ERROR_MESSAGE);
+
+                return new SqlConnectionFactory(connectionString);
+            });
         }
     }
 }

@@ -1,20 +1,24 @@
 ﻿using Eventix.Modules.Events.Application.Abstractions.Data;
+using Eventix.Modules.Events.Application.Abstractions.Messaging;
+using Eventix.Modules.Events.Domain.Events.Errors;
 using Eventix.Modules.Events.Domain.Events.Interfaces;
-using MidR.Interfaces;
+using Eventix.Modules.Events.Domain.Shared;
 
 namespace Eventix.Modules.Events.Application.Events.Create
 {
-    public sealed class CreateEventHandler(IEventRepository repository, IUnitOfWork unitOfWork) : IRequestHandler<CreateEventCommand, CreateEventResponse>
+    public sealed class CreateEventHandler(IEventRepository repository, IUnitOfWork unitOfWork) : ICommandHandler<CreateEventCommand, CreateEventResponse>
     {
-        public async Task<CreateEventResponse> ExecuteAsync(CreateEventCommand request, CancellationToken cancellationToken = default)
+        public async Task<Result<CreateEventResponse>> ExecuteAsync(CreateEventCommand request, CancellationToken cancellationToken = default)
         {
             var @event = CreateEventCommand.ToEvent(request);
 
             repository.Insert(@event);
 
-            await unitOfWork.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+            var rows = await unitOfWork.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+            if (rows < 0)
+                return Result.Failure<CreateEventResponse>(EventErrors.UnableToCreateEvent);
 
-            return new(@event.Id);
+            return Result.Success(new CreateEventResponse(@event.Id));
         }
     }
 }

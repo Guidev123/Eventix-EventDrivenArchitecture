@@ -1,28 +1,43 @@
 ﻿using Eventix.Modules.Events.Domain.Events.Enumerators;
-using Eventix.Modules.Events.Domain.Events.ValueObjects;
 using System.Text.Json.Serialization;
 
 namespace Eventix.Modules.Events.Application.Events.Get
 {
     public record GetEventByIdResponse
     {
-        public GetEventByIdResponse(Guid id, string title, string description, Location? location, DateTime startsAtUtc, DateTime? endsAtUtc, EventStatusEnum status)
+        public GetEventByIdResponse(Guid id, string title, string description,
+                                    string? street, string? city, string? state,
+                                    string? zipCode, string? number, string? additionalInfo,
+                                    string? neighborhood, DateTime startsAtUtc,
+                                    DateTime? endsAtUtc, EventStatusEnum status)
         {
             Id = id;
             Title = title;
             Description = description;
-            Location = location;
+            Street = street;
+            City = city;
+            State = state;
+            ZipCode = zipCode;
+            Number = number;
+            AdditionalInfo = additionalInfo;
+            Neighborhood = neighborhood;
             StartsAtUtc = startsAtUtc;
             EndsAtUtc = endsAtUtc;
             Status = status;
         }
 
-        public Guid Id { get; private set; }
-        public string Title { get; private set; }
-        public string Description { get; private set; }
-        public Location? Location { get; private set; }
-        public DateTime StartsAtUtc { get; private set; }
-        public DateTime? EndsAtUtc { get; private set; }
+        public Guid Id { get; set; }
+        public string Title { get; set; } = default!;
+        public string Description { get; set; } = default!;
+        public string? Street { get; set; }
+        public string? City { get; set; }
+        public string? State { get; set; }
+        public string? ZipCode { get; set; }
+        public string? Number { get; set; }
+        public string? AdditionalInfo { get; set; }
+        public string? Neighborhood { get; set; }
+        public DateTime StartsAtUtc { get; set; }
+        public DateTime? EndsAtUtc { get; set; }
         [JsonConverter(typeof(JsonStringEnumConverter))]
         public EventStatusEnum Status { get; private set; }
     }
