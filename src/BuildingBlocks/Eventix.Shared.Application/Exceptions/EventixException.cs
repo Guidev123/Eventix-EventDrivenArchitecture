@@ -1,6 +1,6 @@
-﻿using Eventix.Modules.Events.Domain.Shared;
+﻿using Eventix.Shared.Domain.Responses;
 
-namespace Eventix.Modules.Events.Application.Abstractions.Exceptions
+namespace Eventix.Shared.Application.Exceptions
 {
     public sealed class EventixException : Exception
     {

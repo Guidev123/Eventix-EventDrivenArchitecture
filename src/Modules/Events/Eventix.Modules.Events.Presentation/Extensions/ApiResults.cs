@@ -1,4 +1,4 @@
-﻿using Eventix.Modules.Events.Domain.Shared;
+﻿using Eventix.Shared.Domain.Responses;
 using Microsoft.AspNetCore.Http;
 
 namespace Eventix.Modules.Events.Presentation.Extensions

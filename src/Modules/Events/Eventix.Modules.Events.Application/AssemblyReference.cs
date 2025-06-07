@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 
-namespace Eventix.Modules.Events.Application.Abstractions
+namespace Eventix.Modules.Events.Application
 {
     public static class AssemblyReference
     {

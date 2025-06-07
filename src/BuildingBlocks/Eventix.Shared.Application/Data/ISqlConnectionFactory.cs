@@ -1,6 +1,6 @@
 ﻿using Microsoft.Data.SqlClient;
 
-namespace Eventix.Modules.Events.Application.Abstractions.Data
+namespace Eventix.Shared.Application.Data
 {
     public interface ISqlConnectionFactory
     {

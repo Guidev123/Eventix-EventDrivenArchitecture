@@ -1,7 +1,7 @@
-﻿using Eventix.Modules.Events.Domain.Shared;
+﻿using Eventix.Shared.Domain.Responses;
 using MidR.Interfaces;
 
-namespace Eventix.Modules.Events.Application.Abstractions.Messaging
+namespace Eventix.Shared.Application.Messaging
 {
     public interface ICommandHandler<TCommand> : IRequestHandler<TCommand, Result>
         where TCommand : ICommand;

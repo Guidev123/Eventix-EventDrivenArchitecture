@@ -1,4 +1,4 @@
-﻿namespace Eventix.Modules.Events.Domain.Shared
+﻿namespace Eventix.Shared.Domain.DomainEvents
 {
     public abstract record DomainEvent : IDomainEvent
     {

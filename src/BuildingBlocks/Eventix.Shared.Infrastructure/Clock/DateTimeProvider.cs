@@ -1,6 +1,6 @@
-﻿using Eventix.Modules.Events.Application.Abstractions.Clock;
+﻿using Eventix.Shared.Application.Clock;
 
-namespace Eventix.Modules.Events.Infrastructure.Clock
+namespace Eventix.Shared.Infrastructure.Clock
 {
     internal sealed class DateTimeProvider : IDateTimeProvider
     {

@@ -1,5 +1,5 @@
-﻿using Eventix.Modules.Events.Application.Abstractions.Messaging;
-using Eventix.Modules.Events.Domain.TicketTypes.Entities;
+﻿using Eventix.Modules.Events.Domain.TicketTypes.Entities;
+using Eventix.Shared.Application.Messaging;
 
 namespace Eventix.Modules.Events.Application.TicketTypes.Create
 {

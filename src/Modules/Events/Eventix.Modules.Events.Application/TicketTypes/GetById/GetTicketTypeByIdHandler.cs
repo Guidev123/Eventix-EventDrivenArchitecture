@@ -1,8 +1,8 @@
 ﻿using Dapper;
-using Eventix.Modules.Events.Application.Abstractions.Data;
-using Eventix.Modules.Events.Application.Abstractions.Messaging;
-using Eventix.Modules.Events.Domain.Shared;
 using Eventix.Modules.Events.Domain.TicketTypes.Errors;
+using Eventix.Shared.Application.Data;
+using Eventix.Shared.Application.Messaging;
+using Eventix.Shared.Domain.Responses;
 
 namespace Eventix.Modules.Events.Application.TicketTypes.GetById
 {

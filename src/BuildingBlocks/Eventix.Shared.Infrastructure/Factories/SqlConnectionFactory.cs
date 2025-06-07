@@ -1,7 +1,7 @@
-﻿using Eventix.Modules.Events.Application.Abstractions.Data;
+﻿using Eventix.Shared.Application.Data;
 using Microsoft.Data.SqlClient;
 
-namespace Eventix.Modules.Events.Infrastructure.Factories
+namespace Eventix.Shared.Infrastructure.Factories
 {
     public sealed class SqlConnectionFactory(string connectionString) : ISqlConnectionFactory
     {

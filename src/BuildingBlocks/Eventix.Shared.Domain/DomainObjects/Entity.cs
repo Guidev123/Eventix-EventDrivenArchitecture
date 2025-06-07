@@ -1,4 +1,6 @@
-﻿namespace Eventix.Modules.Events.Domain.Shared
+﻿using Eventix.Shared.Domain.DomainEvents;
+
+namespace Eventix.Shared.Domain.DomainObjects
 {
     public abstract class Entity
     {

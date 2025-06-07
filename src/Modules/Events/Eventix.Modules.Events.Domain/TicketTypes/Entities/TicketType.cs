@@ -1,10 +1,10 @@
-﻿using Eventix.Modules.Events.Domain.Shared;
-using Eventix.Modules.Events.Domain.TicketTypes.DomainEvents;
+﻿using Eventix.Modules.Events.Domain.TicketTypes.DomainEvents;
 using Eventix.Modules.Events.Domain.TicketTypes.ValueObjects;
+using Eventix.Shared.Domain.DomainObjects;
 
 namespace Eventix.Modules.Events.Domain.TicketTypes.Entities
 {
-    public sealed class TicketType : Entity
+    public sealed class TicketType : Entity, IAggregateRoot
     {
         private TicketType(Guid eventId, string name, decimal price, string currency, decimal quantity)
         {

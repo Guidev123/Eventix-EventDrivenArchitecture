@@ -1,9 +1,9 @@
 ﻿using Eventix.Modules.Events.Domain.Categories.DomainEvents;
-using Eventix.Modules.Events.Domain.Shared;
+using Eventix.Shared.Domain.DomainObjects;
 
 namespace Eventix.Modules.Events.Domain.Categories.Entities
 {
-    public sealed class Category : Entity
+    public sealed class Category : Entity, IAggregateRoot
     {
         private Category(string name)
         {

@@ -1,4 +1,4 @@
-﻿namespace Eventix.Modules.Events.Application.Abstractions.Clock
+﻿namespace Eventix.Shared.Application.Clock
 {
     public interface IDateTimeProvider
     {

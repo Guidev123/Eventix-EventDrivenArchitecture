@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\BuildingBlocks\Eventix.Shared.Domain\Eventix.Shared.Domain.csproj" />
+  </ItemGroup>
+
 </Project>

@@ -1,8 +1,9 @@
 ﻿using Eventix.Modules.Events.Domain.TicketTypes.Entities;
+using Eventix.Shared.Domain.Interfaces;
 
 namespace Eventix.Modules.Events.Domain.TicketTypes.Interfaces
 {
-    public interface ITicketTypeRepository : IDisposable
+    public interface ITicketTypeRepository : IRepository<TicketType>
     {
         Task<TicketType?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
 

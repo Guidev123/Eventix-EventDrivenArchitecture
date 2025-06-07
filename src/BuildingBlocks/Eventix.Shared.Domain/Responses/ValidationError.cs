@@ -1,4 +1,4 @@
-﻿namespace Eventix.Modules.Events.Domain.Shared
+﻿namespace Eventix.Shared.Domain.Responses
 {
     public sealed record ValidationError : Error
     {

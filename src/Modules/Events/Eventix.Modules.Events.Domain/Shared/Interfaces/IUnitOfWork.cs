@@ -1,4 +1,4 @@
-﻿namespace Eventix.Modules.Events.Application.Abstractions.Data
+﻿namespace Eventix.Modules.Events.Domain.Shared.Interfaces
 {
     public interface IUnitOfWork
     {

@@ -1,6 +1,6 @@
-﻿using Eventix.Modules.Events.Application.Abstractions.Data;
-using Eventix.Modules.Events.Domain.Categories.Entities;
+﻿using Eventix.Modules.Events.Domain.Categories.Entities;
 using Eventix.Modules.Events.Domain.Events.Entities;
+using Eventix.Modules.Events.Domain.Shared.Interfaces;
 using Eventix.Modules.Events.Domain.TicketTypes.Entities;
 using Microsoft.EntityFrameworkCore;
 

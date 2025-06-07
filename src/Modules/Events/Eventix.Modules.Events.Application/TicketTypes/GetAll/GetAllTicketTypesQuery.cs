@@ -1,4 +1,4 @@
-﻿using Eventix.Modules.Events.Application.Abstractions.Messaging;
+﻿using Eventix.Shared.Application.Messaging;
 
 namespace Eventix.Modules.Events.Application.TicketTypes.GetAll
 {

@@ -2,11 +2,12 @@
 using Eventix.Modules.Events.Domain.Events.Enumerators;
 using Eventix.Modules.Events.Domain.Events.Errors;
 using Eventix.Modules.Events.Domain.Events.ValueObjects;
-using Eventix.Modules.Events.Domain.Shared;
+using Eventix.Shared.Domain.DomainObjects;
+using Eventix.Shared.Domain.Responses;
 
 namespace Eventix.Modules.Events.Domain.Events.Entities
 {
-    public sealed class Event : Entity
+    public sealed class Event : Entity, IAggregateRoot
     {
         private Event(string title, string description, Guid categoryId, DateTime startsAtUtc, DateTime? endsAtUtc)
         {

@@ -1,4 +1,4 @@
-﻿using Eventix.Modules.Events.Domain.Shared;
+﻿using Eventix.Shared.Domain.Responses;
 
 namespace Eventix.Modules.Events.Domain.Events.Errors
 {

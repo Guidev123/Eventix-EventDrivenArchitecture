@@ -1,5 +1,5 @@
-﻿using Eventix.Modules.Events.Application.Abstractions.Messaging;
-using Eventix.Modules.Events.Domain.Events.Entities;
+﻿using Eventix.Modules.Events.Domain.Events.Entities;
+using Eventix.Shared.Application.Messaging;
 
 namespace Eventix.Modules.Events.Application.Events.Create
 {

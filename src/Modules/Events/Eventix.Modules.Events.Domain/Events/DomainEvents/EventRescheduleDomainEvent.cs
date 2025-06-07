@@ -1,4 +1,4 @@
-﻿using Eventix.Modules.Events.Domain.Shared;
+﻿using Eventix.Shared.Domain.DomainEvents;
 
 namespace Eventix.Modules.Events.Domain.Events.DomainEvents
 {

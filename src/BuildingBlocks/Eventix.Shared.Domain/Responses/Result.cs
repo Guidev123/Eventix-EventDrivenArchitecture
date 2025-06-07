@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
-namespace Eventix.Modules.Events.Domain.Shared
+namespace Eventix.Shared.Domain.Responses
 {
     public class Result
     {
