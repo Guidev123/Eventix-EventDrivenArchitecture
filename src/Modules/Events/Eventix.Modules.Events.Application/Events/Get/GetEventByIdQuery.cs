@@ -2,7 +2,7 @@
 
 namespace Eventix.Modules.Events.Application.Events.Get
 {
-    public record GetEventByIdQuery(Guid EventId) : IQuery<GetEventByIdResponse>
+    public record GetEventByIdQuery(Guid EventId) : IQuery<GetEventResponse>
     {
     }
 }

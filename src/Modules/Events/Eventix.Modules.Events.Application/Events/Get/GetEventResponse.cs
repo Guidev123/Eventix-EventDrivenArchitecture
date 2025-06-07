@@ -3,13 +3,13 @@ using System.Text.Json.Serialization;
 
 namespace Eventix.Modules.Events.Application.Events.Get
 {
-    public record GetEventByIdResponse
+    public record GetEventResponse
     {
-        public GetEventByIdResponse(Guid id, string title, string description,
+        public GetEventResponse(Guid id, string title, string description,
                                     string? street, string? city, string? state,
                                     string? zipCode, string? number, string? additionalInfo,
                                     string? neighborhood, DateTime startsAtUtc,
-                                    DateTime? endsAtUtc, EventStatusEnum status)
+                                    DateTime? endsAtUtc, EventStatusEnum status, Guid categoryId)
         {
             Id = id;
             Title = title;
@@ -24,6 +24,7 @@ namespace Eventix.Modules.Events.Application.Events.Get
             StartsAtUtc = startsAtUtc;
             EndsAtUtc = endsAtUtc;
             Status = status;
+            CategoryId = categoryId;
         }
 
         public Guid Id { get; set; }
@@ -40,5 +41,6 @@ namespace Eventix.Modules.Events.Application.Events.Get
         public DateTime? EndsAtUtc { get; set; }
         [JsonConverter(typeof(JsonStringEnumConverter))]
         public EventStatusEnum Status { get; private set; }
+        public Guid CategoryId { get; private set; }
     }
 }

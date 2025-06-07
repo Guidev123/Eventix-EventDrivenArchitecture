@@ -1,14 +1,16 @@
 ﻿using Dapper;
 using Eventix.Modules.Events.Application.Abstractions.Data;
 using Eventix.Modules.Events.Application.Abstractions.Messaging;
+using Eventix.Modules.Events.Application.Categories.GetById;
 using Eventix.Modules.Events.Domain.Shared;
+using System.Data;
 
 namespace Eventix.Modules.Events.Application.Categories.GetAll
 {
     internal sealed class GetCategoriesQueryHandler(ISqlConnectionFactory sqlConnectionFactory)
-        : IQueryHandler<GetAllCategoriesQuery, List<GetAllCategoriesResponse>>
+            : IQueryHandler<GetAllCategoriesQuery, GetAllCategoriesResponse>
     {
-        public async Task<Result<List<GetAllCategoriesResponse>>> ExecuteAsync(
+        public async Task<Result<GetAllCategoriesResponse>> ExecuteAsync(
             GetAllCategoriesQuery request,
             CancellationToken cancellationToken)
         {
@@ -17,19 +19,34 @@ namespace Eventix.Modules.Events.Application.Categories.GetAll
             const string sql =
                 $@"
                 SELECT
-                Id,
-                Name,
-                IsArchived
+                    Id,
+                    Name,
+                    IsArchived
                 FROM events.Categories
                 ORDER BY Name
                 OFFSET @Skip ROWS FETCH NEXT @Take ROWS ONLY;";
 
-            return Result.Success((await connection.QueryAsync<GetAllCategoriesResponse>(sql, new
+            var totalCount = await GetTotalCountAsync(connection);
+
+            var categories = await connection.QueryAsync<GetCategoryResponse>(sql, new
             {
                 Skip = (request.Page - 1) * request.PageSize,
                 Take = request.PageSize
-            }
-            )).AsList());
+            });
+
+            var result = categories.ToList().AsReadOnly();
+
+            return Result.Success(new GetAllCategoriesResponse(request.Page, request.PageSize, totalCount, result));
+        }
+
+        private static async Task<int> GetTotalCountAsync(IDbConnection connection)
+        {
+            const string sql = @"
+                    SELECT SUM(s.row_count) FROM sys.dm_db_partition_stats AS s
+                    WHERE OBJECT_NAME(object_id) = 'Categories'
+                    AND s.index_id IN (0, 1);";
+
+            return await connection.ExecuteScalarAsync<int>(sql);
         }
     }
 }

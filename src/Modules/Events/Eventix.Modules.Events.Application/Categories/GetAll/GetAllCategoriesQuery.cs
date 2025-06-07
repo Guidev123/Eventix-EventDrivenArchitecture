@@ -2,5 +2,5 @@
 
 namespace Eventix.Modules.Events.Application.Categories.GetAll
 {
-    public record GetAllCategoriesQuery(int Page, int PageSize) : IQuery<List<GetAllCategoriesResponse>>;
+    public record GetAllCategoriesQuery(int Page, int PageSize) : IQuery<GetAllCategoriesResponse>;
 }

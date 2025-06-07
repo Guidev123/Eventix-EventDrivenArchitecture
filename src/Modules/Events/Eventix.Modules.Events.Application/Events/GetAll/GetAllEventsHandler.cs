@@ -1,16 +1,37 @@
-﻿using Dapper;
+﻿using Azure.Core;
+using Dapper;
 using Eventix.Modules.Events.Application.Abstractions.Data;
 using Eventix.Modules.Events.Application.Abstractions.Messaging;
+using Eventix.Modules.Events.Application.Events.Get;
 using Eventix.Modules.Events.Domain.Shared;
+using System.Data;
 
 namespace Eventix.Modules.Events.Application.Events.GetAll
 {
-    public sealed class GetAllEventsHandler(ISqlConnectionFactory connectionFactory) : IQueryHandler<GetAllEventsQuery, List<GetAllEventsResponse>>
+    public sealed class GetAllEventsHandler(ISqlConnectionFactory connectionFactory) : IQueryHandler<GetAllEventsQuery, GetAllEventsResponse>
     {
-        public async Task<Result<List<GetAllEventsResponse>>> ExecuteAsync(GetAllEventsQuery request, CancellationToken cancellationToken = default)
+        public async Task<Result<GetAllEventsResponse>> ExecuteAsync(GetAllEventsQuery request, CancellationToken cancellationToken = default)
         {
             using var connection = connectionFactory.Create();
 
+            var events = await GetEventsAsync(connection, request);
+            var count = await GetTotalCountAsync(connection);
+
+            return Result.Success(new GetAllEventsResponse(request.Page, request.PageSize, count, events));
+        }
+
+        private static async Task<int> GetTotalCountAsync(IDbConnection connection)
+        {
+            const string sql = @"
+                SELECT SUM(s.row_count) FROM sys.dm_db_partition_stats AS s
+                WHERE OBJECT_NAME(object_id) = 'Events'
+                AND s.index_id IN (0, 1);";
+
+            return await connection.ExecuteScalarAsync<int>(sql);
+        }
+
+        private static async Task<IReadOnlyCollection<GetEventResponse>> GetEventsAsync(IDbConnection connection, GetAllEventsQuery request)
+        {
             const string sql = @"
                 SELECT
                     Id,
@@ -25,17 +46,17 @@ namespace Eventix.Modules.Events.Application.Events.GetAll
                     Neighborhood,
                     StartsAtUtc,
                     EndsAtUtc,
-                    Status
+                    Status,
+                    CategoryId
                 FROM events.Events
                 ORDER BY StartsAtUtc
                 OFFSET @Skip ROWS FETCH NEXT @Take ROWS ONLY;";
 
-            return Result.Success((await connection.QueryAsync<GetAllEventsResponse>(sql, new
+            return (await connection.QueryAsync<GetEventResponse>(sql, new
             {
-                Skip = request.Page,
-                Take = (request.Page - 1) * request.PageSize
-            }
-            )).AsList());
+                Skip = (request.Page - 1) * request.PageSize,
+                Take = request.PageSize
+            })).AsList();
         }
     }
 }

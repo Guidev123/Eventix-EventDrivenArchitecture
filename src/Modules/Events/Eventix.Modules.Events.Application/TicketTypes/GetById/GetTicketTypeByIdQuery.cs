@@ -2,5 +2,5 @@
 
 namespace Eventix.Modules.Events.Application.TicketTypes.GetById
 {
-    public record GetTicketTypeByIdQuery(Guid TicketTypeId) : IQuery<GetTicketTypeByIdResponse>;
+    public record GetTicketTypeByIdQuery(Guid TicketTypeId) : IQuery<GetTicketTypeResponse>;
 }

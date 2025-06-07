@@ -29,7 +29,7 @@ namespace Eventix.Modules.Events.Application.Events.Search
             return Result.Success(new SearchEventsResponse(request.Page, request.PageSize, totalCount, events));
         }
 
-        private static async Task<IReadOnlyCollection<GetEventByIdResponse>> GetEventsAsync(IDbConnection connection, SearchEventsParameters parameters)
+        private static async Task<IReadOnlyCollection<GetEventResponse>> GetEventsAsync(IDbConnection connection, SearchEventsParameters parameters)
         {
             const string sql = @"
                 SELECT
@@ -45,7 +45,8 @@ namespace Eventix.Modules.Events.Application.Events.Search
                     Neighborhood,
                     StartsAtUtc,
                     EndsAtUtc,
-                    Status
+                    Status,
+                    CategoryId
                 FROM events.Events
                 WHERE Status = @Status
                 AND (@CategoryId IS NULL OR CategoryId = @CategoryId)
@@ -54,7 +55,7 @@ namespace Eventix.Modules.Events.Application.Events.Search
                 ORDER BY StartsAtUtc
                 OFFSET @Skip ROWS FETCH NEXT @Take ROWS ONLY;";
 
-            return (await connection.QueryAsync<GetEventByIdResponse>(sql, parameters)).AsList();
+            return (await connection.QueryAsync<GetEventResponse>(sql, parameters)).AsList();
         }
 
         private static async Task<int> GetTotalCountAsync(IDbConnection connection, SearchEventsParameters parameters)

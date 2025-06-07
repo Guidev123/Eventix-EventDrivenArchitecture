@@ -6,5 +6,5 @@ namespace Eventix.Modules.Events.Application.Events.Search
         int Page,
         int PageSize,
         int TotalCount,
-        IReadOnlyCollection<GetEventByIdResponse> Events);
+        IReadOnlyCollection<GetEventResponse> Events);
 }

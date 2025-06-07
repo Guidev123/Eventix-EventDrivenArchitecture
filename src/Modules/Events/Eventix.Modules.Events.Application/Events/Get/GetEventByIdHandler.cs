@@ -6,9 +6,9 @@ using Eventix.Modules.Events.Domain.Shared;
 
 namespace Eventix.Modules.Events.Application.Events.Get
 {
-    public sealed class GetEventByIdHandler(ISqlConnectionFactory connectionFactory) : IQueryHandler<GetEventByIdQuery, GetEventByIdResponse>
+    public sealed class GetEventByIdHandler(ISqlConnectionFactory connectionFactory) : IQueryHandler<GetEventByIdQuery, GetEventResponse>
     {
-        public async Task<Result<GetEventByIdResponse>> ExecuteAsync(GetEventByIdQuery request, CancellationToken cancellationToken = default)
+        public async Task<Result<GetEventResponse>> ExecuteAsync(GetEventByIdQuery request, CancellationToken cancellationToken = default)
         {
             const string sql = $@"
                 SELECT
@@ -24,15 +24,16 @@ namespace Eventix.Modules.Events.Application.Events.Get
                     Neighborhood,
                     StartsAtUtc,
                     EndsAtUtc,
-                    Status
+                    Status,
+                    CategoryId
                     FROM events.Events WHERE Id = @Id";
 
             using var connection = connectionFactory.Create();
 
-            var eventData = await connection.QuerySingleOrDefaultAsync<GetEventByIdResponse>(sql, new { Id = request.EventId }).ConfigureAwait(false);
+            var eventData = await connection.QuerySingleOrDefaultAsync<GetEventResponse>(sql, new { Id = request.EventId }).ConfigureAwait(false);
 
             if (eventData is null)
-                return Result.Failure<GetEventByIdResponse>(EventErrors.NotFound(request.EventId));
+                return Result.Failure<GetEventResponse>(EventErrors.NotFound(request.EventId));
 
             return Result.Success(eventData);
         }

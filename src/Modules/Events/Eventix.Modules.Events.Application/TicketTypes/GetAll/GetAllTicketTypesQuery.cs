@@ -2,5 +2,5 @@
 
 namespace Eventix.Modules.Events.Application.TicketTypes.GetAll
 {
-    public record GetAllTicketTypesQuery(int Page, int PageSize) : IQuery<List<GetAllTicketTypesResponse>>;
+    public record GetAllTicketTypesQuery(int Page, int PageSize) : IQuery<GetAllTicketTypesResponse>;
 }
