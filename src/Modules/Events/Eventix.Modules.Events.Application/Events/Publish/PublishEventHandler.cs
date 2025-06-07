@@ -21,6 +21,7 @@ namespace Eventix.Modules.Events.Application.Events.Publish
                 return Result.Failure<PublishEventResponse>(EventErrors.NoTicketsFound);
 
             @event.Publish();
+            eventRepository.Update(@event);
 
             var rows = await unitOfWork.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
 

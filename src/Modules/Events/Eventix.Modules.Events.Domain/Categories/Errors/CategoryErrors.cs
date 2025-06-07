@@ -14,5 +14,9 @@ namespace Eventix.Modules.Events.Domain.Categories.Errors
         public static readonly Error FailToCreate = Error.Problem(
             "Categories.Create",
             "An error occurred while creating the category");
+
+        public static readonly Error FailToArchive = Error.Problem(
+            "Categories.Archive",
+            "An error occurred while archiving the category");
     }
 }

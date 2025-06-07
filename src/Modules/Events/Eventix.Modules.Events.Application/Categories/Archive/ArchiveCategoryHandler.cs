@@ -23,7 +23,7 @@ namespace Eventix.Modules.Events.Application.Categories.Archive
             var rows = await unitOfWork.SaveChangesAsync(cancellationToken);
             return rows > 0
                 ? Result.Success()
-                : Result.Failure(Error.Problem("Categories.Archive", "An error occurred while archiving the category."));
+                : Result.Failure(CategoryErrors.FailToArchive);
         }
     }
 }

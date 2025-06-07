@@ -21,13 +21,13 @@ namespace Eventix.Modules.Events.Application.Categories.GetAll
                 Name,
                 IsArchived
                 FROM events.Categories
-                OFFSET @Skip
-                LIMIT @Take";
+                ORDER BY Name
+                OFFSET @Skip ROWS FETCH NEXT @Take ROWS ONLY;";
 
             return Result.Success((await connection.QueryAsync<GetAllCategoriesResponse>(sql, new
             {
-                Skip = request.Page,
-                Take = (request.Page - 1) * request.PageSize
+                Skip = (request.Page - 1) * request.PageSize,
+                Take = request.PageSize
             }
             )).AsList());
         }

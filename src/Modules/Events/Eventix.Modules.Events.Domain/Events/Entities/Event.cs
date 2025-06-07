@@ -8,11 +8,12 @@ namespace Eventix.Modules.Events.Domain.Events.Entities
 {
     public sealed class Event : Entity
     {
-        private Event(string title, string description, DateTime startsAtUtc, DateTime? endsAtUtc)
+        private Event(string title, string description, Guid categoryId, DateTime startsAtUtc, DateTime? endsAtUtc)
         {
             Specification = (title, description);
             DateRange = (startsAtUtc, endsAtUtc);
             Status = EventStatusEnum.Draft;
+            CategoryId = categoryId;
         }
 
         private Event()
@@ -24,13 +25,13 @@ namespace Eventix.Modules.Events.Domain.Events.Entities
         public EventStatusEnum Status { get; private set; }
         public Guid CategoryId { get; private set; }
 
-        public static Result<Event> Create(string title, string description, DateTime startsAtUtc, DateTime? endsAtUtc)
+        public static Result<Event> Create(string title, string description, Guid categoryId, DateTime startsAtUtc, DateTime? endsAtUtc)
         {
             if (endsAtUtc.HasValue && endsAtUtc < startsAtUtc)
             {
                 return Result.Failure<Event>(EventErrors.EndDatePrecedesStartDate);
             }
-            var @event = new Event(title, description, startsAtUtc, endsAtUtc);
+            var @event = new Event(title, description, categoryId, startsAtUtc, endsAtUtc);
 
             @event.Raise(new EventCreatedDomainEvent(@event.Id));
 

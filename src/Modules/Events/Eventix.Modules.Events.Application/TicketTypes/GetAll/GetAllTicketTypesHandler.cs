@@ -21,8 +21,7 @@ namespace Eventix.Modules.Events.Application.TicketTypes.GetAll
                 Quantity
                 FROM events.TicketTypes
                 ORDER BY Name
-                OFFSET @Skip
-                LIMIT @Take";
+                OFFSET @Skip ROWS FETCH NEXT @Take ROWS ONLY;";
 
             return Result.Success((await connection.QueryAsync<GetAllTicketTypesResponse>(sql, new
             {

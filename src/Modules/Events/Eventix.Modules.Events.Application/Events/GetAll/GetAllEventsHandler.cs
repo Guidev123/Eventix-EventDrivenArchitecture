@@ -28,8 +28,7 @@ namespace Eventix.Modules.Events.Application.Events.GetAll
                     Status
                 FROM events.Events
                 ORDER BY StartsAtUtc
-                OFFSET @Skip
-                LIMIT @Take";
+                OFFSET @Skip ROWS FETCH NEXT @Take ROWS ONLY;";
 
             return Result.Success((await connection.QueryAsync<GetAllEventsResponse>(sql, new
             {

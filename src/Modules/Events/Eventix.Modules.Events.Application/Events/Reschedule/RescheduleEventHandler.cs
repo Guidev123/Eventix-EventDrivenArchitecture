@@ -22,6 +22,7 @@ namespace Eventix.Modules.Events.Application.Events.Reschedule
                 return Result.Failure(EventErrors.StartDateInPast);
 
             @event.Reschedule(request.StartsAtUtc, request.EndsAtUtc);
+            eventRepository.Update(@event);
 
             var rows = await unitOfWork.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
 

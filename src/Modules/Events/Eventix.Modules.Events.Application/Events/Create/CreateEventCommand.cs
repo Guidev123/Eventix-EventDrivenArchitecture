@@ -6,11 +6,12 @@ namespace Eventix.Modules.Events.Application.Events.Create
     public record CreateEventCommand(
             string Title,
             string Description,
+            Guid CategoryId,
             DateTime StartsAtUtc,
             DateTime? EndsAtUtc
             ) : ICommand<CreateEventResponse>
     {
         public static Event ToEvent(CreateEventCommand command)
-            => Event.Create(command.Title, command.Description, command.StartsAtUtc, command.EndsAtUtc).Value;
+            => Event.Create(command.Title, command.Description, command.CategoryId, command.StartsAtUtc, command.EndsAtUtc).Value;
     }
 }

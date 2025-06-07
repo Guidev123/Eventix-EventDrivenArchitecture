@@ -14,8 +14,7 @@ namespace Eventix.Modules.Events.Presentation.Events
             app.MapPut("api/v1/events/{id:guid}/reschedule", async (Guid id, RescheduleEventCommand command, IMediator mediator) =>
             {
                 command.SetEventId(id);
-                return (await mediator.DispatchAsync(
-                    new RescheduleEventCommand(command.StartsAtUtc, command.EndsAtUtc))
+                return (await mediator.DispatchAsync(command)
                 .ConfigureAwait(false))
                 .Match(Results.NoContent, ApiResults.Problem);
             })
