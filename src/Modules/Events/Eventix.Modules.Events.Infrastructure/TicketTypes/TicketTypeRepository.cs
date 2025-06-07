@@ -18,6 +18,9 @@ namespace Eventix.Modules.Events.Infrastructure.TicketTypes
         public void Insert(TicketType ticketType)
             => context.TicketTypes.Add(ticketType);
 
+        public void Update(TicketType ticketType)
+            => context.TicketTypes.Update(ticketType);
+
         public void Dispose()
             => context.Dispose();
     }

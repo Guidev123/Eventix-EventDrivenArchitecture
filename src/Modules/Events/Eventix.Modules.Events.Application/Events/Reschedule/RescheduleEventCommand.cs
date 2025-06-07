@@ -2,10 +2,17 @@
 
 namespace Eventix.Modules.Events.Application.Events.Reschedule
 {
-    public record RescheduleEventCommand(
-        Guid EventId,
-        DateTime StartsAtUtc,
-        DateTime? EndsAtUtc) : ICommand
+    public record RescheduleEventCommand : ICommand
     {
+        public RescheduleEventCommand(DateTime startsAtUtc, DateTime? endsAtUtc)
+        {
+            StartsAtUtc = startsAtUtc;
+            EndsAtUtc = endsAtUtc;
+        }
+
+        public Guid? EventId { get; private set; }
+        public DateTime StartsAtUtc { get; private set; }
+        public DateTime? EndsAtUtc { get; private set; }
+        public void SetEventId(Guid id) => EventId = id;
     }
 }

@@ -6,6 +6,7 @@ namespace Eventix.Modules.Events.Application.Events.Publish
     {
         public PublishEventValidator()
         {
+            RuleFor(c => c.EventId).NotEmpty().WithMessage("Event ID must be not empty.");
         }
     }
 }

@@ -6,6 +6,8 @@ namespace Eventix.Modules.Events.Domain.Categories.Interfaces
     {
         Task<Category?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
 
+        void Update(Category category);
+
         void Insert(Category category);
     }
 }

@@ -8,6 +8,8 @@ namespace Eventix.Modules.Events.Domain.TicketTypes.Interfaces
 
         Task<bool> ExistsAsync(Guid eventId, CancellationToken cancellationToken = default);
 
+        void Update(TicketType ticketType);
+
         void Insert(TicketType ticketType);
     }
 }

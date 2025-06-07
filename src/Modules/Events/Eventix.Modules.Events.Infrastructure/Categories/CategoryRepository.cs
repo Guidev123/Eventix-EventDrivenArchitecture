@@ -14,6 +14,9 @@ namespace Eventix.Modules.Events.Infrastructure.Categories
         public void Insert(Category category)
             => context.Categories.Add(category);
 
+        public void Update(Category category)
+            => context.Categories.Update(category);
+
         public void Dispose()
             => context.Dispose();
     }

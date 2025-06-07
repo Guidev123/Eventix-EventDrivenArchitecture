@@ -11,21 +11,15 @@ namespace Eventix.Modules.Events.Presentation.Events
     {
         public static void MapEndpoint(IEndpointRouteBuilder app)
         {
-            app.MapPut("api/v1/events/{id:guid}/reschedule", async (Guid id, Request request, IMediator mediator) =>
+            app.MapPut("api/v1/events/{id:guid}/reschedule", async (Guid id, RescheduleEventCommand command, IMediator mediator) =>
             {
+                command.SetEventId(id);
                 return (await mediator.DispatchAsync(
-                    new RescheduleEventCommand(id, request.StartsAtUtc, request.EndsAtUtc))
+                    new RescheduleEventCommand(command.StartsAtUtc, command.EndsAtUtc))
                 .ConfigureAwait(false))
                 .Match(Results.NoContent, ApiResults.Problem);
             })
             .WithTags(Tags.Events);
-        }
-
-        internal sealed record Request
-        {
-            public DateTime StartsAtUtc { get; init; }
-
-            public DateTime? EndsAtUtc { get; init; }
         }
     }
 }

@@ -16,13 +16,13 @@ namespace Eventix.Modules.Events.Application.Categories.GetAll
 
             const string sql =
                 $@"
-                 SELECT
-                     Id,
-                     Name,
-                     IsArchived
-                 FROM events.Categories
-                 OFFSET @Skip
-                 LIMIT @Take";
+                SELECT
+                Id,
+                Name,
+                IsArchived
+                FROM events.Categories
+                OFFSET @Skip
+                LIMIT @Take";
 
             return Result.Success((await connection.QueryAsync<GetAllCategoriesResponse>(sql, new
             {

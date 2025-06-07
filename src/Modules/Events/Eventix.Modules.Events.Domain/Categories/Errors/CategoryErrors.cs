@@ -10,5 +10,9 @@ namespace Eventix.Modules.Events.Domain.Categories.Errors
         public static readonly Error AlreadyArchived = Error.Problem(
             "Categories.AlreadyArchived",
             "The category was already archived");
+
+        public static readonly Error FailToCreate = Error.Problem(
+            "Categories.Create",
+            "An error occurred while creating the category");
     }
 }

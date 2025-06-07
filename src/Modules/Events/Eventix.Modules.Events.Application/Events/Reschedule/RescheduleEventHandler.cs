@@ -13,10 +13,10 @@ namespace Eventix.Modules.Events.Application.Events.Reschedule
     {
         public async Task<Result> ExecuteAsync(RescheduleEventCommand request, CancellationToken cancellationToken = default)
         {
-            var @event = await eventRepository.GetByIdAsync(request.EventId, cancellationToken);
+            var @event = await eventRepository.GetByIdAsync(request.EventId!.Value, cancellationToken);
 
             if (@event is null)
-                return Result.Failure(EventErrors.NotFound(request.EventId));
+                return Result.Failure(EventErrors.NotFound(request.EventId.Value));
 
             if (request.StartsAtUtc < dateTimeProvider.UtcNow)
                 return Result.Failure(EventErrors.StartDateInPast);
@@ -27,7 +27,7 @@ namespace Eventix.Modules.Events.Application.Events.Reschedule
 
             return rows > 0
                 ? Result.Success()
-                : Result.Failure(EventErrors.UnableToCancelEvent(request.EventId));
+                : Result.Failure(EventErrors.UnableToCancelEvent(request.EventId.Value));
         }
     }
 }

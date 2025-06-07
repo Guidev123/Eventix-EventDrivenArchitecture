@@ -6,7 +6,7 @@ namespace Eventix.Modules.Events.Domain.TicketTypes.Entities
 {
     public sealed class TicketType : Entity
     {
-        private TicketType(Guid eventId, string name, decimal price, string currency, int quantity)
+        private TicketType(Guid eventId, string name, decimal price, string currency, decimal quantity)
         {
             EventId = eventId;
             Specification = (name, quantity);
@@ -20,7 +20,7 @@ namespace Eventix.Modules.Events.Domain.TicketTypes.Entities
         public TicketTypeSpecification Specification { get; private set; } = null!;
         public Money Price { get; private set; } = null!;
 
-        public static TicketType Create(Guid eventId, string name, decimal price, string currency, int quantity)
+        public static TicketType Create(Guid eventId, string name, decimal price, string currency, decimal quantity)
             => new(eventId, name, price, currency, quantity);
 
         public void UpdatePrice(decimal price)
