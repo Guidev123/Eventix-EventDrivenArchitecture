@@ -1,6 +1,6 @@
-﻿using Eventix.Shared.Application.Behaviors;
-using Eventix.Shared.Application.Clock;
+﻿using Eventix.Shared.Application.Clock;
 using Eventix.Shared.Application.Data;
+using Eventix.Shared.Application.Decorators;
 using Eventix.Shared.Application.Messaging;
 using Eventix.Shared.Infrastructure.Clock;
 using Eventix.Shared.Infrastructure.Factories;
@@ -37,14 +37,15 @@ namespace Eventix.Shared.Infrastructure
         private static IServiceCollection AddHandlers(this IServiceCollection services, Assembly[] modulesAssemblies)
         {
             services.AddMidR(modulesAssemblies);
-            AddRequestPipelineBehaviors(services);
+            AddRequestHandlerDecorators(services);
 
             return services;
         }
 
-        private static IServiceCollection AddRequestPipelineBehaviors(this IServiceCollection services)
+        private static IServiceCollection AddRequestHandlerDecorators(this IServiceCollection services)
         {
-            services.Decorate(typeof(IRequestHandler<,>), typeof(LoggingDecorator.RequestHandler<,>));
+            services.Decorate(typeof(IRequestHandler<,>), typeof(ExceptionHandlingDecorator.RequestHandler<,>));
+            services.Decorate(typeof(IRequestHandler<,>), typeof(RequestLoggingDecorator.RequestHandler<,>));
 
             return services;
         }

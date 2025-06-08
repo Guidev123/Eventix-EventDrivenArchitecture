@@ -1,4 +1,5 @@
 ﻿using Eventix.Modules.Events.Domain.Categories.DomainEvents;
+using Eventix.Modules.Events.Domain.Categories.Errors;
 using Eventix.Shared.Domain.DomainObjects;
 
 namespace Eventix.Modules.Events.Domain.Categories.Entities
@@ -9,6 +10,7 @@ namespace Eventix.Modules.Events.Domain.Categories.Entities
         {
             Name = name;
             IsArchived = false;
+            Validate();
         }
 
         private Category()
@@ -43,6 +45,12 @@ namespace Eventix.Modules.Events.Domain.Categories.Entities
             Name = name;
 
             Raise(new CategoryRenamedDomainEvent(Id, Name));
+        }
+
+        protected override void Validate()
+        {
+            AssertionConcern.EnsureNotEmpty(Name, CategoryErrors.NameMustBeNotEmpty.Description);
+            AssertionConcern.EnsureTrue(Name.Length <= 100, CategoryErrors.NameMustBeNotEmpty.Description);
         }
     }
 }

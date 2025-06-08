@@ -15,6 +15,7 @@ namespace Eventix.Modules.Events.Domain.Events.Entities
             DateRange = (startsAtUtc, endsAtUtc);
             Status = EventStatusEnum.Draft;
             CategoryId = categoryId;
+            Validate();
         }
 
         private Event()
@@ -76,6 +77,12 @@ namespace Eventix.Modules.Events.Domain.Events.Entities
             Raise(new EventCancelledDomainEvent(Id));
 
             return Result.Success();
+        }
+
+        protected override void Validate()
+        {
+            AssertionConcern.EnsureNotNull(Specification, EventErrors.SpecificationIsRequired.Description);
+            AssertionConcern.EnsureNotNull(DateRange, EventErrors.DateRangeIsRequired.Description);
         }
     }
 }

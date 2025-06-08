@@ -1,4 +1,5 @@
 ﻿using Eventix.Modules.Events.Domain.TicketTypes.DomainEvents;
+using Eventix.Modules.Events.Domain.TicketTypes.Errors;
 using Eventix.Modules.Events.Domain.TicketTypes.ValueObjects;
 using Eventix.Shared.Domain.DomainObjects;
 
@@ -11,6 +12,7 @@ namespace Eventix.Modules.Events.Domain.TicketTypes.Entities
             EventId = eventId;
             Specification = (name, quantity);
             Price = (price, currency);
+            Validate();
         }
 
         private TicketType()
@@ -29,6 +31,13 @@ namespace Eventix.Modules.Events.Domain.TicketTypes.Entities
             Price = new Money(price, Price.Currency);
 
             Raise(new TicketTypePriceChangedDomainEvent(Id, Price.Amount));
+        }
+
+        protected override void Validate()
+        {
+            AssertionConcern.EnsureTrue(EventId != Guid.Empty, TicketTypeErrors.EventIdIsRequired.Description);
+            AssertionConcern.EnsureNotNull(Specification, TicketTypeErrors.SpecificationIsRequired.Description);
+            AssertionConcern.EnsureNotNull(Price, TicketTypeErrors.PriceIsRequired.Description);
         }
     }
 }

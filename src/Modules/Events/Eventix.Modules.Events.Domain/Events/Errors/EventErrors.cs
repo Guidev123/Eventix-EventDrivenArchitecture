@@ -39,5 +39,69 @@ namespace Eventix.Modules.Events.Domain.Events.Errors
         public static readonly Error UnableToCreateEvent = Error.Problem(
             "Events.UnableToCreateEvent",
             "Unable to create the event. Please try again later.");
+
+        public static readonly Error SpecificationIsRequired = Error.Problem(
+            "Events.SpecificationIsRequired",
+            "The event specification is required.");
+
+        public static readonly Error TitleIsRequired = Error.Problem(
+            "Events.TitleIsRequired",
+            "The event title is required.");
+
+        public static readonly Error TitleLengthInvalid = Error.Problem(
+            "Events.TitleLengthInvalid",
+            "The event title must be between 3 and 100 characters.");
+
+        public static readonly Error DescriptionIsRequired = Error.Problem(
+            "Events.DescriptionIsRequired",
+            "The event description is required.");
+
+        public static readonly Error DescriptionLengthInvalid = Error.Problem(
+            "Events.DescriptionLengthInvalid",
+            "The event description must be between 10 and 1000 characters.");
+
+        public static readonly Error CategoryIdIsRequired = Error.Problem(
+            "Events.CategoryIdIsRequired",
+            "The event category identifier is required.");
+
+        public static readonly Error StartDateIsRequired = Error.Problem(
+            "Events.StartDateIsRequired",
+            "The event start date is required.");
+
+        public static readonly Error DateRangeIsRequired = Error.Problem(
+            "Events.DateRangeIsRequired",
+            "The event date range is required.");
+
+        public static readonly Error StartDateMustBeInFuture = Error.Problem(
+            "DateRange.StartDateMustBeInFuture",
+            "The start date must be in the future.");
+
+        public static readonly Error EndDateMustBeAfterStartDate = Error.Problem(
+            "DateRange.EndDateMustBeAfterStartDate",
+            "The end date must be after the start date.");
+
+        public static readonly Error StreetIsRequired = Error.Problem(
+           "Location.StreetIsRequired",
+           "The street is required.");
+
+        public static readonly Error NumberIsRequired = Error.Problem(
+            "Location.NumberIsRequired",
+            "The number is required.");
+
+        public static readonly Error NeighborhoodIsRequired = Error.Problem(
+            "Location.NeighborhoodIsRequired",
+            "The neighborhood is required.");
+
+        public static readonly Error ZipCodeIsRequired = Error.Problem(
+            "Location.ZipCodeIsRequired",
+            "The zip code is required.");
+
+        public static readonly Error CityIsRequired = Error.Problem(
+            "Location.CityIsRequired",
+            "The city is required.");
+
+        public static readonly Error StateIsRequired = Error.Problem(
+            "Location.StateIsRequired",
+            "The state is required.");
     }
 }

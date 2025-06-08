@@ -1,5 +1,4 @@
-﻿using Azure.Core;
-using Dapper;
+﻿using Dapper;
 using Eventix.Modules.Events.Application.Events.Get;
 using Eventix.Shared.Application.Data;
 using Eventix.Shared.Application.Messaging;

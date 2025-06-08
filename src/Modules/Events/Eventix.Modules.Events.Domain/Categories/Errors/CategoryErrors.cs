@@ -18,5 +18,13 @@ namespace Eventix.Modules.Events.Domain.Categories.Errors
         public static readonly Error FailToArchive = Error.Problem(
             "Categories.Archive",
             "An error occurred while archiving the category");
+
+        public static readonly Error NameMustBeNotEmpty = Error.Problem(
+            "Categories.NameMustBeNotEmpty",
+            "The category name must not be empty");
+
+        public static readonly Error NameMustBeLessThan100Characters = Error.Problem(
+            "Categories.NameMustBeLessThan100Characters",
+            "The category name must be less than 100 characters");
     }
 }
