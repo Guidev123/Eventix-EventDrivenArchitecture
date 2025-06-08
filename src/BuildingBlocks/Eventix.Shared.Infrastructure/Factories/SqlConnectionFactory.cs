@@ -1,4 +1,4 @@
-﻿using Eventix.Shared.Application.Data;
+﻿using Eventix.Shared.Application.Factories;
 using Microsoft.Data.SqlClient;
 
 namespace Eventix.Shared.Infrastructure.Factories

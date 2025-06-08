@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using Eventix.Modules.Events.Domain.Categories.Entities;
+using FluentValidation;
 
 namespace Eventix.Modules.Events.Application.Categories.Create
 {
@@ -8,7 +9,7 @@ namespace Eventix.Modules.Events.Application.Categories.Create
         {
             RuleFor(x => x.Name)
                 .NotEmpty().WithMessage("Name is required.")
-                .MaximumLength(100).WithMessage("Name must not exceed 100 characters.");
+                .MaximumLength(Category.MAX_NAME_LENGTH).WithMessage($"Name must not exceed {Category.MAX_NAME_LENGTH} characters.");
         }
     }
 }

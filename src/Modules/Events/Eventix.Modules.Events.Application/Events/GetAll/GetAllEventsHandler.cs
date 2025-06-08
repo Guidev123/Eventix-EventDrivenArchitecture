@@ -1,6 +1,6 @@
 ﻿using Dapper;
 using Eventix.Modules.Events.Application.Events.Get;
-using Eventix.Shared.Application.Data;
+using Eventix.Shared.Application.Factories;
 using Eventix.Shared.Application.Messaging;
 using Eventix.Shared.Domain.Responses;
 using System.Data;

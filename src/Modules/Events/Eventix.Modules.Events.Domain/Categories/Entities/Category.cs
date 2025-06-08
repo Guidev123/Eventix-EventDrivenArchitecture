@@ -6,6 +6,8 @@ namespace Eventix.Modules.Events.Domain.Categories.Entities
 {
     public sealed class Category : Entity, IAggregateRoot
     {
+        public const int MAX_NAME_LENGTH = 100;
+
         private Category(string name)
         {
             Name = name;
@@ -50,7 +52,7 @@ namespace Eventix.Modules.Events.Domain.Categories.Entities
         protected override void Validate()
         {
             AssertionConcern.EnsureNotEmpty(Name, CategoryErrors.NameMustBeNotEmpty.Description);
-            AssertionConcern.EnsureTrue(Name.Length <= 100, CategoryErrors.NameMustBeNotEmpty.Description);
+            AssertionConcern.EnsureTrue(Name.Length <= MAX_NAME_LENGTH, CategoryErrors.NameMustBeNotEmpty.Description);
         }
     }
 }

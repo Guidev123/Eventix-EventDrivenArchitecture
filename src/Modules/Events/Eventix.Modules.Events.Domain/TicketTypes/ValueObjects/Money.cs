@@ -5,6 +5,9 @@ namespace Eventix.Modules.Events.Domain.TicketTypes.ValueObjects
 {
     public sealed record Money : ValueObject
     {
+        public static int MIN_CURRENCY_LENGTH = 2;
+        public static int MAX_CURRENCY_LENGTH = 5;
+
         public Money(decimal price, string currency)
         {
             Amount = price;
@@ -27,7 +30,7 @@ namespace Eventix.Modules.Events.Domain.TicketTypes.ValueObjects
         {
             AssertionConcern.EnsureGreaterThan(Amount, 0, TicketTypeErrors.PriceMustBeGreaterThanZero.Description);
             AssertionConcern.EnsureNotEmpty(Currency, TicketTypeErrors.CurrencyIsRequired.Description);
-            AssertionConcern.EnsureLengthInRange(Currency, 2, 5, TicketTypeErrors.CurrencyLengthInvalid.Description);
+            AssertionConcern.EnsureLengthInRange(Currency, MIN_CURRENCY_LENGTH, MAX_CURRENCY_LENGTH, TicketTypeErrors.CurrencyLengthInvalid.Description);
         }
     }
 }

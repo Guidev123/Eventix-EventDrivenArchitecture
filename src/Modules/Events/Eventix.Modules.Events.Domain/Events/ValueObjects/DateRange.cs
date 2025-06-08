@@ -14,13 +14,14 @@ namespace Eventix.Modules.Events.Domain.Events.ValueObjects
 
         public DateTime StartsAtUtc { get; }
         public DateTime? EndsAtUtc { get; }
+        private bool IsInValidRange
+            => StartsAtUtc > DateTime.UtcNow;
 
         public static implicit operator DateRange((DateTime start, DateTime? end) range)
             => new(range.start, range.end);
         protected override void Validate()
         {
-            AssertionConcern.EnsureTrue(StartsAtUtc != default, EventErrors.StartDateIsRequired.Description);
-            AssertionConcern.EnsureTrue(StartsAtUtc > DateTime.UtcNow, EventErrors.StartDateMustBeInFuture.Description);
+            AssertionConcern.EnsureTrue(IsInValidRange, EventErrors.StartDateMustBeInFuture.Description);
 
             if (EndsAtUtc.HasValue)
             {

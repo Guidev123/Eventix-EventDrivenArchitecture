@@ -1,6 +1,6 @@
 ﻿using Eventix.Shared.Application.Clock;
-using Eventix.Shared.Application.Data;
 using Eventix.Shared.Application.Decorators;
+using Eventix.Shared.Application.Factories;
 using Eventix.Shared.Application.Messaging;
 using Eventix.Shared.Infrastructure.Clock;
 using Eventix.Shared.Infrastructure.Factories;
