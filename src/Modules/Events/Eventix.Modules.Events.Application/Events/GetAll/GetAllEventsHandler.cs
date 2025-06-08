@@ -51,11 +51,13 @@ namespace Eventix.Modules.Events.Application.Events.GetAll
                 ORDER BY StartsAtUtc
                 OFFSET @Skip ROWS FETCH NEXT @Take ROWS ONLY;";
 
-            return (await connection.QueryAsync<GetEventResponse>(sql, new
+            var events = await connection.QueryAsync<GetEventResponse>(sql, new
             {
                 Skip = (request.Page - 1) * request.PageSize,
                 Take = request.PageSize
-            })).AsList();
+            });
+
+            return events.AsList();
         }
     }
 }
