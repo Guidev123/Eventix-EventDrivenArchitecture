@@ -44,6 +44,7 @@ namespace Eventix.Shared.Infrastructure
 
         private static IServiceCollection AddRequestHandlerDecorators(this IServiceCollection services)
         {
+            services.Decorate(typeof(IRequestHandler<,>), typeof(ValidationDecorator.RequestHandler<,>));
             services.Decorate(typeof(IRequestHandler<,>), typeof(RequestLoggingDecorator.RequestHandler<,>));
 
             return services;

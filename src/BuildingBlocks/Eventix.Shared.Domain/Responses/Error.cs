@@ -1,4 +1,6 @@
-﻿namespace Eventix.Shared.Domain.Responses
+﻿using System.Text.Json.Serialization;
+
+namespace Eventix.Shared.Domain.Responses
 {
     public record Error
     {
@@ -19,6 +21,7 @@
 
         public string Description { get; }
 
+        [JsonConverter(typeof(JsonStringEnumConverter))]
         public ErrorTypeEnum Type { get; }
 
         public static Error Failure(string code, string description) =>
