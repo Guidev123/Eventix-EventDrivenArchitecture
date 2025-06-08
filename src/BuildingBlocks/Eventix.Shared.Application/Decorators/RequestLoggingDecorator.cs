@@ -1,4 +1,5 @@
-﻿using Eventix.Shared.Domain.Responses;
+﻿using Eventix.Shared.Application.Exceptions;
+using Eventix.Shared.Domain.Responses;
 using Microsoft.Extensions.Logging;
 using MidR.Interfaces;
 using Serilog.Context;
@@ -18,31 +19,42 @@ namespace Eventix.Shared.Application.Decorators
                 var requestName = typeof(TRequest).Name;
                 var requestModule = GetRequestModule(typeof(TRequest).FullName!);
                 var stopwatch = System.Diagnostics.Stopwatch.StartNew();
-
                 using (LogContext.PushProperty("Module", requestModule))
                 {
-                    logger.LogInformation("Processing request: {RequestName}", requestName);
-
-                    var result = await innerHandler.ExecuteAsync(request, cancellationToken);
-
-                    stopwatch.Stop();
-                    var executionTime = stopwatch.ElapsedMilliseconds;
-
-                    if (result.IsSuccess)
+                    try
                     {
-                        logger.LogInformation("Request: {RequestName} processed successfully in {ExecutionTimeInMilliseconds}ms",
-                            requestName, executionTime);
-                    }
-                    else
-                    {
-                        using (LogContext.PushProperty("Error", result.Error, true))
+                        logger.LogInformation("Processing request: {RequestName}", requestName);
+
+                        var result = await innerHandler.ExecuteAsync(request, cancellationToken);
+
+                        stopwatch.Stop();
+                        var executionTime = stopwatch.ElapsedMilliseconds;
+
+                        if (result.IsSuccess)
                         {
-                            logger.LogError("Request: {RequestName} failed in {ExecutionTimeInMilliseconds}ms",
+                            logger.LogInformation("Request: {RequestName} processed successfully in {ExecutionTimeInMilliseconds}ms",
                                 requestName, executionTime);
                         }
-                    }
+                        else
+                        {
+                            using (LogContext.PushProperty("Error", result.Error, true))
+                            {
+                                logger.LogError("Request: {RequestName} failed in {ExecutionTimeInMilliseconds}ms",
+                                    requestName, executionTime);
+                            }
+                        }
 
-                    return result;
+                        return result;
+                    }
+                    catch (Exception ex)
+                    {
+                        stopwatch.Stop();
+                        var executionTime = stopwatch.ElapsedMilliseconds;
+
+                        logger.LogError(ex, "Request: {RequestName} failed in {ExecutionTimeInMilliseconds}ms with unhandled exception", requestName, executionTime);
+
+                        throw new EventixException(typeof(TRequest).Name, innerException: ex);
+                    }
                 }
             }
 

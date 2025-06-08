@@ -11,6 +11,8 @@ namespace Eventix.Modules.Events.Application.Events.GetAll
     {
         public async Task<Result<GetAllEventsResponse>> ExecuteAsync(GetAllEventsQuery request, CancellationToken cancellationToken = default)
         {
+            throw new Exception("Erro boladao menó");
+
             using var connection = connectionFactory.Create();
 
             var events = await GetEventsAsync(connection, request);
