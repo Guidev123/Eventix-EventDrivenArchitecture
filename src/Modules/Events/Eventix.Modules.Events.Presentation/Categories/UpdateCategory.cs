@@ -1,5 +1,6 @@
 ﻿using Eventix.Modules.Events.Application.Categories.Update;
-using Eventix.Modules.Events.Presentation.Extensions;
+using Eventix.Shared.Presentation.Endpoints;
+using Eventix.Shared.Presentation.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
@@ -7,9 +8,9 @@ using MidR.Interfaces;
 
 namespace Eventix.Modules.Events.Presentation.Categories
 {
-    internal static class UpdateCategory
+    internal class UpdateCategory : IEndpoint
     {
-        public static void MapEndpoint(IEndpointRouteBuilder app)
+        public void MapEndpoint(IEndpointRouteBuilder app)
         {
             app.MapPatch("api/v1/categories/{id:guid}", async (Guid id, UpdateCategoryCommand command, IMediator mediator) =>
             {

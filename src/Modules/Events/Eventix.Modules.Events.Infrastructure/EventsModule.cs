@@ -7,7 +7,7 @@ using Eventix.Modules.Events.Infrastructure.Database;
 using Eventix.Modules.Events.Infrastructure.Events;
 using Eventix.Modules.Events.Infrastructure.TicketTypes;
 using Eventix.Modules.Events.Presentation;
-using Microsoft.AspNetCore.Routing;
+using Eventix.Shared.Presentation.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -19,11 +19,10 @@ namespace Eventix.Modules.Events.Infrastructure
         private const string DEFAULT_CONNECTION = "DefaultConnection";
         private const string CONNECTION_ERROR_MESSAGE = $"The connection string {DEFAULT_CONNECTION} is not configured";
 
-        public static void MapEndpoints(IEndpointRouteBuilder app)
-            => EventsEndpoints.MapEndpoints(app);
-
         public static IServiceCollection AddEventsModule(this IServiceCollection services, IConfiguration configuration)
         {
+            services.AddEndpoints(typeof(PresentationModule).Assembly);
+
             services.AddEntityFrameworkDbContext(configuration);
             services.AddRepositories();
             return services;

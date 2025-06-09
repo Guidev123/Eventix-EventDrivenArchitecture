@@ -1,5 +1,6 @@
 ﻿using Eventix.Modules.Events.Application.Events.Publish;
-using Eventix.Modules.Events.Presentation.Extensions;
+using Eventix.Shared.Presentation.Endpoints;
+using Eventix.Shared.Presentation.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
@@ -7,9 +8,9 @@ using MidR.Interfaces;
 
 namespace Eventix.Modules.Events.Presentation.Events
 {
-    internal static class PublishEvent
+    internal class PublishEvent : IEndpoint
     {
-        public static void MapEndpoint(IEndpointRouteBuilder app)
+        public void MapEndpoint(IEndpointRouteBuilder app)
         {
             app.MapPut("api/v1/events/{id:guid}/publish", async (Guid id, IMediator mediator) =>
             {

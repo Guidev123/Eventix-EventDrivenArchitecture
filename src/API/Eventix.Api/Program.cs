@@ -4,6 +4,9 @@ using Eventix.Api.Middlewares;
 using Eventix.Modules.Events.Application;
 using Eventix.Modules.Events.Infrastructure;
 using Eventix.Shared.Infrastructure;
+using Eventix.Shared.Presentation.Extensions;
+using HealthChecks.UI.Client;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Serilog;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
@@ -13,11 +16,19 @@ builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddProblemDetails();
 
 builder.Services.AddOpenApi();
+
+var dbConnectionString = builder.Configuration.GetConnectionString("Database") ?? string.Empty;
+var redisConnectionString = builder.Configuration.GetConnectionString("Cache") ?? string.Empty;
+
+builder.Services.AddHealthChecks()
+    .AddSqlServer(dbConnectionString)
+    .AddRedis(redisConnectionString);
+
 builder.AddSwaggerConfig();
 builder.Services.AddEventsModule(builder.Configuration);
 
 builder.Services.AddApplication([AssemblyReference.Assembly]);
-builder.Services.AddInfrastructure(builder.Configuration.GetConnectionString("DefaultConnection") ?? string.Empty);
+builder.Services.AddInfrastructure(dbConnectionString, redisConnectionString);
 builder.Configuration.AddModuleConfiguration(["events"]);
 var app = builder.Build();
 
@@ -31,7 +42,12 @@ if (app.Environment.IsDevelopment())
     app.ApplyMigrations();
 }
 
-EventsModule.MapEndpoints(app);
+app.MapEndpoints();
+
+app.MapHealthChecks("healthz", new HealthCheckOptions
+{
+    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+});
 
 app.UseSerilogRequestLogging();
 

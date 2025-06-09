@@ -1,4 +1,5 @@
-﻿using Eventix.Shared.Domain.Responses;
+﻿using Eventix.Shared.Application.Messaging;
+using Eventix.Shared.Domain.Responses;
 using FluentValidation;
 using FluentValidation.Results;
 using MidR.Interfaces;
@@ -11,7 +12,7 @@ namespace Eventix.Shared.Application.Decorators
         public sealed class RequestHandler<TRequest, TResponse>(IRequestHandler<TRequest, TResponse> innerHandler,
             IEnumerable<IValidator<TRequest>> validators)
             : IRequestHandler<TRequest, TResponse>
-            where TRequest : IRequest<TResponse>
+            where TRequest : IRequest<TResponse>, IBaseCommand
             where TResponse : Result
         {
             public async Task<TResponse> ExecuteAsync(TRequest request, CancellationToken cancellationToken = default)

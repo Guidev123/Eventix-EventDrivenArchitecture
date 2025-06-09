@@ -1,6 +1,6 @@
 ﻿using Eventix.Shared.Domain.Responses;
 
-namespace Eventix.Modules.Events.Presentation.Extensions
+namespace Eventix.Shared.Presentation.Extensions
 {
     public static class ResultExtensions
     {

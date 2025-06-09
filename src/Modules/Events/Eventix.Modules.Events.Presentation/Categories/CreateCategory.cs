@@ -1,5 +1,6 @@
 ﻿using Eventix.Modules.Events.Application.Categories.Create;
-using Eventix.Modules.Events.Presentation.Extensions;
+using Eventix.Shared.Presentation.Endpoints;
+using Eventix.Shared.Presentation.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
@@ -7,9 +8,9 @@ using MidR.Interfaces;
 
 namespace Eventix.Modules.Events.Presentation.Categories
 {
-    internal static class CreateCategory
+    internal class CreateCategory : IEndpoint
     {
-        public static void MapEndpoint(IEndpointRouteBuilder app)
+        public void MapEndpoint(IEndpointRouteBuilder app)
         {
             app.MapPost("api/v1/categories", async (CreateCategoryCommand command, IMediator mediator) =>
             {

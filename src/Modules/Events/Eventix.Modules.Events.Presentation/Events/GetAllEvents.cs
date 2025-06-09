@@ -1,5 +1,6 @@
 ﻿using Eventix.Modules.Events.Application.Events.GetAll;
-using Eventix.Modules.Events.Presentation.Extensions;
+using Eventix.Shared.Presentation.Endpoints;
+using Eventix.Shared.Presentation.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -8,13 +9,13 @@ using MidR.Interfaces;
 
 namespace Eventix.Modules.Events.Presentation.Events
 {
-    internal sealed class GetAllEvents
+    internal class GetAllEvents : IEndpoint
     {
-        public static void MapEndpoint(IEndpointRouteBuilder app)
+        public void MapEndpoint(IEndpointRouteBuilder app)
         {
             app.MapGet("api/v1/events", async (IMediator mediator,
-                                               [FromQuery] int page = EventsEndpoints.DEFAULT_PAGE,
-                                               [FromQuery] int pageSize = EventsEndpoints.DEFAULT_PAGE_SIZE) =>
+                                               [FromQuery] int page = PresentationModule.DEFAULT_PAGE,
+                                               [FromQuery] int pageSize = PresentationModule.DEFAULT_PAGE_SIZE) =>
             {
                 return (await mediator
                 .DispatchAsync(new GetAllEventsQuery(page, pageSize))

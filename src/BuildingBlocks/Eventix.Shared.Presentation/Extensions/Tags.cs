@@ -1,6 +1,6 @@
-﻿namespace Eventix.Modules.Events.Presentation.Extensions
+﻿namespace Eventix.Shared.Presentation.Extensions
 {
-    internal static class Tags
+    public static class Tags
     {
         public const string Events = "Events";
         public const string Categories = "Categories";

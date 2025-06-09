@@ -1,16 +1,14 @@
 ﻿using Eventix.Shared.Domain.Responses;
 using Microsoft.AspNetCore.Http;
 
-namespace Eventix.Modules.Events.Presentation.Extensions
+namespace Eventix.Shared.Presentation.Extensions
 {
     public static class ApiResults
     {
         public static IResult Problem(Result result)
         {
-            if (result.IsSuccess)
-            {
+            if (result.IsSuccess || result.Error is null)
                 throw new InvalidOperationException();
-            }
 
             return Results.Problem(
                 title: GetTitle(result.Error),

@@ -4,10 +4,9 @@ namespace Eventix.Shared.Domain.Responses
 {
     public class Result
     {
-        public Result(bool isSuccess, Error error)
+        public Result(bool isSuccess, Error? error = null)
         {
-            if (isSuccess && error != Error.None ||
-                !isSuccess && error == Error.None)
+            if (!isSuccess && error == Error.None)
             {
                 throw new ArgumentException("Invalid arguments for Result creation.");
             }
@@ -18,13 +17,13 @@ namespace Eventix.Shared.Domain.Responses
 
         public bool IsSuccess { get; }
         public bool IsFailure => !IsSuccess;
-        public Error Error { get; }
+        public Error? Error { get; }
 
-        public static Result Success() => new(true, Error.None);
+        public static Result Success() => new(true);
 
         public static Result Failure(Error error) => new(false, error);
 
-        public static Result<TValue> Success<TValue>(TValue value) => new(value, true, Error.None);
+        public static Result<TValue> Success<TValue>(TValue value) => new(value, true);
 
         public static Result<TValue> Failure<TValue>(Error error) => new(default, false, error);
     }
@@ -33,7 +32,7 @@ namespace Eventix.Shared.Domain.Responses
     {
         private readonly TValue? _value;
 
-        public Result(TValue? value, bool isSuccess, Error error)
+        public Result(TValue? value, bool isSuccess, Error? error = null)
             : base(isSuccess, error) => _value = value;
 
         [NotNull]

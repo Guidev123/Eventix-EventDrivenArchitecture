@@ -33,6 +33,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eventix.Shared.Domain", "sr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eventix.Shared.Infrastructure", "src\BuildingBlocks\Eventix.Shared.Infrastructure\Eventix.Shared.Infrastructure.csproj", "{B4986668-78CB-4CAC-9C7B-E7AF15B2036F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eventix.Shared.Presentation", "src\BuildingBlocks\Eventix.Shared.Presentation\Eventix.Shared.Presentation.csproj", "{AEFACC12-9DF2-4674-B878-AA7F97CA35D2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -75,6 +77,10 @@ Global
 		{B4986668-78CB-4CAC-9C7B-E7AF15B2036F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B4986668-78CB-4CAC-9C7B-E7AF15B2036F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B4986668-78CB-4CAC-9C7B-E7AF15B2036F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AEFACC12-9DF2-4674-B878-AA7F97CA35D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AEFACC12-9DF2-4674-B878-AA7F97CA35D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AEFACC12-9DF2-4674-B878-AA7F97CA35D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AEFACC12-9DF2-4674-B878-AA7F97CA35D2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -93,6 +99,7 @@ Global
 		{691CE269-C012-423A-B2E9-248FD04BA732} = {FF71A834-E035-4649-9AD3-5891B0C64CF4}
 		{B170E981-51B9-4869-91A2-CD7EE4914643} = {FF71A834-E035-4649-9AD3-5891B0C64CF4}
 		{B4986668-78CB-4CAC-9C7B-E7AF15B2036F} = {FF71A834-E035-4649-9AD3-5891B0C64CF4}
+		{AEFACC12-9DF2-4674-B878-AA7F97CA35D2} = {FF71A834-E035-4649-9AD3-5891B0C64CF4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {148A9F60-4D1F-455F-9A54-21778D353BE0}
