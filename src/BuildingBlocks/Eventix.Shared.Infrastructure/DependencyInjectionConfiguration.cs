@@ -2,7 +2,6 @@
 using Eventix.Shared.Application.Clock;
 using Eventix.Shared.Application.Decorators;
 using Eventix.Shared.Application.Factories;
-using Eventix.Shared.Application.Messaging;
 using Eventix.Shared.Infrastructure.Cache;
 using Eventix.Shared.Infrastructure.Clock;
 using Eventix.Shared.Infrastructure.Factories;
@@ -69,15 +68,22 @@ namespace Eventix.Shared.Infrastructure
 
         private static IServiceCollection AddCacheService(this IServiceCollection services, string redisConnectionString)
         {
-            IConnectionMultiplexer connectionMultiplexer = ConnectionMultiplexer.Connect(redisConnectionString);
-            services.TryAddSingleton(connectionMultiplexer);
-
-            services.AddStackExchangeRedisCache(options =>
+            try
             {
-                options.ConnectionMultiplexerFactory = () => Task.FromResult(connectionMultiplexer);
-            });
+                IConnectionMultiplexer connectionMultiplexer = ConnectionMultiplexer.Connect(redisConnectionString);
+                services.TryAddSingleton(connectionMultiplexer);
 
-            services.TryAddSingleton<ICacheService, CacheService>();
+                services.AddStackExchangeRedisCache(options =>
+                {
+                    options.ConnectionMultiplexerFactory = () => Task.FromResult(connectionMultiplexer);
+                });
+
+                services.TryAddSingleton<ICacheService, CacheService>();
+            }
+            catch
+            {
+                services.AddDistributedMemoryCache();
+            }
 
             return services;
         }

@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\BuildingBlocks\Eventix.Shared.Infrastructure\Eventix.Shared.Infrastructure.csproj" />
+    <ProjectReference Include="..\Eventix.Modules.Users.Presentation\Eventix.Modules.Users.Presentation.csproj" />
+  </ItemGroup>
+
+</Project>
