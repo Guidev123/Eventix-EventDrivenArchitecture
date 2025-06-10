@@ -1,4 +1,4 @@
-﻿using Eventix.Modules.Events.Application.Events.Publish;
+﻿using Eventix.Modules.Events.Application.Events.UseCases.Publish;
 using Eventix.Shared.Presentation.Endpoints;
 using Eventix.Shared.Presentation.Extensions;
 using Microsoft.AspNetCore.Builder;

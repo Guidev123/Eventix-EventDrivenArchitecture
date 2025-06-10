@@ -1,4 +1,4 @@
-﻿using Eventix.Modules.Events.Application.Events.Get;
+﻿using Eventix.Modules.Events.Application.Events.UseCases.Get;
 using Eventix.Shared.Presentation.Endpoints;
 using Eventix.Shared.Presentation.Extensions;
 using Microsoft.AspNetCore.Builder;

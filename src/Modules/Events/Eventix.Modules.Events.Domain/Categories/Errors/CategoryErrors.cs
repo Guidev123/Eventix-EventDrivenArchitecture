@@ -26,5 +26,9 @@ namespace Eventix.Modules.Events.Domain.Categories.Errors
         public static readonly Error NameMustBeLessThan100Characters = Error.Problem(
             "Categories.NameMustBeLessThan100Characters",
             "The category name must be less than 100 characters");
+
+        public static readonly Error FailToUpdate = Error.Problem(
+            "Categories.Update",
+            "An error occurred while updating the category");
     }
 }

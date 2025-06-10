@@ -12,6 +12,9 @@ namespace Eventix.Modules.Events.Domain.Events.ValueObjects
             Validate();
         }
 
+        private DateRange()
+        { }
+
         public DateTime StartsAtUtc { get; }
         public DateTime? EndsAtUtc { get; }
         private bool IsInValidRange

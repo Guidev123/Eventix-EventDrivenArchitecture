@@ -1,4 +1,4 @@
-﻿using Eventix.Modules.Events.Application.Events.Cancel;
+﻿using Eventix.Modules.Events.Application.Events.UseCases.Cancel;
 using Eventix.Shared.Presentation.Endpoints;
 using Eventix.Shared.Presentation.Extensions;
 using Microsoft.AspNetCore.Builder;

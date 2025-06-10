@@ -7,6 +7,7 @@ using Eventix.Modules.Events.Infrastructure.Database;
 using Eventix.Modules.Events.Infrastructure.Events;
 using Eventix.Modules.Events.Infrastructure.TicketTypes;
 using Eventix.Modules.Events.Presentation;
+using Eventix.Shared.Infrastructure.Interceptors;
 using Eventix.Shared.Presentation.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -41,11 +42,11 @@ namespace Eventix.Modules.Events.Infrastructure
             var connectionString = configuration.GetConnectionString(DEFAULT_CONNECTION)
                 ?? throw new InvalidOperationException(CONNECTION_ERROR_MESSAGE);
 
-            services.AddDbContext<EventsDbContext>(options =>
+            services.AddDbContext<EventsDbContext>((sp, options) =>
             {
-                options.UseSqlServer(connectionString);
+                var publishDomainEventsInterceptor = sp.GetRequiredService<PublishDomainEventsInterceptors>();
 
-                options.LogTo(Console.WriteLine);
+                options.UseSqlServer(connectionString).AddInterceptors(publishDomainEventsInterceptor).LogTo(Console.WriteLine);
             });
         }
     }

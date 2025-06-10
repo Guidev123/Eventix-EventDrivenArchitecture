@@ -6,6 +6,7 @@ using Eventix.Shared.Application.Messaging;
 using Eventix.Shared.Infrastructure.Cache;
 using Eventix.Shared.Infrastructure.Clock;
 using Eventix.Shared.Infrastructure.Factories;
+using Eventix.Shared.Infrastructure.Interceptors;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -23,12 +24,8 @@ namespace Eventix.Shared.Infrastructure
             string databaseConnectionString,
             string redisConnectionString)
         {
-            services.AddSingleton<ISqlConnectionFactory, SqlConnectionFactory>(sp =>
-            {
-                return new SqlConnectionFactory(databaseConnectionString);
-            });
-
-            AddCacheService(services, redisConnectionString);
+            AddData(services, databaseConnectionString)
+                .AddCacheService(redisConnectionString);
 
             return services;
         }
@@ -38,6 +35,18 @@ namespace Eventix.Shared.Infrastructure
             AddHandlers(services, modulesAssemblies);
             services.AddValidatorsFromAssemblies(modulesAssemblies, includeInternalTypes: true);
             services.TryAddSingleton<IDateTimeProvider, DateTimeProvider>();
+
+            return services;
+        }
+
+        private static IServiceCollection AddData(this IServiceCollection services, string databaseConnectionString)
+        {
+            services.AddSingleton<ISqlConnectionFactory, SqlConnectionFactory>(sp =>
+            {
+                return new SqlConnectionFactory(databaseConnectionString);
+            });
+
+            services.TryAddSingleton<PublishDomainEventsInterceptors>();
 
             return services;
         }
