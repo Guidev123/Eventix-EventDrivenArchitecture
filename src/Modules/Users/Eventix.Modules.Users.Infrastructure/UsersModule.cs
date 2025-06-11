@@ -1,29 +1,21 @@
-﻿using Eventix.Modules.Events.Domain.Categories.Interfaces;
-using Eventix.Modules.Events.Domain.Events.Interfaces;
-using Eventix.Modules.Events.Domain.TicketTypes.Interfaces;
-using Eventix.Modules.Events.Infrastructure.Categories;
-using Eventix.Modules.Events.Infrastructure.Database;
-using Eventix.Modules.Events.Infrastructure.Events;
-using Eventix.Modules.Events.Infrastructure.TicketTypes;
-using Eventix.Modules.Events.Presentation;
+﻿using Eventix.Modules.Users.Domain.Users.Interfaces;
+using Eventix.Modules.Users.Infrastructure.Database;
+using Eventix.Modules.Users.Infrastructure.Users;
 using Eventix.Shared.Domain.Interfaces;
 using Eventix.Shared.Infrastructure.Interceptors;
-using Eventix.Shared.Presentation.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Eventix.Modules.Events.Infrastructure
+namespace Eventix.Modules.Users.Infrastructure
 {
-    public static class EventsModule
+    public static class UsersModule
     {
         private const string DATABASE_CONNECTION = "Database";
         private const string CONNECTION_ERROR_MESSAGE = $"The connection string {DATABASE_CONNECTION} is not configured";
 
-        public static IServiceCollection AddEventsModule(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddUsersModule(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddEndpoints(typeof(PresentationModule).Assembly);
-
             AddRepositories(services);
             AddEntityFrameworkDbContext(services, configuration);
 
@@ -32,10 +24,8 @@ namespace Eventix.Modules.Events.Infrastructure
 
         private static void AddRepositories(this IServiceCollection services)
         {
-            services.AddScoped<IEventRepository, EventRepository>();
-            services.AddScoped<ITicketTypeRepository, TicketTypeRepository>();
-            services.AddScoped<ICategoryRepository, CategoryRepository>();
-            services.AddScoped<IUnitOfWork>(sp => sp.GetRequiredService<EventsDbContext>());
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IUnitOfWork>(sp => sp.GetRequiredService<UsersDbContext>());
         }
 
         private static void AddEntityFrameworkDbContext(this IServiceCollection services, IConfiguration configuration)
@@ -43,7 +33,7 @@ namespace Eventix.Modules.Events.Infrastructure
             var connectionString = configuration.GetConnectionString(DATABASE_CONNECTION)
                 ?? throw new InvalidOperationException(CONNECTION_ERROR_MESSAGE);
 
-            services.AddDbContext<EventsDbContext>((sp, options) =>
+            services.AddDbContext<UsersDbContext>((sp, options) =>
             {
                 var publishDomainEventsInterceptor = sp.GetRequiredService<PublishDomainEventsInterceptors>();
 

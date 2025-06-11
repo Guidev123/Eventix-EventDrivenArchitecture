@@ -12,4 +12,8 @@
     <ProjectReference Include="..\Eventix.Modules.Users.Presentation\Eventix.Modules.Users.Presentation.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.6" />
+  </ItemGroup>
+
 </Project>

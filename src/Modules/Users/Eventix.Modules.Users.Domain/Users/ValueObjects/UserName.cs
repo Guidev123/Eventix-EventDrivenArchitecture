@@ -10,13 +10,15 @@ namespace Eventix.Modules.Users.Domain.Users.ValueObjects
             LastName = lastName;
             Validate();
         }
+
         private UserName()
         { }
 
         public string FirstName { get; } = string.Empty;
         public string LastName { get; } = string.Empty;
 
-        public static implicit operator UserName((string firstName, string lastName) name) => new(name.firstName, name.lastName);
+        public static implicit operator UserName((string firstName, string lastName) name)
+            => new(name.firstName, name.lastName);
 
         protected override void Validate()
         {
