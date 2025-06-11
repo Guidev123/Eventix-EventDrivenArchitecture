@@ -1,12 +1,12 @@
 ﻿using Eventix.Modules.Events.Domain.Categories.Interfaces;
 using Eventix.Modules.Events.Domain.Events.Interfaces;
-using Eventix.Modules.Events.Domain.Shared.Interfaces;
 using Eventix.Modules.Events.Domain.TicketTypes.Interfaces;
 using Eventix.Modules.Events.Infrastructure.Categories;
 using Eventix.Modules.Events.Infrastructure.Database;
 using Eventix.Modules.Events.Infrastructure.Events;
 using Eventix.Modules.Events.Infrastructure.TicketTypes;
 using Eventix.Modules.Events.Presentation;
+using Eventix.Shared.Domain.Interfaces;
 using Eventix.Shared.Infrastructure.Interceptors;
 using Eventix.Shared.Presentation.Extensions;
 using Microsoft.EntityFrameworkCore;

@@ -45,5 +45,9 @@ namespace Eventix.Modules.Events.Domain.TicketTypes.Errors
         public static readonly Error CurrencyLengthInvalid = Error.Problem(
             "TicketType.CurrencyLengthInvalid",
             "The ticket currency must be between 2 and 5 characters.");
+
+        public static readonly Error FailToCreateTicket = Error.Problem(
+            "TicketTypes.Create",
+            "An error occurred while creating the ticket type.");
     }
 }

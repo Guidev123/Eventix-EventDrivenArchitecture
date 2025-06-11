@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Eventix.Modules.Users.Domain\Eventix.Modules.Users.Domain.csproj" />
+  </ItemGroup>
+
 </Project>

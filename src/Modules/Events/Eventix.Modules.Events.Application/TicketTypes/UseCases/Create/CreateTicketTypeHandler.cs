@@ -1,8 +1,9 @@
 ﻿using Eventix.Modules.Events.Domain.Events.Errors;
 using Eventix.Modules.Events.Domain.Events.Interfaces;
-using Eventix.Modules.Events.Domain.Shared.Interfaces;
+using Eventix.Modules.Events.Domain.TicketTypes.Errors;
 using Eventix.Modules.Events.Domain.TicketTypes.Interfaces;
 using Eventix.Shared.Application.Messaging;
+using Eventix.Shared.Domain.Interfaces;
 using Eventix.Shared.Domain.Responses;
 
 namespace Eventix.Modules.Events.Application.TicketTypes.UseCases.Create
@@ -21,13 +22,10 @@ namespace Eventix.Modules.Events.Application.TicketTypes.UseCases.Create
 
             ticketTypeRepository.Insert(ticketType);
 
-            var saveChanges = await PersistDataAsync(cancellationToken).ConfigureAwait(false);
+            var saveChanges = await unitOfWork.CommitAsync(cancellationToken).ConfigureAwait(false);
             return saveChanges
                 ? Result.Success(new CreateTicketTypeResponse(ticketType.Id))
-                : Result.Failure<CreateTicketTypeResponse>(Error.Problem("TicketTypes.Create", "An error occurred while creating the ticket type."));
+                : Result.Failure<CreateTicketTypeResponse>(TicketTypeErrors.FailToCreateTicket);
         }
-
-        private async ValueTask<bool> PersistDataAsync(CancellationToken cancellationToken)
-            => await unitOfWork.SaveChangesAsync(cancellationToken).ConfigureAwait(false) > 0;
     }
 }

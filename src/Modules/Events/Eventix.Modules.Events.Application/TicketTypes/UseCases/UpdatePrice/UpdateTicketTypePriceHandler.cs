@@ -1,7 +1,7 @@
-﻿using Eventix.Modules.Events.Domain.Shared.Interfaces;
-using Eventix.Modules.Events.Domain.TicketTypes.Errors;
+﻿using Eventix.Modules.Events.Domain.TicketTypes.Errors;
 using Eventix.Modules.Events.Domain.TicketTypes.Interfaces;
 using Eventix.Shared.Application.Messaging;
+using Eventix.Shared.Domain.Interfaces;
 using Eventix.Shared.Domain.Responses;
 
 namespace Eventix.Modules.Events.Application.TicketTypes.UseCases.UpdatePrice
@@ -17,13 +17,10 @@ namespace Eventix.Modules.Events.Application.TicketTypes.UseCases.UpdatePrice
             ticketType.UpdatePrice(request.Price);
             ticketTypeRepository.Update(ticketType);
 
-            var saveChanges = await PersistDataAsync(cancellationToken).ConfigureAwait(false);
+            var saveChanges = await unitOfWork.CommitAsync(cancellationToken).ConfigureAwait(false);
             return saveChanges
                 ? Result.Success()
                 : Result.Failure(TicketTypeErrors.UnableToUpdate(ticketType.GetType().Name, ticketType.Id));
         }
-
-        private async ValueTask<bool> PersistDataAsync(CancellationToken cancellationToken)
-            => await unitOfWork.SaveChangesAsync(cancellationToken).ConfigureAwait(false) > 0;
     }
 }

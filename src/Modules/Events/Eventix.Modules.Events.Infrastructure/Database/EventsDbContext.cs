@@ -1,7 +1,7 @@
 ﻿using Eventix.Modules.Events.Domain.Categories.Entities;
 using Eventix.Modules.Events.Domain.Events.Entities;
-using Eventix.Modules.Events.Domain.Shared.Interfaces;
 using Eventix.Modules.Events.Domain.TicketTypes.Entities;
+using Eventix.Shared.Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace Eventix.Modules.Events.Infrastructure.Database
@@ -18,5 +18,8 @@ namespace Eventix.Modules.Events.Infrastructure.Database
 
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(EventsDbContext).Assembly);
         }
+
+        public async Task<bool> CommitAsync(CancellationToken cancellationToken = default)
+            => await SaveChangesAsync(cancellationToken).ConfigureAwait(false) > 0;
     }
 }

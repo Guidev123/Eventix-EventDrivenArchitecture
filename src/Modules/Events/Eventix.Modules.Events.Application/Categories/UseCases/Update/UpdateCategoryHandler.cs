@@ -1,7 +1,7 @@
 ﻿using Eventix.Modules.Events.Domain.Categories.Errors;
 using Eventix.Modules.Events.Domain.Categories.Interfaces;
-using Eventix.Modules.Events.Domain.Shared.Interfaces;
 using Eventix.Shared.Application.Messaging;
+using Eventix.Shared.Domain.Interfaces;
 using Eventix.Shared.Domain.Responses;
 
 namespace Eventix.Modules.Events.Application.Categories.UseCases.Update
@@ -17,13 +17,10 @@ namespace Eventix.Modules.Events.Application.Categories.UseCases.Update
             category.Rename(request.Name);
             categoryRepository.Update(category);
 
-            var saveChanges = await PersistDataAsync(cancellationToken).ConfigureAwait(false);
+            var saveChanges = await unitOfWork.CommitAsync(cancellationToken).ConfigureAwait(false);
             return saveChanges
                 ? Result.Success()
                 : Result.Failure(CategoryErrors.FailToUpdate);
         }
-
-        private async ValueTask<bool> PersistDataAsync(CancellationToken cancellationToken)
-            => await unitOfWork.SaveChangesAsync(cancellationToken).ConfigureAwait(false) > 0;
     }
 }
