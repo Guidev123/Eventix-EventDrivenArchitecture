@@ -1,4 +1,4 @@
-﻿namespace Eventix.Shared.Presentation.Extensions
+﻿namespace Eventix.Modules.Events.Presentation
 {
     public static class Tags
     {

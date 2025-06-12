@@ -9,6 +9,8 @@ namespace Eventix.Modules.Users.Domain.Users.Interfaces
 
         void Update(User user);
 
-        Task<User?> GetByIdAsync(Guid id);
+        Task<User?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
+
+        Task<bool> ExistsAsync(string email, CancellationToken cancellationToken = default);
     }
 }

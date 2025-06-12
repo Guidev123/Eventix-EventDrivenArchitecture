@@ -9,6 +9,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\BuildingBlocks\Eventix.Shared.Application\Eventix.Shared.Application.csproj" />
     <ProjectReference Include="..\..\..\BuildingBlocks\Eventix.Shared.Presentation\Eventix.Shared.Presentation.csproj" />
+    <ProjectReference Include="..\Eventix.Modules.Users.Application\Eventix.Modules.Users.Application.csproj" />
   </ItemGroup>
 
 </Project>

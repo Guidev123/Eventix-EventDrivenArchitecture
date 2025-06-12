@@ -19,7 +19,6 @@ namespace Eventix.Modules.Users.Domain.Users.ValueObjects
 
         protected override void Validate()
         {
-            throw new NotImplementedException();
         }
     }
 }

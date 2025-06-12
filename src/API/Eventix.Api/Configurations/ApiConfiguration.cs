@@ -1,6 +1,7 @@
-﻿using Eventix.Api.Extensions;
+﻿using EventsAssembly = Eventix.Modules.Events.Application.AssemblyReference;
+using UsersAssembly = Eventix.Modules.Users.Application.AssemblyReference;
+using Eventix.Api.Extensions;
 using Eventix.Api.Middlewares;
-using Eventix.Modules.Events.Application;
 using Eventix.Modules.Events.Infrastructure;
 using Eventix.Modules.Users.Infrastructure;
 using Eventix.Shared.Infrastructure;
@@ -24,7 +25,7 @@ namespace Eventix.Api.Configurations
             builder.AddExceptionHandler();
             builder.AddCustomHealthChecks(dbConnectionString, redisConnectionString);
             builder.AddAllModules();
-            builder.Services.AddApplication([AssemblyReference.Assembly]);
+            builder.Services.AddApplication([EventsAssembly.Assembly, UsersAssembly.Assembly]);
             builder.Services.AddInfrastructure(dbConnectionString, redisConnectionString);
 
             return builder;

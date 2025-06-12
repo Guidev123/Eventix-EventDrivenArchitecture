@@ -32,8 +32,8 @@ namespace Eventix.Modules.Users.Domain.Users.Entities
 
         public void UpdateName(string firstName, string lastName)
         {
-            if (Name.FirstName == firstName
-                && Name.LastName == lastName) return;
+            if (Name.FirstName.Equals(firstName, StringComparison.OrdinalIgnoreCase)
+                && Name.LastName.Equals(lastName, StringComparison.OrdinalIgnoreCase)) return;
 
             var name = (firstName, lastName);
             Name = name;
@@ -53,7 +53,6 @@ namespace Eventix.Modules.Users.Domain.Users.Entities
 
         protected override void Validate()
         {
-            throw new NotImplementedException();
         }
     }
 }

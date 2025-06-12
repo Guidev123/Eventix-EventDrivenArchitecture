@@ -1,8 +1,10 @@
 ﻿using Eventix.Modules.Users.Domain.Users.Interfaces;
 using Eventix.Modules.Users.Infrastructure.Database;
 using Eventix.Modules.Users.Infrastructure.Users;
+using Eventix.Modules.Users.Presentation;
 using Eventix.Shared.Domain.Interfaces;
 using Eventix.Shared.Infrastructure.Interceptors;
+using Eventix.Shared.Presentation.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,6 +18,8 @@ namespace Eventix.Modules.Users.Infrastructure
 
         public static IServiceCollection AddUsersModule(this IServiceCollection services, IConfiguration configuration)
         {
+            services.AddEndpoints(typeof(PresentationModule).Assembly);
+
             AddRepositories(services);
             AddEntityFrameworkDbContext(services, configuration);
 

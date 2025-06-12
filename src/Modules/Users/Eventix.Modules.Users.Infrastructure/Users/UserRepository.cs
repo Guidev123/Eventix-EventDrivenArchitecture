@@ -7,12 +7,15 @@ namespace Eventix.Modules.Users.Infrastructure.Users
 {
     internal sealed class UserRepository(UsersDbContext context) : IUserRepository
     {
-        public async Task<User?> GetByIdAsync(Guid id)
-            => await context.Users.AsNoTracking().FirstOrDefaultAsync(user => user.Id == id);
+        public async Task<User?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
+            => await context.Users.AsNoTracking().FirstOrDefaultAsync(user => user.Id == id, cancellationToken);
 
         public void Insert(User user) => context.Add(user);
 
         public void Update(User user) => context.Update(user);
+
+        public async Task<bool> ExistsAsync(string email, CancellationToken cancellationToken = default)
+            => await context.Users.AnyAsync(user => user.Email.Address == email, cancellationToken);
 
         public void Dispose() => context.Dispose();
     }
