@@ -16,17 +16,22 @@ namespace Eventix.Modules.Users.Application.Users.UseCases.Update
             if (user is null)
                 return Result.Failure(UserErrors.NotFound);
 
-            if (IsNameChange(request))
-                UpdateUserProperties(user, request);
-
-            if (IsEmailChange(request))
-                UpdateUserEmail(user, request);
+            UpdateProperties(user, request);
 
             var saveChanges = await unitOfWork.CommitAsync(cancellationToken).ConfigureAwait(false);
             return saveChanges ? Result.Success() : Result.Failure(UserErrors.FailToUpdate);
         }
 
-        private void UpdateUserProperties(User user, UpdateUserCommand command)
+        private void UpdateProperties(User user, UpdateUserCommand command)
+        {
+            if (IsNameChange(command))
+                UpdateUserName(user, command);
+
+            if (IsEmailChange(command))
+                UpdateUserEmail(user, command);
+        }
+
+        private void UpdateUserName(User user, UpdateUserCommand command)
         {
             if (!IsNameChange(command)) return;
 
