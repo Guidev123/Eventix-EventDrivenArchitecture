@@ -14,6 +14,7 @@ namespace Eventix.Modules.Users.Application.Users.Mappers
 
         public static GetUserByIdResponse MapFromUser(this User user)
             => new(
+                user.Id,
                 user.Name.FirstName,
                 user.Name.LastName,
                 user.Email.Address

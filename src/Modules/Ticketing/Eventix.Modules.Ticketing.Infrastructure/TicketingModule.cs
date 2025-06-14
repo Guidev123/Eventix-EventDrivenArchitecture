@@ -1,4 +1,5 @@
-﻿using Eventix.Modules.Ticketing.Presentation;
+﻿using Eventix.Modules.Ticketing.Application.Carts.Services;
+using Eventix.Modules.Ticketing.Presentation;
 using Eventix.Shared.Infrastructure.Interceptors;
 using Eventix.Shared.Presentation.Extensions;
 using Microsoft.EntityFrameworkCore;
@@ -16,14 +17,15 @@ namespace Eventix.Modules.Ticketing.Infrastructure
         {
             services.AddEndpoints(typeof(PresentationModule).Assembly);
 
-            AddRepositories(services);
+            AddServices(services);
             AddEntityFrameworkDbContext(services, configuration);
 
             return services;
         }
 
-        private static void AddRepositories(this IServiceCollection services)
+        private static void AddServices(this IServiceCollection services)
         {
+            services.AddSingleton<ICartService, CartService>();
         }
 
         private static void AddEntityFrameworkDbContext(this IServiceCollection services, IConfiguration configuration)
