@@ -1,9 +1,12 @@
-﻿using Eventix.Shared.Domain.DomainObjects;
+﻿using Eventix.Modules.Users.Domain.Users.Errors;
+using Eventix.Shared.Domain.DomainObjects;
 
 namespace Eventix.Modules.Users.Domain.Users.ValueObjects
 {
     public record UserName : ValueObject
     {
+        private const int NAME_MAX_LENGTH = 50;
+
         public UserName(string firstName, string lastName)
         {
             FirstName = firstName;
@@ -22,6 +25,10 @@ namespace Eventix.Modules.Users.Domain.Users.ValueObjects
 
         protected override void Validate()
         {
+            AssertionConcern.EnsureNotEmpty(FirstName, UserErrors.UserNameMustBeNotEmpty.Description);
+            AssertionConcern.EnsureNotEmpty(LastName, UserErrors.UserNameMustBeNotEmpty.Description);
+            AssertionConcern.EnsureTrue(FirstName.Length <= NAME_MAX_LENGTH, UserErrors.UserNameLengthMustNotExceedTheLimitCharacters(NAME_MAX_LENGTH).Description);
+            AssertionConcern.EnsureTrue(LastName.Length <= NAME_MAX_LENGTH, UserErrors.UserNameLengthMustNotExceedTheLimitCharacters(NAME_MAX_LENGTH).Description);
         }
     }
 }

@@ -45,6 +45,16 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eventix.Modules.Users.Appli
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eventix.Modules.Users.Presentation", "src\Modules\Users\Eventix.Modules.Users.Presentation\Eventix.Modules.Users.Presentation.csproj", "{AD082083-B181-4E6C-B14C-B183DC4DFB92}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Ticketing", "Ticketing", "{8E852857-DDCD-4E30-BEFB-E8A497B1337A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eventix.Modules.Ticketing.Application", "src\Modules\Ticketing\Eventix.Modules.Ticketing.Application\Eventix.Modules.Ticketing.Application.csproj", "{DE5189DC-9FAE-4A5B-ABD3-13B040F43E3E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eventix.Modules.Ticketing.Domain", "src\Modules\Ticketing\Eventix.Modules.Ticketing.Domain\Eventix.Modules.Ticketing.Domain.csproj", "{D594F03A-6BBA-4779-8C1B-36D5FBCA7116}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eventix.Modules.Ticketing.Infrastructure", "src\Modules\Ticketing\Eventix.Modules.Ticketing.Infrastructure\Eventix.Modules.Ticketing.Infrastructure.csproj", "{3D488ACB-8AF1-4B9F-9E48-161DACF02C9E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eventix.Modules.Ticketing.Presentation", "src\Modules\Ticketing\Eventix.Modules.Ticketing.Presentation\Eventix.Modules.Ticketing.Presentation.csproj", "{025A1F68-0E32-487B-A03E-3E289CA066F6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -107,6 +117,22 @@ Global
 		{AD082083-B181-4E6C-B14C-B183DC4DFB92}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AD082083-B181-4E6C-B14C-B183DC4DFB92}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AD082083-B181-4E6C-B14C-B183DC4DFB92}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DE5189DC-9FAE-4A5B-ABD3-13B040F43E3E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DE5189DC-9FAE-4A5B-ABD3-13B040F43E3E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DE5189DC-9FAE-4A5B-ABD3-13B040F43E3E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DE5189DC-9FAE-4A5B-ABD3-13B040F43E3E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D594F03A-6BBA-4779-8C1B-36D5FBCA7116}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D594F03A-6BBA-4779-8C1B-36D5FBCA7116}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D594F03A-6BBA-4779-8C1B-36D5FBCA7116}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D594F03A-6BBA-4779-8C1B-36D5FBCA7116}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3D488ACB-8AF1-4B9F-9E48-161DACF02C9E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3D488ACB-8AF1-4B9F-9E48-161DACF02C9E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3D488ACB-8AF1-4B9F-9E48-161DACF02C9E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3D488ACB-8AF1-4B9F-9E48-161DACF02C9E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{025A1F68-0E32-487B-A03E-3E289CA066F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{025A1F68-0E32-487B-A03E-3E289CA066F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{025A1F68-0E32-487B-A03E-3E289CA066F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{025A1F68-0E32-487B-A03E-3E289CA066F6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -131,6 +157,11 @@ Global
 		{522208F7-FDCA-4EBC-A16D-0F8D47EE5EA7} = {8A4BBE81-E466-45E7-8066-BD2CD8196B8D}
 		{F771224C-35A8-4F3C-844B-CD08E3CA9DF6} = {8A4BBE81-E466-45E7-8066-BD2CD8196B8D}
 		{AD082083-B181-4E6C-B14C-B183DC4DFB92} = {8A4BBE81-E466-45E7-8066-BD2CD8196B8D}
+		{8E852857-DDCD-4E30-BEFB-E8A497B1337A} = {E02BAA5C-ECFF-43BF-AAC8-9CF985E13310}
+		{DE5189DC-9FAE-4A5B-ABD3-13B040F43E3E} = {8E852857-DDCD-4E30-BEFB-E8A497B1337A}
+		{D594F03A-6BBA-4779-8C1B-36D5FBCA7116} = {8E852857-DDCD-4E30-BEFB-E8A497B1337A}
+		{3D488ACB-8AF1-4B9F-9E48-161DACF02C9E} = {8E852857-DDCD-4E30-BEFB-E8A497B1337A}
+		{025A1F68-0E32-487B-A03E-3E289CA066F6} = {8E852857-DDCD-4E30-BEFB-E8A497B1337A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {148A9F60-4D1F-455F-9A54-21778D353BE0}

@@ -6,6 +6,7 @@ namespace Eventix.Modules.Users.Application.Users.UseCases.Register
         string FirstName,
         string LastName,
         string Email,
-        string Password
+        string Password,
+        string ConfirmPassword
         ) : ICommand<RegisterUserResponse>;
 }

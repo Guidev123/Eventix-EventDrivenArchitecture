@@ -1,4 +1,5 @@
 ﻿using Eventix.Modules.Users.Domain.Users.DomainEvents;
+using Eventix.Modules.Users.Domain.Users.Errors;
 using Eventix.Modules.Users.Domain.Users.ValueObjects;
 using Eventix.Shared.Domain.DomainObjects;
 
@@ -10,7 +11,7 @@ namespace Eventix.Modules.Users.Domain.Users.Entities
         {
             Email = email;
             Name = (firstName, lastName);
-            AuditInfo = (false, DateTime.UtcNow, null);
+            AuditInfo = new(DateTime.UtcNow);
             Validate();
         }
 
@@ -51,8 +52,20 @@ namespace Eventix.Modules.Users.Domain.Users.Entities
             Raise(new UserEmailUpdatedDomainEvent(Id, Email.Address));
         }
 
+        public void Delete()
+        {
+            if (AuditInfo.IsDeleted) return;
+
+            AuditInfo = new UserAuditInfo(AuditInfo.CreatedAtUtc, true, DateTime.UtcNow);
+
+            Raise(new UserDeletedDomainEvent(Id));
+        }
+
         protected override void Validate()
         {
+            AssertionConcern.EnsureNotNull(Email, UserErrors.EmailMustBeNotEmpty.Description);
+            AssertionConcern.EnsureNotNull(Name, UserErrors.NameMustBeNotEmpty.Description);
+            AssertionConcern.EnsureNotNull(AuditInfo, UserErrors.AuditInfoMustBeNotEmpty.Description);
         }
     }
 }

@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\BuildingBlocks\Eventix.Shared.Application\Eventix.Shared.Application.csproj" />
+    <ProjectReference Include="..\Eventix.Modules.Ticketing.Domain\Eventix.Modules.Ticketing.Domain.csproj" />
+  </ItemGroup>
+
+</Project>

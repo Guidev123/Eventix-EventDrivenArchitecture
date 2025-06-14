@@ -1,11 +1,13 @@
 ﻿using EventsAssembly = Eventix.Modules.Events.Application.AssemblyReference;
 using UsersAssembly = Eventix.Modules.Users.Application.AssemblyReference;
+using TicketingAssembly = Eventix.Modules.Ticketing.Application.AssemblyReference;
 using Eventix.Api.Extensions;
 using Eventix.Api.Middlewares;
 using Eventix.Modules.Events.Infrastructure;
 using Eventix.Modules.Users.Infrastructure;
 using Eventix.Shared.Infrastructure;
 using Serilog;
+using Eventix.Modules.Ticketing.Infrastructure;
 
 namespace Eventix.Api.Configurations
 {
@@ -13,6 +15,7 @@ namespace Eventix.Api.Configurations
     {
         private const string EVENTS_MODULE = "events";
         private const string USERS_MODULE = "users";
+        private const string TICKETING_MODULE = "ticketing";
 
         public static WebApplicationBuilder ConfigureServices(this WebApplicationBuilder builder)
         {
@@ -20,12 +23,24 @@ namespace Eventix.Api.Configurations
             var redisConnectionString = builder.Configuration.GetConnectionString("Cache") ?? string.Empty;
 
             builder.Services.AddOpenApi();
+
             builder.AddSwaggerConfig();
-            builder.Host.UseSerilog((context, loggerConfig) => loggerConfig.ReadFrom.Configuration(context.Configuration));
+
+            builder.Host.UseSerilog((context, loggerConfig)
+                => loggerConfig.ReadFrom.Configuration(context.Configuration));
+
             builder.AddExceptionHandler();
+
             builder.AddCustomHealthChecks(dbConnectionString, redisConnectionString);
+
             builder.AddAllModules();
-            builder.Services.AddApplication([EventsAssembly.Assembly, UsersAssembly.Assembly]);
+
+            builder.Services.AddApplication([
+                EventsAssembly.Assembly,
+                UsersAssembly.Assembly,
+                TicketingAssembly.Assembly
+                ]);
+
             builder.Services.AddInfrastructure(dbConnectionString, redisConnectionString);
 
             return builder;
@@ -56,9 +71,14 @@ namespace Eventix.Api.Configurations
         {
             builder.Services
                 .AddEventsModule(builder.Configuration)
-                .AddUsersModule(builder.Configuration);
+                .AddUsersModule(builder.Configuration)
+                .AddTicketingModule(builder.Configuration);
 
-            builder.Configuration.AddModuleConfiguration([EVENTS_MODULE, USERS_MODULE]);
+            builder.Configuration.AddModuleConfiguration([
+                EVENTS_MODULE,
+                USERS_MODULE,
+                TICKETING_MODULE
+                ]);
 
             return builder;
         }

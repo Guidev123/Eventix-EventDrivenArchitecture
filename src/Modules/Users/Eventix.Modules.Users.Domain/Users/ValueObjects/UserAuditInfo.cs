@@ -1,14 +1,15 @@
-﻿using Eventix.Shared.Domain.DomainObjects;
+﻿using Eventix.Modules.Users.Domain.Users.Errors;
+using Eventix.Shared.Domain.DomainObjects;
 
 namespace Eventix.Modules.Users.Domain.Users.ValueObjects
 {
     public record UserAuditInfo : ValueObject
     {
-        public UserAuditInfo(bool isDeleted, DateTime createdAtUtc, DateTime? deletedAtUtc = null)
+        public UserAuditInfo(DateTime createdAtUtc, bool isDeleted = false, DateTime? deletedAt = null)
         {
             IsDeleted = isDeleted;
             CreatedAtUtc = createdAtUtc;
-            DeletedAtUtc = deletedAtUtc;
+            DeletedAtUtc = deletedAt;
             Validate();
         }
 
@@ -19,11 +20,18 @@ namespace Eventix.Modules.Users.Domain.Users.ValueObjects
         public DateTime CreatedAtUtc { get; }
         public DateTime? DeletedAtUtc { get; }
 
-        public static implicit operator UserAuditInfo((bool isDeleted, DateTime createdAtUtc, DateTime? deletedAtUtc) auditInfo)
-            => new(auditInfo.isDeleted, auditInfo.createdAtUtc, auditInfo.deletedAtUtc);
-
         protected override void Validate()
         {
+            AssertionConcern.EnsureNotNull(CreatedAtUtc, UserErrors.CreatedAtMustBeNotEmpty.Description);
+
+            if (IsDeleted)
+            {
+                AssertionConcern.EnsureNotNull(DeletedAtUtc!, UserErrors.DeletedAtUtcMustBeNotNullWhenUserIsDeleted.Description);
+            }
+            else
+            {
+                AssertionConcern.EnsureTrue(DeletedAtUtc is null, UserErrors.DeletedAtUtcMustBeNullWhenUserIsDeleted.Description);
+            }
         }
     }
 }
