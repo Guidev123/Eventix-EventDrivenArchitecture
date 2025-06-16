@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using Eventix.Modules.Ticketing.Domain.Customers.Errors;
+using FluentValidation;
 
 namespace Eventix.Modules.Ticketing.Application.Customers.UseCases.Update
 {
@@ -6,11 +7,22 @@ namespace Eventix.Modules.Ticketing.Application.Customers.UseCases.Update
     {
         public UpdateCustomerValidator()
         {
-            RuleFor(x => x.CustomerId).NotEmpty().WithMessage("Customer ID cannot be empty");
-            RuleFor(x => x.FirstName).MaximumLength(50).WithMessage("First name cannot exceed 50 characters");
-            RuleFor(x => x.LastName).MaximumLength(50).WithMessage("Last name cannot exceed 50 characters");
-            RuleFor(x => x.Email).EmailAddress().When(x => !string.IsNullOrEmpty(x.Email))
-                .WithMessage("Invalid email format");
+            RuleFor(x => x.CustomerId)
+                .NotEmpty()
+                .WithMessage(CustomerErrors.CustomerIdCannotBeEmpty.Description);
+
+            RuleFor(x => x.FirstName)
+                .MaximumLength(50)
+                .WithMessage(CustomerErrors.FirstNameMaxLengthExceeded.Description);
+
+            RuleFor(x => x.LastName)
+                .MaximumLength(50)
+                .WithMessage(CustomerErrors.LastNameMaxLengthExceeded.Description);
+
+            RuleFor(x => x.Email)
+                .EmailAddress()
+                .When(x => !string.IsNullOrEmpty(x.Email))
+                .WithMessage(CustomerErrors.InvalidEmailFormat.Description);
         }
     }
 }

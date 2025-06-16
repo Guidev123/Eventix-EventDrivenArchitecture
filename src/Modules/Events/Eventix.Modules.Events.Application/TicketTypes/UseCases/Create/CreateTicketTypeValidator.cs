@@ -1,4 +1,6 @@
-﻿using Eventix.Modules.Events.Domain.TicketTypes.ValueObjects;
+﻿using Eventix.Modules.Events.Domain.Events.Errors;
+using Eventix.Modules.Events.Domain.TicketTypes.Errors;
+using Eventix.Modules.Events.Domain.TicketTypes.ValueObjects;
 using FluentValidation;
 
 namespace Eventix.Modules.Events.Application.TicketTypes.UseCases.Create
@@ -7,22 +9,24 @@ namespace Eventix.Modules.Events.Application.TicketTypes.UseCases.Create
     {
         public CreateTicketTypeValidator()
         {
-            RuleFor(c => c.EventId).NotEmpty().WithMessage("Event ID must be not empty.");
+            RuleFor(c => c.EventId)
+                .NotEmpty()
+                .WithMessage(EventErrors.EventIdIsRequired.Description);
 
-            RuleFor(c => c.Name).NotEmpty().WithMessage("Ticket type name must be not empty.")
-                .MaximumLength(100).WithMessage("Ticket type name must not exceed 100 characters.");
+            RuleFor(c => c.Name)
+                .NotEmpty().WithMessage(TicketTypeErrors.NameIsRequired.Description)
+                .MaximumLength(100).WithMessage(TicketTypeErrors.NameTooLong.Description);
 
-            RuleFor(c => c.Price).GreaterThan(0).WithMessage("Ticket type price must be greater than zero.");
+            RuleFor(c => c.Price)
+                .GreaterThan(0).WithMessage(TicketTypeErrors.PriceMustBeGreaterThanZero.Description);
 
             RuleFor(c => c.Currency)
-                .MinimumLength(Money.MIN_CURRENCY_LENGTH)
-                .WithMessage($"Currency length must be greater than {Money.MIN_CURRENCY_LENGTH} caracters.")
-                .MaximumLength(Money.MAX_CURRENCY_LENGTH)
-                .WithMessage($"Currency length must be less than {Money.MAX_CURRENCY_LENGTH} caracters.")
-                .NotEmpty()
-                .WithMessage("Currency must be not empty.");
+                .MinimumLength(Money.MIN_CURRENCY_LENGTH).WithMessage(TicketTypeErrors.CurrencyTooShort.Description)
+                .MaximumLength(Money.MAX_CURRENCY_LENGTH).WithMessage(TicketTypeErrors.CurrencyTooLong.Description)
+                .NotEmpty().WithMessage(TicketTypeErrors.CurrencyIsRequired.Description);
 
-            RuleFor(c => c.Quantity).GreaterThan(0).WithMessage("Ticket type quantity must be greater than zero.");
+            RuleFor(c => c.Quantity)
+                .GreaterThan(0).WithMessage(TicketTypeErrors.QuantityMustBeGreaterThanZero.Description);
         }
     }
 }

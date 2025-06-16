@@ -1,4 +1,6 @@
-﻿using FluentValidation;
+﻿using Eventix.Modules.Events.Domain.Categories.Entities;
+using Eventix.Modules.Events.Domain.Categories.Errors;
+using FluentValidation;
 
 namespace Eventix.Modules.Events.Application.Categories.UseCases.Update
 {
@@ -7,8 +9,10 @@ namespace Eventix.Modules.Events.Application.Categories.UseCases.Update
         public UpdateCategoryValidator()
         {
             RuleFor(x => x.Name)
-                .NotEmpty().WithMessage("Name is required.")
-                .MaximumLength(100).WithMessage("Name must not exceed 100 characters.");
+                .NotEmpty()
+                .WithMessage(CategoryErrors.NameMustBeNotEmpty.Description)
+                .MaximumLength(Category.MAX_NAME_LENGTH)
+                .WithMessage(CategoryErrors.NameMustBeLessThan100Characters.Description);
         }
     }
 }

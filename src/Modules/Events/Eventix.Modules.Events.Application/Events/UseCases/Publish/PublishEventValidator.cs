@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using Eventix.Modules.Events.Domain.Events.Errors;
+using FluentValidation;
 
 namespace Eventix.Modules.Events.Application.Events.UseCases.Publish
 {
@@ -6,7 +7,7 @@ namespace Eventix.Modules.Events.Application.Events.UseCases.Publish
     {
         public PublishEventValidator()
         {
-            RuleFor(c => c.EventId).NotEmpty().WithMessage("Event ID must be not empty.");
+            RuleFor(c => c.EventId).NotEmpty().WithMessage(EventErrors.EventIdIsRequired.Description);
         }
     }
 }

@@ -1,5 +1,7 @@
 ﻿using Eventix.Modules.Ticketing.Application.Carts.Services;
+using Eventix.Modules.Ticketing.Infrastructure.PublicApi;
 using Eventix.Modules.Ticketing.Presentation;
+using Eventix.Modules.Ticketing.PublicApi;
 using Eventix.Shared.Infrastructure.Interceptors;
 using Eventix.Shared.Presentation.Extensions;
 using Microsoft.EntityFrameworkCore;
@@ -16,6 +18,7 @@ namespace Eventix.Modules.Ticketing.Infrastructure
         public static IServiceCollection AddTicketingModule(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddEndpoints(typeof(PresentationModule).Assembly);
+            services.AddTransient<ITicketingApi, TicketingApi>();
 
             AddServices(services);
             AddEntityFrameworkDbContext(services, configuration);

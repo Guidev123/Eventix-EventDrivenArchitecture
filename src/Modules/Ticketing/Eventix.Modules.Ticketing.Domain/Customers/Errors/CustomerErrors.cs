@@ -39,5 +39,33 @@ namespace Eventix.Modules.Ticketing.Domain.Customers.Errors
         public static readonly Error FailToUpdate = Error.Failure(
             "Customers.FailToUpdate",
             "Fail to update customer properties");
+
+        public static readonly Error CustomerIdIsRequired = Error.Problem(
+            "Customers.CustomerIdIsRequired",
+            "Customer ID must not be empty");
+
+        public static readonly Error InvalidEmailFormat = Error.Problem(
+            "Customers.InvalidEmailFormat",
+            "Invalid e-mail format");
+
+        public static readonly Error FirstNameLengthInvalid = Error.Problem(
+            "Customers.FirstNameLengthInvalid",
+            "First Name must be between 2 and 50 characters");
+
+        public static readonly Error LastNameLengthInvalid = Error.Problem(
+            "Customers.LastNameLengthInvalid",
+            "Last Name must be between 2 and 50 characters");
+
+        public static readonly Error CustomerIdCannotBeEmpty = Error.Problem(
+            "Customers.CustomerIdCannotBeEmpty",
+            "Customer ID cannot be empty");
+
+        public static readonly Error FirstNameMaxLengthExceeded = Error.Problem(
+            "Customers.FirstNameMaxLengthExceeded",
+            "First name cannot exceed 50 characters");
+
+        public static readonly Error LastNameMaxLengthExceeded = Error.Problem(
+            "Customers.LastNameMaxLengthExceeded",
+            "Last name cannot exceed 50 characters");
     }
 }

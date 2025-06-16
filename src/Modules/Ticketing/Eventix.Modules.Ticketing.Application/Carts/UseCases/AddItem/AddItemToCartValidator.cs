@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using Eventix.Modules.Ticketing.Application.Carts.Errors;
+using FluentValidation;
 
 namespace Eventix.Modules.Ticketing.Application.Carts.UseCases.AddItem
 {
@@ -8,9 +9,17 @@ namespace Eventix.Modules.Ticketing.Application.Carts.UseCases.AddItem
 
         public AddItemToCartValidator()
         {
-            RuleFor(x => x.CustomerId).NotEmpty().WithMessage("Customer ID must not be empty");
-            RuleFor(x => x.TicketTypeId).NotEmpty().WithMessage("Ticket Type ID must not be empty");
-            RuleFor(x => x.Quantity).GreaterThanOrEqualTo(MINIMUM_QUANTITY).WithMessage($"Quantity must be greater than or equal to {MINIMUM_QUANTITY}");
+            RuleFor(x => x.CustomerId)
+                .NotEmpty()
+                .WithMessage(CartErrors.CustomerIdIsRequired.Description);
+
+            RuleFor(x => x.TicketTypeId)
+                .NotEmpty()
+                .WithMessage(CartErrors.TicketTypeIdIsRequired.Description);
+
+            RuleFor(x => x.Quantity)
+                .GreaterThanOrEqualTo(MINIMUM_QUANTITY)
+                .WithMessage(CartErrors.QuantityMustBeAtLeast(MINIMUM_QUANTITY).Description);
         }
     }
 }

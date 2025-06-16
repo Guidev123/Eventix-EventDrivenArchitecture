@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using Eventix.Modules.Ticketing.Application.Carts.Errors;
+using FluentValidation;
 
 namespace Eventix.Modules.Ticketing.Application.Carts.UseCases.Clear
 {
@@ -6,7 +7,9 @@ namespace Eventix.Modules.Ticketing.Application.Carts.UseCases.Clear
     {
         public ClearCartValidator()
         {
-            RuleFor(x => x.CustomerId).NotEmpty().WithMessage("Customer ID must not be empty");
+            RuleFor(x => x.CustomerId)
+                .NotEmpty()
+                .WithMessage(CartErrors.CustomerIdIsRequired.Description);
         }
     }
 }

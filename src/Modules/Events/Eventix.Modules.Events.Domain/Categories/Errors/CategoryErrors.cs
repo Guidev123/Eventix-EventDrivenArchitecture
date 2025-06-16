@@ -30,5 +30,9 @@ namespace Eventix.Modules.Events.Domain.Categories.Errors
         public static readonly Error FailToUpdate = Error.Problem(
             "Categories.Update",
             "An error occurred while updating the category");
+
+        public static readonly Error CategoryIdMustNotBeEmpty = Error.Problem(
+              "Categories.CategoryIdMustNotBeEmpty",
+              "The category ID must not be empty");
     }
 }

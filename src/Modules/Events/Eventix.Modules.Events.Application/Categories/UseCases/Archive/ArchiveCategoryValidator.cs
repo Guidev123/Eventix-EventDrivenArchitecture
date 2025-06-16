@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using Eventix.Modules.Events.Domain.Categories.Errors;
+using FluentValidation;
 
 namespace Eventix.Modules.Events.Application.Categories.UseCases.Archive
 {
@@ -6,7 +7,9 @@ namespace Eventix.Modules.Events.Application.Categories.UseCases.Archive
     {
         public ArchiveCategoryValidator()
         {
-            RuleFor(x => x.CategoryId).NotEmpty().WithMessage("Category ID must not be empty.");
+            RuleFor(x => x.CategoryId)
+                .NotEmpty()
+                .WithMessage(CategoryErrors.CategoryIdMustNotBeEmpty.Description);
         }
     }
 }

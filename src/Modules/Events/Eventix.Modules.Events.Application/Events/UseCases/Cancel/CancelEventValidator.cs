@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using Eventix.Modules.Events.Domain.Events.Errors;
+using FluentValidation;
 
 namespace Eventix.Modules.Events.Application.Events.UseCases.Cancel
 {
@@ -8,9 +9,8 @@ namespace Eventix.Modules.Events.Application.Events.UseCases.Cancel
         {
             RuleFor(x => x.EventId)
                 .NotEmpty()
-                .WithMessage("Event ID must not be empty.")
                 .NotEqual(Guid.Empty)
-                .WithMessage("Event ID must not be an empty GUID.");
+                .WithMessage(EventErrors.EventIdIsRequired.Description);
         }
     }
 }

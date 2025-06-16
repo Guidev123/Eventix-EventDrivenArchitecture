@@ -1,4 +1,5 @@
 ﻿using Eventix.Modules.Events.Domain.Categories.Entities;
+using Eventix.Modules.Events.Domain.Categories.Errors;
 using FluentValidation;
 
 namespace Eventix.Modules.Events.Application.Categories.UseCases.Create
@@ -8,8 +9,10 @@ namespace Eventix.Modules.Events.Application.Categories.UseCases.Create
         public CreateCategoryValidator()
         {
             RuleFor(x => x.Name)
-                .NotEmpty().WithMessage("Name is required.")
-                .MaximumLength(Category.MAX_NAME_LENGTH).WithMessage($"Name must not exceed {Category.MAX_NAME_LENGTH} characters.");
+                .NotEmpty()
+                .WithMessage(CategoryErrors.NameMustBeNotEmpty.Description)
+                .MaximumLength(Category.MAX_NAME_LENGTH)
+                .WithMessage(CategoryErrors.NameMustBeLessThan100Characters.Description);
         }
     }
 }

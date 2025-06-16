@@ -1,4 +1,4 @@
-﻿using Eventix.Modules.Events.Domain.Events.Entities;
+﻿using Eventix.Modules.Events.Domain.Events.Errors;
 using Eventix.Modules.Events.Domain.Events.ValueObjects;
 using FluentValidation;
 
@@ -11,23 +11,28 @@ namespace Eventix.Modules.Events.Application.Events.UseCases.Create
         public CreateEventValidator()
         {
             RuleFor(c => c.Title)
-                .NotEmpty().WithMessage("Title is required.")
+                .NotEmpty().WithMessage(EventErrors.TitleIsRequired.Description)
                 .MinimumLength(EventSpecification.TITLE_MIN_LENGTH)
-                .WithMessage($"Title must be at least {EventSpecification.TITLE_MIN_LENGTH} characters long.")
+                    .WithMessage(EventErrors.TitleTooShort(EventSpecification.TITLE_MIN_LENGTH).Description)
                 .MaximumLength(EventSpecification.TITLE_MAX_LENGTH)
-                .WithMessage($"Title must not exceed {EventSpecification.DESCRIPTION_MAX_LENGTH} characters.");
+                    .WithMessage(EventErrors.TitleTooLong(EventSpecification.TITLE_MAX_LENGTH).Description);
 
             RuleFor(c => c.Description)
-                .NotEmpty().WithMessage("Description is required.")
+                .NotEmpty().WithMessage(EventErrors.DescriptionIsRequired.Description)
                 .MinimumLength(EventSpecification.DESCRIPTION_MIN_LENGTH)
-                .WithMessage($"Description must be at least {EventSpecification.DESCRIPTION_MIN_LENGTH} characters long.")
+                    .WithMessage(EventErrors.DescriptionTooShort(EventSpecification.DESCRIPTION_MIN_LENGTH).Description)
                 .MaximumLength(EventSpecification.DESCRIPTION_MAX_LENGTH)
-                .WithMessage("Description must not exceed {EventSpecification.DESCRIPTION_MAX_LENGTH} characters.");
+                    .WithMessage(EventErrors.DescriptionTooLong(EventSpecification.DESCRIPTION_MAX_LENGTH).Description);
 
-            RuleFor(c => c.StartsAtUtc).NotEmpty().WithMessage("Start date must be not empty.")
-                .Must(c => c > DateTime.UtcNow.AddHours(MINIMUM_START_TIME)).WithMessage($"The event must start at least {MINIMUM_START_TIME} hour later.");
+            RuleFor(c => c.StartsAtUtc)
+                .NotEmpty().WithMessage(EventErrors.StartDateIsRequired.Description)
+                .Must(c => c > DateTime.UtcNow.AddHours(MINIMUM_START_TIME))
+                    .WithMessage(EventErrors.StartDateTooSoon(MINIMUM_START_TIME).Description);
 
-            RuleFor(c => c.EndsAtUtc).Must((cmd, endsAt) => endsAt > cmd.StartsAtUtc).When(c => c.EndsAtUtc.HasValue);
+            RuleFor(c => c.EndsAtUtc)
+                .Must((cmd, endsAt) => endsAt > cmd.StartsAtUtc)
+                .When(c => c.EndsAtUtc.HasValue)
+                .WithMessage(EventErrors.EndDateBeforeStartDate.Description);
         }
     }
 }

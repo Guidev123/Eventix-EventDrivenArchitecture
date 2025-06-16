@@ -1,4 +1,5 @@
-﻿using Eventix.Modules.Users.Application.Users.Mappers;
+﻿using Eventix.Modules.Ticketing.PublicApi;
+using Eventix.Modules.Users.Application.Users.Mappers;
 using Eventix.Modules.Users.Domain.Users.Errors;
 using Eventix.Modules.Users.Domain.Users.Interfaces;
 using Eventix.Shared.Application.Messaging;
@@ -8,7 +9,8 @@ using Eventix.Shared.Domain.Responses;
 namespace Eventix.Modules.Users.Application.Users.UseCases.Register
 {
     internal sealed class RegisterUserHandler(IUserRepository userRepository,
-                                              IUnitOfWork unitOfWork) : ICommandHandler<RegisterUserCommand, RegisterUserResponse>
+                                              IUnitOfWork unitOfWork,
+                                              ITicketingApi ticketingApi) : ICommandHandler<RegisterUserCommand, RegisterUserResponse>
     {
         public async Task<Result<RegisterUserResponse>> ExecuteAsync(RegisterUserCommand request, CancellationToken cancellationToken = default)
         {
@@ -21,6 +23,9 @@ namespace Eventix.Modules.Users.Application.Users.UseCases.Register
             userRepository.Insert(user);
 
             var saveChanges = await unitOfWork.CommitAsync(cancellationToken).ConfigureAwait(false);
+
+            await ticketingApi.CreateCustomerAsync(user.Id, user.Email.Address, user.Name.FirstName, user.Name.LastName, cancellationToken).ConfigureAwait(false);
+
             return saveChanges ? Result.Success(new RegisterUserResponse(user.Id))
                 : Result.Failure<RegisterUserResponse>(UserErrors.FailToCreate);
         }

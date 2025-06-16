@@ -1,4 +1,5 @@
-﻿using Eventix.Shared.Domain.Responses;
+﻿using Eventix.Modules.Events.Domain.Events.ValueObjects;
+using Eventix.Shared.Domain.Responses;
 
 namespace Eventix.Modules.Events.Domain.Events.Errors
 {
@@ -103,5 +104,28 @@ namespace Eventix.Modules.Events.Domain.Events.Errors
         public static readonly Error StateIsRequired = Error.Problem(
             "Location.StateIsRequired",
             "The state is required.");
+
+        public static readonly Error EventIdIsRequired = Error.Problem(
+            "Events.EventIdIsRequired",
+            "The event ID must not be empty or an empty GUID.");
+
+        public static Error TitleTooShort(int minLength) =>
+       Error.Problem("Events.TitleTooShort", $"The event title must be at least {minLength} characters long.");
+
+        public static Error TitleTooLong(int maxLength) =>
+            Error.Problem("Events.TitleTooLong", $"The event title must not exceed {maxLength} characters.");
+
+        public static Error DescriptionTooShort(int minLength) =>
+            Error.Problem("Events.DescriptionTooShort", $"The event description must be at least {minLength} characters long.");
+
+        public static Error DescriptionTooLong(int maxLength) =>
+            Error.Problem("Events.DescriptionTooLong", $"The event description must not exceed {maxLength} characters.");
+
+        public static Error StartDateTooSoon(int minimumStartTime) =>
+            Error.Problem("Events.StartDateTooSoon", $"The event must start at least {minimumStartTime} hour(s) later.");
+
+        public static readonly Error EndDateBeforeStartDate = Error.Problem(
+            "Events.EndDateBeforeStartDate",
+            "The event end date must be after the start date.");
     }
 }

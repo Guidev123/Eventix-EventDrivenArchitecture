@@ -1,4 +1,5 @@
-﻿using Eventix.Shared.Domain.Responses;
+﻿using Eventix.Modules.Events.Domain.TicketTypes.ValueObjects;
+using Eventix.Shared.Domain.Responses;
 
 namespace Eventix.Modules.Events.Domain.TicketTypes.Errors
 {
@@ -49,5 +50,17 @@ namespace Eventix.Modules.Events.Domain.TicketTypes.Errors
         public static readonly Error FailToCreateTicket = Error.Problem(
             "TicketTypes.Create",
             "An error occurred while creating the ticket type.");
+
+        public static readonly Error NameTooLong = Error.Problem(
+            "Tickets.NameTooLong",
+            "Ticket type name must not exceed 100 characters.");
+
+        public static readonly Error CurrencyTooShort = Error.Problem(
+            "Tickets.CurrencyTooShort",
+            $"Currency length must be greater than {Money.MIN_CURRENCY_LENGTH} characters.");
+
+        public static readonly Error CurrencyTooLong = Error.Problem(
+            "Tickets.CurrencyTooLong",
+            $"Currency length must be less than {Money.MAX_CURRENCY_LENGTH} characters.");
     }
 }
