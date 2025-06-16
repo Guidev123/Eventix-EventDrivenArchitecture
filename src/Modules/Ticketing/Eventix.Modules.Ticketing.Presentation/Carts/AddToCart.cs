@@ -1,4 +1,4 @@
-﻿using Eventix.Modules.Ticketing.Application.Carts.UseCases.AddItemToCart;
+﻿using Eventix.Modules.Ticketing.Application.Carts.UseCases.AddItem;
 using Eventix.Shared.Presentation.Endpoints;
 using Eventix.Shared.Presentation.Extensions;
 using Microsoft.AspNetCore.Builder;

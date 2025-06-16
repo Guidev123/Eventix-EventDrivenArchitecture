@@ -1,5 +1,6 @@
-﻿using Eventix.Modules.Ticketing.Application.Carts.Models;
-using Eventix.Modules.Ticketing.Domain.Errors;
+﻿using Eventix.Modules.Ticketing.Application.Carts.Errors;
+using Eventix.Modules.Ticketing.Application.Carts.Models;
+using Eventix.Modules.Ticketing.Domain.Events.Errors;
 using Eventix.Shared.Application.Cache;
 using Eventix.Shared.Domain.Responses;
 
@@ -35,7 +36,7 @@ namespace Eventix.Modules.Ticketing.Application.Carts.Services
             var cart = (await GetAsync(customerId, cancellationToken)).Value;
 
             if (cart is null)
-                return Result.Failure(TicketingErrors.CartNotFound(customerId));
+                return Result.Failure(CartErrors.NotFound(customerId));
 
             var existingItem = GetItem(cart.Items, item.TicketTypeId);
 
@@ -60,12 +61,12 @@ namespace Eventix.Modules.Ticketing.Application.Carts.Services
             var cart = (await GetAsync(customerId, cancellationToken)).Value;
 
             if (cart is null)
-                return Result.Failure(TicketingErrors.CartNotFound(customerId));
+                return Result.Failure(CartErrors.NotFound(customerId));
 
             var existingItem = GetItem(cart.Items, ticketTypeId);
 
             if (existingItem is null)
-                return Result.Failure(TicketingErrors.CartNotFound(customerId));
+                return Result.Failure(CartErrors.NotFound(customerId));
 
             cart.Items.Remove(existingItem);
 

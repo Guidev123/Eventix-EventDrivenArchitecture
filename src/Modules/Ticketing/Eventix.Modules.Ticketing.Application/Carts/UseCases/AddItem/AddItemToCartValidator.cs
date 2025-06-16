@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace Eventix.Modules.Ticketing.Application.Carts.UseCases.AddItemToCart
+namespace Eventix.Modules.Ticketing.Application.Carts.UseCases.AddItem
 {
     public sealed class AddItemToCartValidator : AbstractValidator<AddItemToCartCommand>
     {

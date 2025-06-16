@@ -1,12 +1,13 @@
 ﻿using Eventix.Modules.Events.PublicApi;
 using Eventix.Modules.Ticketing.Application.Carts.Models;
 using Eventix.Modules.Ticketing.Application.Carts.Services;
-using Eventix.Modules.Ticketing.Domain.Errors;
+using Eventix.Modules.Ticketing.Domain.Customers.Errors;
+using Eventix.Modules.Ticketing.Domain.Events.Errors;
 using Eventix.Modules.Users.PublicApi;
 using Eventix.Shared.Application.Messaging;
 using Eventix.Shared.Domain.Responses;
 
-namespace Eventix.Modules.Ticketing.Application.Carts.UseCases.AddItemToCart
+namespace Eventix.Modules.Ticketing.Application.Carts.UseCases.AddItem
 {
     internal sealed class AddItemToCartHandler(ICartService cartService,
                                                IUsersApi usersApi,
@@ -16,7 +17,7 @@ namespace Eventix.Modules.Ticketing.Application.Carts.UseCases.AddItemToCart
         {
             var customer = await usersApi.GetAsync(request.CustomerId, cancellationToken).ConfigureAwait(false);
             if (customer is null)
-                return Result.Failure(TicketingErrors.CustomerNotFound(request.CustomerId));
+                return Result.Failure(CustomerErrors.NotFound(request.CustomerId));
 
             var ticketType = await eventsApi.GetTicketTypeAsync(request.TicketTypeId, cancellationToken).ConfigureAwait(false);
             if (ticketType is null)
@@ -30,11 +31,7 @@ namespace Eventix.Modules.Ticketing.Application.Carts.UseCases.AddItemToCart
                 Currency = ticketType.Currency,
             };
 
-            var result = await cartService.AddItemAsync(customer.Id, cartItem, cancellationToken).ConfigureAwait(false);
-            if (result.IsFailure)
-                return Result.Failure(TicketingErrors.FailToAddItemToCart);
-
-            return Result.Success();
+            return await cartService.AddItemAsync(customer.Id, cartItem, cancellationToken).ConfigureAwait(false);
         }
     }
 }
