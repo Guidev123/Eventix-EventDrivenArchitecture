@@ -4,7 +4,7 @@ using Eventix.Modules.Events.Domain.Events.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Eventix.Modules.Events.Infrastructure.Events
+namespace Eventix.Modules.Events.Infrastructure.Events.Mappings
 {
     public sealed class EventMapping : IEntityTypeConfiguration<Event>
     {

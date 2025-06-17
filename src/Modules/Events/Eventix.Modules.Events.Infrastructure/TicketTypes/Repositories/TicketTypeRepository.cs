@@ -3,7 +3,7 @@ using Eventix.Modules.Events.Domain.TicketTypes.Interfaces;
 using Eventix.Modules.Events.Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
 
-namespace Eventix.Modules.Events.Infrastructure.TicketTypes
+namespace Eventix.Modules.Events.Infrastructure.TicketTypes.Repositories
 {
     internal sealed class TicketTypeRepository(EventsDbContext context) : ITicketTypeRepository
     {

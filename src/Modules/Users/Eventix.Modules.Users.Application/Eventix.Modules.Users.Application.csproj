@@ -8,8 +8,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\BuildingBlocks\Eventix.Shared.Application\Eventix.Shared.Application.csproj" />
-    <ProjectReference Include="..\..\Ticketing\Eventix.Modules.Ticketing.PublicApi\Eventix.Modules.Ticketing.PublicApi.csproj" />
     <ProjectReference Include="..\Eventix.Modules.Users.Domain\Eventix.Modules.Users.Domain.csproj" />
+    <ProjectReference Include="..\Eventix.Modules.Users.IntegrationEvents\Eventix.Modules.Users.IntegrationEvents.csproj" />
   </ItemGroup>
 
 </Project>

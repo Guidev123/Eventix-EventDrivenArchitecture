@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Eventix.Modules.Events.Infrastructure.Categories
+namespace Eventix.Modules.Events.Infrastructure.Categories.Mappings
 {
     public sealed class CategoryMapping : IEntityTypeConfiguration<Category>
     {

@@ -1,12 +1,14 @@
 ﻿using Eventix.Shared.Application.Cache;
 using Eventix.Shared.Application.Clock;
 using Eventix.Shared.Application.Decorators;
+using Eventix.Shared.Application.EventBus;
 using Eventix.Shared.Application.Factories;
 using Eventix.Shared.Infrastructure.Cache;
 using Eventix.Shared.Infrastructure.Clock;
 using Eventix.Shared.Infrastructure.Factories;
 using Eventix.Shared.Infrastructure.Interceptors;
 using FluentValidation;
+using MassTransit;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using MidR.DependencyInjection;
@@ -20,11 +22,13 @@ namespace Eventix.Shared.Infrastructure
     {
         public static IServiceCollection AddInfrastructure(
             this IServiceCollection services,
+            Action<IRegistrationConfigurator>[] moduleConfigureConsumers,
             string databaseConnectionString,
             string redisConnectionString)
         {
             AddData(services, databaseConnectionString)
-                .AddCacheService(redisConnectionString);
+                .AddCacheService(redisConnectionString)
+                .AddBus(moduleConfigureConsumers);
 
             return services;
         }
@@ -84,6 +88,27 @@ namespace Eventix.Shared.Infrastructure
             {
                 services.AddDistributedMemoryCache();
             }
+
+            return services;
+        }
+
+        public static IServiceCollection AddBus(this IServiceCollection services, Action<IRegistrationConfigurator>[] moduleConfigureConsumers)
+        {
+            services.TryAddSingleton<IEventBus, EventBus.EventBus>();
+            services.AddMassTransit(opt =>
+            {
+                foreach (var configureConsumer in moduleConfigureConsumers)
+                {
+                    configureConsumer(opt);
+                }
+
+                opt.SetKebabCaseEndpointNameFormatter();
+
+                opt.UsingInMemory((context, cfg) =>
+                {
+                    cfg.ConfigureEndpoints(context);
+                });
+            });
 
             return services;
         }

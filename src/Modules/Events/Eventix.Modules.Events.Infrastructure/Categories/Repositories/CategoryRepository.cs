@@ -3,7 +3,7 @@ using Eventix.Modules.Events.Domain.Categories.Interfaces;
 using Eventix.Modules.Events.Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
 
-namespace Eventix.Modules.Events.Infrastructure.Categories
+namespace Eventix.Modules.Events.Infrastructure.Categories.Repositories
 {
     internal sealed class CategoryRepository(EventsDbContext context) : ICategoryRepository
     {

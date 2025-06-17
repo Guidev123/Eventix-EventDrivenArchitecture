@@ -41,7 +41,7 @@ namespace Eventix.Api.Configurations
                 TicketingAssembly.Assembly
                 ]);
 
-            builder.Services.AddInfrastructure(dbConnectionString, redisConnectionString);
+            builder.Services.AddInfrastructure([TicketingModule.ConfigureConsumers], dbConnectionString, redisConnectionString);
 
             return builder;
         }

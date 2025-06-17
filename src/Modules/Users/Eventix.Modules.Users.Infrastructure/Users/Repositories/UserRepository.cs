@@ -3,7 +3,7 @@ using Eventix.Modules.Users.Domain.Users.Interfaces;
 using Eventix.Modules.Users.Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
 
-namespace Eventix.Modules.Users.Infrastructure.Users
+namespace Eventix.Modules.Users.Infrastructure.Users.Repositories
 {
     internal sealed class UserRepository(UsersDbContext context) : IUserRepository
     {

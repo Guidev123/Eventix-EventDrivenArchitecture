@@ -3,7 +3,7 @@ using Eventix.Modules.Events.Domain.Events.Interfaces;
 using Eventix.Modules.Events.Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
 
-namespace Eventix.Modules.Events.Infrastructure.Events
+namespace Eventix.Modules.Events.Infrastructure.Events.Repositories
 {
     public sealed class EventRepository(EventsDbContext context) : IEventRepository
     {

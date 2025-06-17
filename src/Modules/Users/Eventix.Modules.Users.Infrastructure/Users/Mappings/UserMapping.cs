@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Eventix.Modules.Users.Infrastructure.Users
+namespace Eventix.Modules.Users.Infrastructure.Users.Mappings
 {
     internal sealed class UserMapping : IEntityTypeConfiguration<User>
     {

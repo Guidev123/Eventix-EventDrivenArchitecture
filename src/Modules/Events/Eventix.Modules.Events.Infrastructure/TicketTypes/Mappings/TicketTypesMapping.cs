@@ -3,7 +3,7 @@ using Eventix.Modules.Events.Domain.TicketTypes.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Eventix.Modules.Events.Infrastructure.TicketTypes
+namespace Eventix.Modules.Events.Infrastructure.TicketTypes.Mappings
 {
     public sealed class TicketTypesMapping : IEntityTypeConfiguration<TicketType>
     {
