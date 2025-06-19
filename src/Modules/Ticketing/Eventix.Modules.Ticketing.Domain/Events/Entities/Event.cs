@@ -1,11 +1,10 @@
-﻿using Eventix.Modules.Events.Domain.Events.DomainEvents;
-using Eventix.Modules.Events.Domain.Events.Enumerators;
-using Eventix.Modules.Events.Domain.Events.Errors;
-using Eventix.Modules.Events.Domain.Events.ValueObjects;
+﻿using Eventix.Modules.Ticketing.Domain.Events.DomainEvents;
+using Eventix.Modules.Ticketing.Domain.Events.Errors;
+using Eventix.Modules.Ticketing.Domain.Events.ValueObjects;
 using Eventix.Shared.Domain.DomainObjects;
 using Eventix.Shared.Domain.Responses;
 
-namespace Eventix.Modules.Events.Domain.Events.Entities
+namespace Eventix.Modules.Ticketing.Domain.Events.Entities
 {
     public sealed class Event : Entity, IAggregateRoot
     {
@@ -13,7 +12,7 @@ namespace Eventix.Modules.Events.Domain.Events.Entities
         {
             Specification = (title, description);
             DateRange = (startsAtUtc, endsAtUtc);
-            Status = EventStatusEnum.Draft;
+            IsCanceled = false;
             CategoryId = categoryId;
             Validate();
         }
@@ -24,34 +23,15 @@ namespace Eventix.Modules.Events.Domain.Events.Entities
         public EventSpecification Specification { get; private set; } = default!;
         public Location? Location { get; private set; } = default!;
         public DateRange DateRange { get; private set; } = default!;
-        public EventStatusEnum Status { get; private set; }
+        public bool IsCanceled { get; private set; }
         public Guid CategoryId { get; private set; }
 
         public static Result<Event> Create(string title, string description, Guid categoryId, DateTime startsAtUtc, DateTime? endsAtUtc)
         {
             if (endsAtUtc.HasValue && endsAtUtc < startsAtUtc)
-            {
                 return Result.Failure<Event>(EventErrors.EndDatePrecedesStartDate);
-            }
-            var @event = new Event(title, description, categoryId, startsAtUtc, endsAtUtc);
 
-            @event.Raise(new EventCreatedDomainEvent(@event.Id));
-
-            return @event;
-        }
-
-        public Result Publish()
-        {
-            if (Status != EventStatusEnum.Draft)
-            {
-                return Result.Failure(EventErrors.NotDraft);
-            }
-
-            Status = EventStatusEnum.Published;
-
-            Raise(new EventPublishedDomainEvent(Id));
-
-            return Result.Success();
+            return new Event(title, description, categoryId, startsAtUtc, endsAtUtc);
         }
 
         public void Reschedule(DateTime startsAtUtc, DateTime? endsAtUtc)
@@ -66,17 +46,27 @@ namespace Eventix.Modules.Events.Domain.Events.Entities
 
         public Result Cancel(DateTime utcNow)
         {
-            if (Status == EventStatusEnum.Cancelled)
+            if (IsCanceled)
                 return Result.Failure(EventErrors.AlreadyCanceled);
 
             if (DateRange.StartsAtUtc < utcNow)
                 return Result.Failure(EventErrors.AlreadyStarted);
 
-            Status = EventStatusEnum.Cancelled;
+            IsCanceled = true;
 
             Raise(new EventCancelledDomainEvent(Id));
 
             return Result.Success();
+        }
+
+        public void PaymentsRefunded()
+        {
+            Raise(new EventPaymentsRefundedDomainEvent(Id));
+        }
+
+        public void TicketsArchived()
+        {
+            Raise(new EventTicketsArchivedDomainEvent(Id));
         }
 
         protected override void Validate()

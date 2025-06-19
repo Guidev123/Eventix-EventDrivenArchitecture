@@ -2,9 +2,9 @@
 
 namespace Eventix.Modules.Events.Domain.Events.DomainEvents
 {
-    public record EventRescheduleDomainEvent : DomainEvent
+    public record EventRescheduledDomainEvent : DomainEvent
     {
-        public EventRescheduleDomainEvent(Guid eventId, DateTime startsAtUtc, DateTime? endsAtUtc)
+        public EventRescheduledDomainEvent(Guid eventId, DateTime startsAtUtc, DateTime? endsAtUtc)
         {
             EventId = eventId;
             StartsAtUtc = startsAtUtc;

@@ -3,9 +3,9 @@ using Eventix.Shared.Application.Messaging;
 
 namespace Eventix.Modules.Events.Application.Events.DomainEvents
 {
-    public sealed class EventRescheduleDomainEventHandler : IDomainEventHandler<EventRescheduleDomainEvent>
+    public sealed class EventRescheduleDomainEventHandler : IDomainEventHandler<EventRescheduledDomainEvent>
     {
-        public async Task ExecuteAsync(EventRescheduleDomainEvent notification, CancellationToken cancellationToken)
+        public async Task ExecuteAsync(EventRescheduledDomainEvent notification, CancellationToken cancellationToken)
         {
             await Task.Delay(100);
         }

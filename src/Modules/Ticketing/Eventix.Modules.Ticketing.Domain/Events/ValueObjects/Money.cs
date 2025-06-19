@@ -1,28 +1,27 @@
-﻿using Eventix.Modules.Events.Domain.TicketTypes.Errors;
+﻿using Eventix.Modules.Ticketing.Domain.Events.Errors;
 using Eventix.Shared.Domain.DomainObjects;
 
-namespace Eventix.Modules.Events.Domain.TicketTypes.ValueObjects
+namespace Eventix.Modules.Ticketing.Domain.Events.ValueObjects
 {
     public sealed record Money : ValueObject
     {
         public static int MIN_CURRENCY_LENGTH = 2;
         public static int MAX_CURRENCY_LENGTH = 5;
 
-        public Money(decimal ammount, string currency)
+        public Money(decimal price, string currency)
         {
-            Amount = ammount;
+            Amount = price;
             Currency = currency;
             Validate();
         }
         private Money()
-        {
-        }
+        { }
 
         public decimal Amount { get; }
         public string Currency { get; } = string.Empty;
 
-        public static implicit operator Money((decimal ammount, string currency) value)
-            => new(value.ammount, value.currency);
+        public static implicit operator Money((decimal price, string currency) value)
+            => new(value.price, value.currency);
 
         public override string ToString() => $"{Amount} {Currency}";
 

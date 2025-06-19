@@ -21,7 +21,7 @@ namespace Eventix.Modules.Ticketing.Application.Carts.UseCases.AddItem
 
             var ticketType = await eventsApi.GetTicketTypeAsync(request.TicketTypeId, cancellationToken).ConfigureAwait(false);
             if (ticketType is null)
-                return Result.Failure(TicketingErrors.TicketTypeNotFound(request.TicketTypeId));
+                return Result.Failure(TicketTypeErrors.NotFound(request.TicketTypeId));
 
             var cartItem = new CartItem()
             {
