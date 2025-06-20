@@ -2,6 +2,7 @@
 using Eventix.Modules.Users.Domain.Users.Errors;
 using Eventix.Modules.Users.Domain.Users.ValueObjects;
 using Eventix.Shared.Domain.DomainObjects;
+using Eventix.Shared.Domain.ValueObjects;
 
 namespace Eventix.Modules.Users.Domain.Users.Entities
 {
@@ -19,7 +20,7 @@ namespace Eventix.Modules.Users.Domain.Users.Entities
         { }
 
         public Email Email { get; private set; } = null!;
-        public UserName Name { get; private set; } = null!;
+        public Name Name { get; private set; } = null!;
         public UserAuditInfo AuditInfo { get; private set; } = null!;
 
         public static User Create(string email, string firstName, string lastName)

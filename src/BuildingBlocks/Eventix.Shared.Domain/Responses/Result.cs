@@ -26,6 +26,11 @@ namespace Eventix.Shared.Domain.Responses
         public static Result<TValue> Success<TValue>(TValue value) => new(value, true);
 
         public static Result<TValue> Failure<TValue>(Error error) => new(default, false, error);
+
+        public static Result Failure(object failToPersistEventData)
+        {
+            throw new NotImplementedException();
+        }
     }
 
     public class Result<TValue> : Result

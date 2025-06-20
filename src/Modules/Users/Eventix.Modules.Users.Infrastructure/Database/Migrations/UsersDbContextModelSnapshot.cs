@@ -80,7 +80,7 @@ namespace Eventix.Modules.Users.Infrastructure.Database.Migrations
                                 .HasForeignKey("UserId");
                         });
 
-                    b.OwnsOne("Eventix.Modules.Users.Domain.Users.ValueObjects.UserName", "Name", b1 =>
+                    b.OwnsOne("Eventix.Modules.Users.Domain.Users.ValueObjects.Name", "Name", b1 =>
                         {
                             b1.Property<Guid>("UserId")
                                 .HasColumnType("uniqueidentifier");

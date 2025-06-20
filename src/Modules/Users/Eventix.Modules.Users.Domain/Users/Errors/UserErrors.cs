@@ -32,10 +32,6 @@ namespace Eventix.Modules.Users.Domain.Users.Errors
             "Users.AuditInfoMustBeNotEmpty",
             "Audit info must be not empty");
 
-        public static readonly Error InvalidEmailFormart = Error.Failure(
-            "Users.InvalidEmailFormat",
-            "Invalid email format");
-
         public static readonly Error UserNameMustBeNotEmpty = Error.Failure(
             "Users.UserNameMustBeNotEmpty",
             "User name must be not empty");

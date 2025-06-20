@@ -1,4 +1,5 @@
 ﻿using Eventix.Modules.Ticketing.Domain.Customers.Errors;
+using Eventix.Modules.Users.Domain.Users.ValueObjects;
 using FluentValidation;
 
 namespace Eventix.Modules.Ticketing.Application.Customers.UseCases.Update
@@ -12,11 +13,11 @@ namespace Eventix.Modules.Ticketing.Application.Customers.UseCases.Update
                 .WithMessage(CustomerErrors.CustomerIdCannotBeEmpty.Description);
 
             RuleFor(x => x.FirstName)
-                .MaximumLength(50)
+                .MaximumLength(Name.NAME_MAX_LENGTH)
                 .WithMessage(CustomerErrors.FirstNameMaxLengthExceeded.Description);
 
             RuleFor(x => x.LastName)
-                .MaximumLength(50)
+                .MaximumLength(Name.NAME_MAX_LENGTH)
                 .WithMessage(CustomerErrors.LastNameMaxLengthExceeded.Description);
 
             RuleFor(x => x.Email)

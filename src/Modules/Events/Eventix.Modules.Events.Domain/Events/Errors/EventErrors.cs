@@ -8,6 +8,22 @@ namespace Eventix.Modules.Events.Domain.Events.Errors
         public static Error NotFound(Guid eventId) =>
                 Error.NotFound("Events.NotFound", $"The event with the identifier {eventId} was not found");
 
+        public static readonly Error PriceMustBeGreaterThanZero = Error.Problem(
+            "Money.PriceMustBeGreaterThanZero",
+            "The ticket price must be greater than zero.");
+
+        public static readonly Error CurrencyIsRequired = Error.Problem(
+            "Money.CurrencyIsRequired",
+            "The ticket currency is required.");
+
+        public static readonly Error CurrencyLengthInvalid = Error.Problem(
+            "Money.CurrencyLengthInvalid",
+            "The ticket currency must be between 2 and 5 characters.");
+
+        public static readonly Error InvalidPaymentData = Error.Problem(
+            "Money.InvalidPaymentData",
+            "Invalid payment data provided");
+
         public static Error UnableToCancelEvent(Guid eventId) =>
             Error.Problem("Events.UnableToCancelEvent", $"Unable to cancel the event with identifier {eventId}");
 

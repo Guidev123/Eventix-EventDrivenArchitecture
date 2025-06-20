@@ -13,16 +13,20 @@ namespace Eventix.Modules.Ticketing.Application.Carts.Errors
             "Fail to add item to cart");
 
         public static readonly Error CustomerIdIsRequired = Error.Problem(
-            "Orders.CustomerIdIsRequired",
+            "Carts.CustomerIdIsRequired",
             "Customer ID must not be empty");
 
         public static readonly Error TicketTypeIdIsRequired = Error.Problem(
-            "Orders.TicketTypeIdIsRequired",
+            "Carts.TicketTypeIdIsRequired",
             "Ticket Type ID must not be empty");
 
         public static Error QuantityMustBeAtLeast(int min) =>
             Error.Problem(
-                "Orders.QuantityMustBeAtLeast",
+                "Carts.QuantityMustBeAtLeast",
                 $"Quantity must be greater than or equal to {min}");
+
+        public static readonly Error Empty = Error.Problem(
+            "Carts.Empty",
+            "Customer cart is empty");
     }
 }

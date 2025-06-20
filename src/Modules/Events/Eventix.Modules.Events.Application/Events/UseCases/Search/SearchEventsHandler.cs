@@ -1,5 +1,5 @@
 ﻿using Dapper;
-using Eventix.Modules.Events.Application.Events.UseCases.Get;
+using Eventix.Modules.Events.Application.Events.UseCases.GetById;
 using Eventix.Modules.Events.Domain.Events.Enumerators;
 using Eventix.Shared.Application.Factories;
 using Eventix.Shared.Application.Messaging;

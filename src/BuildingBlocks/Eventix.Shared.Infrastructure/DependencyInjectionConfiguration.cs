@@ -86,6 +86,7 @@ namespace Eventix.Shared.Infrastructure
             }
             catch
             {
+                services.TryAddSingleton<ICacheService, CacheService>();
                 services.AddDistributedMemoryCache();
             }
 

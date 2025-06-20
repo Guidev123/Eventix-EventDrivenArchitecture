@@ -1,12 +1,15 @@
-﻿using Eventix.Modules.Events.Domain.TicketTypes.Errors;
+﻿using Eventix.Modules.Events.Domain.Events.Errors;
 using Eventix.Shared.Domain.DomainObjects;
 
 namespace Eventix.Modules.Events.Domain.TicketTypes.ValueObjects
 {
     public sealed record Money : ValueObject
     {
-        public static int MIN_CURRENCY_LENGTH = 2;
-        public static int MAX_CURRENCY_LENGTH = 5;
+        public const int MIN_CURRENCY_LENGTH = 2;
+        public const int MAX_CURRENCY_LENGTH = 5;
+        public const int CURRENCY_CODE_LEN = 3;
+        public const string CURRENCY_CODE_PATTERN = @"^[A-Z]{3}$";
+        public const decimal MINIMUM_AMOUNT = 0.01M;
 
         public Money(decimal ammount, string currency)
         {
@@ -28,9 +31,25 @@ namespace Eventix.Modules.Events.Domain.TicketTypes.ValueObjects
 
         protected override void Validate()
         {
-            AssertionConcern.EnsureGreaterThan(Amount, 0, TicketTypeErrors.PriceMustBeGreaterThanZero.Description);
-            AssertionConcern.EnsureNotEmpty(Currency, TicketTypeErrors.CurrencyIsRequired.Description);
-            AssertionConcern.EnsureLengthInRange(Currency, MIN_CURRENCY_LENGTH, MAX_CURRENCY_LENGTH, TicketTypeErrors.CurrencyLengthInvalid.Description);
+            AssertionConcern.EnsureGreaterThan(
+                Amount,
+                MINIMUM_AMOUNT,
+                EventErrors.PriceMustBeGreaterThanZero.Description);
+
+            AssertionConcern.EnsureNotEmpty(
+                Currency,
+                EventErrors.CurrencyIsRequired.Description);
+
+            AssertionConcern.EnsureLengthInRange(
+                Currency,
+                MIN_CURRENCY_LENGTH,
+                MAX_CURRENCY_LENGTH,
+                EventErrors.CurrencyLengthInvalid.Description);
+
+            AssertionConcern.EnsureMatchesPattern(
+                CURRENCY_CODE_PATTERN,
+                Currency,
+                EventErrors.InvalidPaymentData.Description);
         }
     }
 }

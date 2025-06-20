@@ -1,6 +1,7 @@
 ﻿using Eventix.Modules.Ticketing.Domain.Customers.Errors;
-using Eventix.Modules.Ticketing.Domain.Customers.ValueObjects;
+using Eventix.Modules.Users.Domain.Users.ValueObjects;
 using Eventix.Shared.Domain.DomainObjects;
+using Eventix.Shared.Domain.ValueObjects;
 
 namespace Eventix.Modules.Ticketing.Domain.Customers.Entities
 {
@@ -18,7 +19,7 @@ namespace Eventix.Modules.Ticketing.Domain.Customers.Entities
         { }
 
         public Email Email { get; private set; } = null!;
-        public CustomerName Name { get; private set; } = null!;
+        public Name Name { get; private set; } = null!;
 
         public static Customer Create(Guid id, string email, string firstName, string lastName)
         {

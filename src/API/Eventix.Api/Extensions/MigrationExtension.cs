@@ -1,4 +1,5 @@
 ﻿using Eventix.Modules.Events.Infrastructure.Database;
+using Eventix.Modules.Ticketing.Infrastructure.Database;
 using Eventix.Modules.Users.Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,8 +11,9 @@ namespace Eventix.Api.Extensions
         {
             using IServiceScope scope = app.ApplicationServices.CreateScope();
 
-            ApplyMigration<UsersDbContext>(scope);
             ApplyMigration<EventsDbContext>(scope);
+            ApplyMigration<UsersDbContext>(scope);
+            ApplyMigration<TicketingDbContext>(scope);
         }
 
         private static void ApplyMigration<TDb>(this IServiceScope scope)

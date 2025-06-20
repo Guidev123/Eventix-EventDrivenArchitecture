@@ -8,12 +8,12 @@ namespace Eventix.Modules.Ticketing.Domain.Events.Entities
 {
     public sealed class Event : Entity, IAggregateRoot
     {
-        private Event(string title, string description, Guid categoryId, DateTime startsAtUtc, DateTime? endsAtUtc)
+        private Event(string title, string description, Location location, DateTime startsAtUtc, DateTime? endsAtUtc)
         {
             Specification = (title, description);
             DateRange = (startsAtUtc, endsAtUtc);
+            Location = location;
             IsCanceled = false;
-            CategoryId = categoryId;
             Validate();
         }
 
@@ -24,14 +24,13 @@ namespace Eventix.Modules.Ticketing.Domain.Events.Entities
         public Location? Location { get; private set; } = default!;
         public DateRange DateRange { get; private set; } = default!;
         public bool IsCanceled { get; private set; }
-        public Guid CategoryId { get; private set; }
 
-        public static Result<Event> Create(string title, string description, Guid categoryId, DateTime startsAtUtc, DateTime? endsAtUtc)
+        public static Result<Event> Create(string title, string description, Location location, DateTime startsAtUtc, DateTime? endsAtUtc)
         {
             if (endsAtUtc.HasValue && endsAtUtc < startsAtUtc)
                 return Result.Failure<Event>(EventErrors.EndDatePrecedesStartDate);
 
-            return new Event(title, description, categoryId, startsAtUtc, endsAtUtc);
+            return new Event(title, description, location, startsAtUtc, endsAtUtc);
         }
 
         public void Reschedule(DateTime startsAtUtc, DateTime? endsAtUtc)
@@ -44,13 +43,10 @@ namespace Eventix.Modules.Ticketing.Domain.Events.Entities
             Raise(new EventRescheduledDomainEvent(Id, DateRange.StartsAtUtc, DateRange.EndsAtUtc));
         }
 
-        public Result Cancel(DateTime utcNow)
+        public Result Cancel()
         {
             if (IsCanceled)
                 return Result.Failure(EventErrors.AlreadyCanceled);
-
-            if (DateRange.StartsAtUtc < utcNow)
-                return Result.Failure(EventErrors.AlreadyStarted);
 
             IsCanceled = true;
 
@@ -71,8 +67,11 @@ namespace Eventix.Modules.Ticketing.Domain.Events.Entities
 
         protected override void Validate()
         {
-            AssertionConcern.EnsureNotNull(Specification, EventErrors.SpecificationIsRequired.Description);
-            AssertionConcern.EnsureNotNull(DateRange, EventErrors.DateRangeIsRequired.Description);
+            AssertionConcern
+                .EnsureNotNull(Specification, EventErrors.SpecificationIsRequired.Description);
+
+            AssertionConcern
+                .EnsureNotNull(DateRange, EventErrors.DateRangeIsRequired.Description);
         }
     }
 }

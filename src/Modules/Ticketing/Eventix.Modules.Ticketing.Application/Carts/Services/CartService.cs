@@ -1,6 +1,5 @@
 ﻿using Eventix.Modules.Ticketing.Application.Carts.Errors;
 using Eventix.Modules.Ticketing.Application.Carts.Models;
-using Eventix.Modules.Ticketing.Domain.Events.Errors;
 using Eventix.Shared.Application.Cache;
 using Eventix.Shared.Domain.Responses;
 

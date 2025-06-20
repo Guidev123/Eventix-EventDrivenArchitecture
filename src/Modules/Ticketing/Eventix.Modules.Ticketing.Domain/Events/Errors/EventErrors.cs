@@ -10,10 +10,6 @@ namespace Eventix.Modules.Ticketing.Domain.Events.Errors
         public static Error UnableToCancelEvent(Guid eventId) =>
             Error.Problem("Events.UnableToCancelEvent", $"Unable to cancel the event with identifier {eventId}");
 
-        public static readonly Error EventCanNotBePublished = Error.Problem(
-            "Events.EventCanNotBePublished",
-            "The event can not be published.");
-
         public static readonly Error StartDateInPast = Error.Problem(
             "Events.StartDateInPast",
             "The event start date is in the past");
@@ -108,23 +104,44 @@ namespace Eventix.Modules.Ticketing.Domain.Events.Errors
             "Events.EventIdIsRequired",
             "The event ID must not be empty or an empty GUID.");
 
-        public static Error TitleTooShort(int minLength) =>
-       Error.Problem("Events.TitleTooShort", $"The event title must be at least {minLength} characters long.");
-
-        public static Error TitleTooLong(int maxLength) =>
-            Error.Problem("Events.TitleTooLong", $"The event title must not exceed {maxLength} characters.");
-
-        public static Error DescriptionTooShort(int minLength) =>
-            Error.Problem("Events.DescriptionTooShort", $"The event description must be at least {minLength} characters long.");
-
-        public static Error DescriptionTooLong(int maxLength) =>
-            Error.Problem("Events.DescriptionTooLong", $"The event description must not exceed {maxLength} characters.");
-
-        public static Error StartDateTooSoon(int minimumStartTime) =>
-            Error.Problem("Events.StartDateTooSoon", $"The event must start at least {minimumStartTime} hour(s) later.");
-
         public static readonly Error EndDateBeforeStartDate = Error.Problem(
             "Events.EndDateBeforeStartDate",
             "The event end date must be after the start date.");
+
+        public static readonly Error FailToCancelEvent = Error.Problem(
+            "Events.FailToPersistData",
+            "Something has failed during the event cancellation");
+
+        public static readonly Error FailToCreateEvent = Error.Problem(
+            "Events.FailToCreateEvent",
+            "Something has failed to create event");
+
+        public static readonly Error FailToRescheduleEvent = Error.Problem(
+            "Events.FailToRescheduleEvent",
+            "Something has failed to reschedule event");
+
+        public static readonly Error InvalidEventId = Error.Problem(
+             "Event.InvalidEventId",
+             "Event ID cannot be empty");
+
+        public static readonly Error LocationIsRequired = Error.Problem(
+            "Event.LocationIsRequired",
+            "Event location is required");
+
+        public static readonly Error InvalidStartDate = Error.Problem(
+            "Event.InvalidStartDate",
+            "Event start date cannot be default value");
+
+        public static readonly Error InvalidEndDate = Error.Problem(
+            "Event.InvalidEndDate",
+            "Event end date cannot be default value");
+
+        public static readonly Error TicketTypesIsRequired = Error.Problem(
+            "Event.TicketTypesIsRequired",
+            "Ticket types list is required");
+
+        public static readonly Error TicketTypesCannotBeEmpty = Error.Problem(
+            "Event.TicketTypesCannotBeEmpty",
+            "Event must have at least one ticket type");
     }
 }

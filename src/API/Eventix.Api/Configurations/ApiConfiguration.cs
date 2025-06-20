@@ -24,6 +24,8 @@ namespace Eventix.Api.Configurations
 
             builder.Services.AddOpenApi();
 
+            builder.Services.AddHttpContextAccessor();
+
             builder.AddSwaggerConfig();
 
             builder.Host.UseSerilog((context, loggerConfig)
@@ -33,6 +35,8 @@ namespace Eventix.Api.Configurations
 
             builder.AddCustomHealthChecks(dbConnectionString, redisConnectionString);
 
+            builder.Services.AddInfrastructure([TicketingModule.ConfigureConsumers], dbConnectionString, redisConnectionString);
+
             builder.AddAllModules();
 
             builder.Services.AddApplication([
@@ -40,8 +44,6 @@ namespace Eventix.Api.Configurations
                 UsersAssembly.Assembly,
                 TicketingAssembly.Assembly
                 ]);
-
-            builder.Services.AddInfrastructure([TicketingModule.ConfigureConsumers], dbConnectionString, redisConnectionString);
 
             return builder;
         }

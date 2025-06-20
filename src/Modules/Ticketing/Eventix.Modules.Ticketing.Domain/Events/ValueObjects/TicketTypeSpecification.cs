@@ -20,7 +20,7 @@ namespace Eventix.Modules.Ticketing.Domain.Events.ValueObjects
 
         public string Name { get; } = string.Empty;
         public decimal Quantity { get; }
-        public decimal AvailableQuantity { get; private set; }
+        public decimal AvailableQuantity { get; }
 
         public static implicit operator TicketTypeSpecification((string name, decimal quantity, decimal availableQuantity) value)
             => new(value.name, value.quantity, value.availableQuantity);

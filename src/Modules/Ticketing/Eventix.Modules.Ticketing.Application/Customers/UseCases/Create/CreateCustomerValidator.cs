@@ -1,4 +1,5 @@
 ﻿using Eventix.Modules.Ticketing.Domain.Customers.Errors;
+using Eventix.Modules.Users.Domain.Users.ValueObjects;
 using FluentValidation;
 
 namespace Eventix.Modules.Ticketing.Application.Customers.UseCases.Create
@@ -17,12 +18,12 @@ namespace Eventix.Modules.Ticketing.Application.Customers.UseCases.Create
 
             RuleFor(x => x.FirstName)
                 .NotEmpty()
-                .Length(2, 50)
+                .Length(Name.NAME_MIN_LENGTH, Name.NAME_MAX_LENGTH)
                 .WithMessage(CustomerErrors.FirstNameLengthInvalid.Description);
 
             RuleFor(x => x.LastName)
                 .NotEmpty()
-                .Length(2, 50)
+                .Length(Name.NAME_MIN_LENGTH, Name.NAME_MAX_LENGTH)
                 .WithMessage(CustomerErrors.LastNameLengthInvalid.Description);
         }
     }

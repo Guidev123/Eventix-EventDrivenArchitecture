@@ -3,6 +3,7 @@ using Eventix.Modules.Ticketing.Domain.Events.Errors;
 using Eventix.Modules.Ticketing.Domain.Events.ValueObjects;
 using Eventix.Shared.Domain.DomainObjects;
 using Eventix.Shared.Domain.Responses;
+using Eventix.Shared.Domain.ValueObjects;
 
 namespace Eventix.Modules.Ticketing.Domain.Events.Entities
 {
@@ -23,8 +24,8 @@ namespace Eventix.Modules.Ticketing.Domain.Events.Entities
         public TicketTypeSpecification Specification { get; private set; } = null!;
         public Money Price { get; private set; } = null!;
 
-        public static TicketType Create(Guid eventId, string name, decimal price, string currency, decimal quantity, decimal availableQuantity)
-            => new(eventId, name, price, currency, quantity, availableQuantity);
+        public static TicketType Create(Guid eventId, string name, decimal price, string currency, decimal quantity)
+            => new(eventId, name, price, currency, quantity, quantity);
 
         public void UpdatePrice(decimal price)
         {
@@ -43,9 +44,7 @@ namespace Eventix.Modules.Ticketing.Domain.Events.Entities
             Specification = (Specification.Name, Specification.Quantity, newAvailableQuantity);
 
             if (Specification.AvailableQuantity == 0)
-            {
                 Raise(new TicketTypeSoldOutDomainEvent(Id));
-            }
 
             return Result.Success();
         }

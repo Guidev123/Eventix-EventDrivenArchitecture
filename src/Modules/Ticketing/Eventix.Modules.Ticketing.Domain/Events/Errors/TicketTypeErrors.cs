@@ -1,5 +1,5 @@
-﻿using Eventix.Modules.Ticketing.Domain.Events.ValueObjects;
-using Eventix.Shared.Domain.Responses;
+﻿using Eventix.Shared.Domain.Responses;
+using Eventix.Shared.Domain.ValueObjects;
 
 namespace Eventix.Modules.Ticketing.Domain.Events.Errors
 {
@@ -44,18 +44,6 @@ namespace Eventix.Modules.Ticketing.Domain.Events.Errors
             "TicketType.PriceIsRequired",
             "The ticket price is required.");
 
-        public static readonly Error PriceMustBeGreaterThanZero = Error.Problem(
-            "TicketType.PriceMustBeGreaterThanZero",
-            "The ticket price must be greater than zero.");
-
-        public static readonly Error CurrencyIsRequired = Error.Problem(
-            "TicketType.CurrencyIsRequired",
-            "The ticket currency is required.");
-
-        public static readonly Error CurrencyLengthInvalid = Error.Problem(
-            "TicketType.CurrencyLengthInvalid",
-            "The ticket currency must be between 2 and 5 characters.");
-
         public static readonly Error FailToCreateTicket = Error.Problem(
             "TicketTypes.Create",
             "An error occurred while creating the ticket type.");
@@ -71,5 +59,29 @@ namespace Eventix.Modules.Ticketing.Domain.Events.Errors
         public static readonly Error CurrencyTooLong = Error.Problem(
             "Tickets.CurrencyTooLong",
             $"Currency length must be less than {Money.MAX_CURRENCY_LENGTH} characters.");
+
+        public static readonly Error InvalidTicketTypeId = Error.Problem(
+           "TicketType.InvalidTicketTypeId",
+           "Ticket type ID cannot be empty");
+
+        public static readonly Error InvalidEventId = Error.Problem(
+            "TicketType.InvalidEventId",
+            "Event ID cannot be empty");
+
+        public static readonly Error PriceMustBeGreaterThanZero = Error.Problem(
+            "TicketType.PriceMustBeGreaterThanZero",
+            "Ticket type price must be greater than zero");
+
+        public static readonly Error CurrencyIsRequired = Error.Problem(
+            "TicketType.CurrencyIsRequired",
+            "Currency is required");
+
+        public static readonly Error InvalidCurrencyLength = Error.Problem(
+            "TicketType.InvalidCurrencyLength",
+            "Currency must be exactly 3 characters long");
+
+        public static readonly Error InvalidCurrencyFormat = Error.Problem(
+            "TicketType.InvalidCurrencyFormat",
+            "Currency must contain only uppercase letters");
     }
 }
