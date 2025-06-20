@@ -31,5 +31,13 @@ namespace Eventix.Shared.Domain.ValueObjects.Errors
         public static Error NameLengthMustNotExceedTheLimitCharacters(int maxLength) => Error.Failure(
             "Name.UserNameLengthMustNotExceedTheLimitCharacters",
             $"User name length must not exceed {maxLength} characters");
+
+        public static readonly Error InvalidCurrencyLength = Error.Problem(
+            "Money.InvalidCurrencyLength",
+            "Currency must be exactly 3 characters long");
+
+        public static readonly Error InvalidCurrencyFormat = Error.Problem(
+            "Money.InvalidCurrencyFormat",
+            "Currency must contain only uppercase letters");
     }
 }

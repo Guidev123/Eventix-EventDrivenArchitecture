@@ -75,13 +75,5 @@ namespace Eventix.Modules.Ticketing.Domain.Events.Errors
         public static readonly Error CurrencyIsRequired = Error.Problem(
             "TicketType.CurrencyIsRequired",
             "Currency is required");
-
-        public static readonly Error InvalidCurrencyLength = Error.Problem(
-            "TicketType.InvalidCurrencyLength",
-            "Currency must be exactly 3 characters long");
-
-        public static readonly Error InvalidCurrencyFormat = Error.Problem(
-            "TicketType.InvalidCurrencyFormat",
-            "Currency must contain only uppercase letters");
     }
 }

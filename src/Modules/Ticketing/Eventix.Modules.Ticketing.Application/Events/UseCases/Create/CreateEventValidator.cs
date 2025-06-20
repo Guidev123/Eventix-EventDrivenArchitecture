@@ -1,5 +1,6 @@
 ﻿using Eventix.Modules.Ticketing.Domain.Events.Errors;
 using Eventix.Shared.Domain.ValueObjects;
+using Eventix.Shared.Domain.ValueObjects.Errors;
 using FluentValidation;
 
 namespace Eventix.Modules.Ticketing.Application.Events.UseCases.Create
@@ -71,9 +72,9 @@ namespace Eventix.Modules.Ticketing.Application.Events.UseCases.Create
                     .NotEmpty()
                     .WithMessage(TicketTypeErrors.CurrencyIsRequired.Description)
                     .Length(Money.MIN_CURRENCY_LENGTH)
-                    .WithMessage(TicketTypeErrors.InvalidCurrencyLength.Description)
+                    .WithMessage(ValueObjectErrors.InvalidCurrencyLength.Description)
                     .Matches(Money.CURRENCY_CODE_PATTERN)
-                    .WithMessage(TicketTypeErrors.InvalidCurrencyFormat.Description);
+                    .WithMessage(ValueObjectErrors.InvalidCurrencyFormat.Description);
 
                 RuleFor(x => x.Quantity)
                     .GreaterThan(0)
