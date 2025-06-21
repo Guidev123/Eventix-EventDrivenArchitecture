@@ -4,6 +4,7 @@ using Eventix.Modules.Events.Domain.Events.Errors;
 using Eventix.Modules.Events.Domain.Events.ValueObjects;
 using Eventix.Shared.Domain.DomainObjects;
 using Eventix.Shared.Domain.Responses;
+using Eventix.Shared.Domain.ValueObjects;
 
 namespace Eventix.Modules.Events.Domain.Events.Entities
 {

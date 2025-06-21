@@ -2,6 +2,7 @@
 using Eventix.Modules.Events.Domain.TicketTypes.Errors;
 using Eventix.Modules.Events.Domain.TicketTypes.ValueObjects;
 using Eventix.Shared.Domain.DomainObjects;
+using Eventix.Shared.Domain.ValueObjects;
 
 namespace Eventix.Modules.Events.Domain.TicketTypes.Entities
 {

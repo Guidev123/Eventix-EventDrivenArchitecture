@@ -1,5 +1,4 @@
-﻿using Eventix.Modules.Events.Domain.Events.ValueObjects;
-using Eventix.Shared.Domain.Responses;
+﻿using Eventix.Shared.Domain.Responses;
 
 namespace Eventix.Modules.Events.Domain.Events.Errors
 {
@@ -11,18 +10,6 @@ namespace Eventix.Modules.Events.Domain.Events.Errors
         public static readonly Error PriceMustBeGreaterThanZero = Error.Problem(
             "Money.PriceMustBeGreaterThanZero",
             "The ticket price must be greater than zero.");
-
-        public static readonly Error CurrencyIsRequired = Error.Problem(
-            "Money.CurrencyIsRequired",
-            "The ticket currency is required.");
-
-        public static readonly Error CurrencyLengthInvalid = Error.Problem(
-            "Money.CurrencyLengthInvalid",
-            "The ticket currency must be between 2 and 5 characters.");
-
-        public static readonly Error InvalidPaymentData = Error.Problem(
-            "Money.InvalidPaymentData",
-            "Invalid payment data provided");
 
         public static Error UnableToCancelEvent(Guid eventId) =>
             Error.Problem("Events.UnableToCancelEvent", $"Unable to cancel the event with identifier {eventId}");
@@ -89,37 +76,9 @@ namespace Eventix.Modules.Events.Domain.Events.Errors
             "Events.DateRangeIsRequired",
             "The event date range is required.");
 
-        public static readonly Error StartDateMustBeInFuture = Error.Problem(
-            "DateRange.StartDateMustBeInFuture",
-            "The start date must be in the future.");
-
         public static readonly Error EndDateMustBeAfterStartDate = Error.Problem(
             "DateRange.EndDateMustBeAfterStartDate",
             "The end date must be after the start date.");
-
-        public static readonly Error StreetIsRequired = Error.Problem(
-           "Location.StreetIsRequired",
-           "The street is required.");
-
-        public static readonly Error NumberIsRequired = Error.Problem(
-            "Location.NumberIsRequired",
-            "The number is required.");
-
-        public static readonly Error NeighborhoodIsRequired = Error.Problem(
-            "Location.NeighborhoodIsRequired",
-            "The neighborhood is required.");
-
-        public static readonly Error ZipCodeIsRequired = Error.Problem(
-            "Location.ZipCodeIsRequired",
-            "The zip code is required.");
-
-        public static readonly Error CityIsRequired = Error.Problem(
-            "Location.CityIsRequired",
-            "The city is required.");
-
-        public static readonly Error StateIsRequired = Error.Problem(
-            "Location.StateIsRequired",
-            "The state is required.");
 
         public static readonly Error EventIdIsRequired = Error.Problem(
             "Events.EventIdIsRequired",

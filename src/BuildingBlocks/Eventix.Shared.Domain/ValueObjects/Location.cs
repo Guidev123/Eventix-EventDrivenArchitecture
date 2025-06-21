@@ -1,7 +1,7 @@
-﻿using Eventix.Modules.Events.Domain.Events.Errors;
-using Eventix.Shared.Domain.DomainObjects;
+﻿using Eventix.Shared.Domain.DomainObjects;
+using Eventix.Shared.Domain.ValueObjects.Errors;
 
-namespace Eventix.Modules.Events.Domain.Events.ValueObjects
+namespace Eventix.Shared.Domain.ValueObjects
 {
     public sealed record Location : ValueObject
     {
@@ -17,6 +17,9 @@ namespace Eventix.Modules.Events.Domain.Events.ValueObjects
             Validate();
         }
 
+        private Location()
+        { }
+
         public string Street { get; private set; } = string.Empty;
         public string Number { get; private set; } = string.Empty;
         public string AdditionalInfo { get; private set; } = string.Empty;
@@ -29,12 +32,12 @@ namespace Eventix.Modules.Events.Domain.Events.ValueObjects
             => new(location.street, location.number, location.additionalInfo, location.neighborhood, location.zipCode, location.city, location.state);
         protected override void Validate()
         {
-            AssertionConcern.EnsureNotEmpty(Street, EventErrors.StreetIsRequired.Description);
-            AssertionConcern.EnsureNotEmpty(Number, EventErrors.NumberIsRequired.Description);
-            AssertionConcern.EnsureNotEmpty(Neighborhood, EventErrors.NeighborhoodIsRequired.Description);
-            AssertionConcern.EnsureNotEmpty(ZipCode, EventErrors.ZipCodeIsRequired.Description);
-            AssertionConcern.EnsureNotEmpty(City, EventErrors.CityIsRequired.Description);
-            AssertionConcern.EnsureNotEmpty(State, EventErrors.StateIsRequired.Description);
+            AssertionConcern.EnsureNotEmpty(Street, ValueObjectErrors.StreetIsRequired.Description);
+            AssertionConcern.EnsureNotEmpty(Number, ValueObjectErrors.NumberIsRequired.Description);
+            AssertionConcern.EnsureNotEmpty(Neighborhood, ValueObjectErrors.NeighborhoodIsRequired.Description);
+            AssertionConcern.EnsureNotEmpty(ZipCode, ValueObjectErrors.ZipCodeIsRequired.Description);
+            AssertionConcern.EnsureNotEmpty(City, ValueObjectErrors.CityIsRequired.Description);
+            AssertionConcern.EnsureNotEmpty(State, ValueObjectErrors.StateIsRequired.Description);
         }
     }
 }

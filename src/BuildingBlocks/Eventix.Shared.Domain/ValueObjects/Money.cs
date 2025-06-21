@@ -18,7 +18,8 @@ namespace Eventix.Shared.Domain.ValueObjects
             Validate();
         }
 
-        private Money() { }
+        private Money()
+        { }
 
         public decimal Amount { get; }
         public string Currency { get; } = string.Empty;

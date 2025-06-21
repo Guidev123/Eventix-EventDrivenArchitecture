@@ -3,6 +3,7 @@ using Eventix.Modules.Ticketing.Domain.Events.Errors;
 using Eventix.Modules.Ticketing.Domain.Events.ValueObjects;
 using Eventix.Shared.Domain.DomainObjects;
 using Eventix.Shared.Domain.Responses;
+using Eventix.Shared.Domain.ValueObjects;
 
 namespace Eventix.Modules.Ticketing.Domain.Events.Entities
 {

@@ -19,14 +19,6 @@ namespace Eventix.Modules.Events.Domain.TicketTypes.Errors
             "TicketType.SpecificationIsRequired",
             "The ticket specification is required.");
 
-        public static readonly Error NameIsRequired = Error.Problem(
-            "TicketType.NameIsRequired",
-            "The ticket name is required.");
-
-        public static readonly Error NameLengthInvalid = Error.Problem(
-            "TicketType.NameLengthInvalid",
-            "The ticket name must be between 3 and 100 characters.");
-
         public static readonly Error QuantityMustBeGreaterThanZero = Error.Problem(
             "TicketType.QuantityMustBeGreaterThanZero",
             "The ticket quantity must be greater than zero.");
@@ -34,18 +26,6 @@ namespace Eventix.Modules.Events.Domain.TicketTypes.Errors
         public static readonly Error PriceIsRequired = Error.Problem(
             "TicketType.PriceIsRequired",
             "The ticket price is required.");
-
-        public static readonly Error PriceMustBeGreaterThanZero = Error.Problem(
-            "TicketType.PriceMustBeGreaterThanZero",
-            "The ticket price must be greater than zero.");
-
-        public static readonly Error CurrencyIsRequired = Error.Problem(
-            "TicketType.CurrencyIsRequired",
-            "The ticket currency is required.");
-
-        public static readonly Error CurrencyLengthInvalid = Error.Problem(
-            "TicketType.CurrencyLengthInvalid",
-            "The ticket currency must be between 2 and 5 characters.");
 
         public static readonly Error FailToCreateTicket = Error.Problem(
             "TicketTypes.Create",
@@ -55,12 +35,12 @@ namespace Eventix.Modules.Events.Domain.TicketTypes.Errors
             "Tickets.NameTooLong",
             "Ticket type name must not exceed 100 characters.");
 
-        public static readonly Error CurrencyTooShort = Error.Problem(
-            "Tickets.CurrencyTooShort",
-            $"Currency length must be greater than {Money.MIN_CURRENCY_LENGTH} characters.");
+        public static readonly Error NameIsRequired = Error.Problem(
+            "TicketTypes.NameIsRequired",
+            "Name is required");
 
-        public static readonly Error CurrencyTooLong = Error.Problem(
-            "Tickets.CurrencyTooLong",
-            $"Currency length must be less than {Money.MAX_CURRENCY_LENGTH} characters.");
+        public static readonly Error NameLengthInvalid = Error.Problem(
+            "TicketTypes.NameLengthInvalid",
+            "Invalid name length");
     }
 }

@@ -60,10 +60,6 @@ namespace Eventix.Modules.Ticketing.Domain.Events.Errors
             "Events.CategoryIdIsRequired",
             "The event category identifier is required.");
 
-        public static readonly Error StartDateIsRequired = Error.Problem(
-            "Events.StartDateIsRequired",
-            "The event start date is required.");
-
         public static readonly Error DateRangeIsRequired = Error.Problem(
             "Events.DateRangeIsRequired",
             "The event date range is required.");
@@ -75,30 +71,6 @@ namespace Eventix.Modules.Ticketing.Domain.Events.Errors
         public static readonly Error EndDateMustBeAfterStartDate = Error.Problem(
             "DateRange.EndDateMustBeAfterStartDate",
             "The end date must be after the start date.");
-
-        public static readonly Error StreetIsRequired = Error.Problem(
-           "Location.StreetIsRequired",
-           "The street is required.");
-
-        public static readonly Error NumberIsRequired = Error.Problem(
-            "Location.NumberIsRequired",
-            "The number is required.");
-
-        public static readonly Error NeighborhoodIsRequired = Error.Problem(
-            "Location.NeighborhoodIsRequired",
-            "The neighborhood is required.");
-
-        public static readonly Error ZipCodeIsRequired = Error.Problem(
-            "Location.ZipCodeIsRequired",
-            "The zip code is required.");
-
-        public static readonly Error CityIsRequired = Error.Problem(
-            "Location.CityIsRequired",
-            "The city is required.");
-
-        public static readonly Error StateIsRequired = Error.Problem(
-            "Location.StateIsRequired",
-            "The state is required.");
 
         public static readonly Error EventIdIsRequired = Error.Problem(
             "Events.EventIdIsRequired",

@@ -1,5 +1,6 @@
 ﻿using Eventix.Modules.Ticketing.Domain.Events.Entities;
 using Eventix.Modules.Ticketing.Domain.Events.ValueObjects;
+using Eventix.Shared.Domain.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

@@ -1,5 +1,5 @@
-﻿using Eventix.Modules.Ticketing.Domain.Events.ValueObjects;
-using Eventix.Shared.Application.Messaging;
+﻿using Eventix.Shared.Application.Messaging;
+using Eventix.Shared.Domain.ValueObjects;
 using static Eventix.Modules.Ticketing.Application.Events.UseCases.Create.CreateEventCommand;
 
 namespace Eventix.Modules.Ticketing.Application.Events.UseCases.Create

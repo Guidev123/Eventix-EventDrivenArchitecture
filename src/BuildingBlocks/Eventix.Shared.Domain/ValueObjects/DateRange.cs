@@ -1,7 +1,7 @@
-﻿using Eventix.Modules.Events.Domain.Events.Errors;
-using Eventix.Shared.Domain.DomainObjects;
+﻿using Eventix.Shared.Domain.DomainObjects;
+using Eventix.Shared.Domain.ValueObjects.Errors;
 
-namespace Eventix.Modules.Events.Domain.Events.ValueObjects
+namespace Eventix.Shared.Domain.ValueObjects
 {
     public sealed record DateRange : ValueObject
     {
@@ -24,13 +24,13 @@ namespace Eventix.Modules.Events.Domain.Events.ValueObjects
             => new(range.start, range.end);
         protected override void Validate()
         {
-            AssertionConcern.EnsureTrue(IsInValidRange, EventErrors.StartDateMustBeInFuture.Description);
+            AssertionConcern.EnsureTrue(IsInValidRange, ValueObjectErrors.StartDateMustBeInFuture.Description);
 
             if (EndsAtUtc.HasValue)
             {
                 AssertionConcern.EnsureTrue(
                     EndsAtUtc.Value > StartsAtUtc,
-                    EventErrors.EndDateMustBeAfterStartDate.Description);
+                    ValueObjectErrors.EndDateMustBeAfterStartDate.Description);
             }
         }
     }

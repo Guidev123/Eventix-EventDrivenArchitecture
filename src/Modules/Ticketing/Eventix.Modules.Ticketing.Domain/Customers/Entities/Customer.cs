@@ -1,5 +1,4 @@
 ﻿using Eventix.Modules.Ticketing.Domain.Customers.Errors;
-using Eventix.Modules.Users.Domain.Users.ValueObjects;
 using Eventix.Shared.Domain.DomainObjects;
 using Eventix.Shared.Domain.ValueObjects;
 

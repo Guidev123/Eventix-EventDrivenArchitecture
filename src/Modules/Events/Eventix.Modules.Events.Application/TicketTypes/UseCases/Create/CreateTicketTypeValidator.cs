@@ -1,6 +1,7 @@
 ﻿using Eventix.Modules.Events.Domain.Events.Errors;
 using Eventix.Modules.Events.Domain.TicketTypes.Errors;
 using Eventix.Modules.Events.Domain.TicketTypes.ValueObjects;
+using Eventix.Shared.Domain.ValueObjects;
 using Eventix.Shared.Domain.ValueObjects.Errors;
 using FluentValidation;
 
@@ -19,7 +20,7 @@ namespace Eventix.Modules.Events.Application.TicketTypes.UseCases.Create
                 .MaximumLength(100).WithMessage(TicketTypeErrors.NameTooLong.Description);
 
             RuleFor(c => c.Price)
-                .GreaterThan(0).WithMessage(TicketTypeErrors.PriceMustBeGreaterThanZero.Description);
+                .GreaterThan(0).WithMessage(ValueObjectErrors.PriceMustBeGreaterThanZero.Description);
 
             RuleFor(x => x.Currency)
                 .NotEmpty()

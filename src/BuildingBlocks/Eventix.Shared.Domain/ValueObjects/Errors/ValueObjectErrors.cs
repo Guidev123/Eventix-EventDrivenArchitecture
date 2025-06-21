@@ -39,5 +39,45 @@ namespace Eventix.Shared.Domain.ValueObjects.Errors
         public static readonly Error InvalidCurrencyFormat = Error.Problem(
             "Money.InvalidCurrencyFormat",
             "Currency must contain only uppercase letters");
+
+        public static readonly Error StartDateInPast = Error.Problem(
+            "Date.StartDateInPast",
+            "The event start date is in the past");
+
+        public static readonly Error EndDatePrecedesStartDate = Error.Problem(
+            "Date.EndDatePrecedesStartDate",
+            "The event end date precedes the start date");
+
+        public static readonly Error StartDateMustBeInFuture = Error.Problem(
+           "Date.StartDateMustBeInFuture",
+           "The start date must be in the future.");
+
+        public static readonly Error EndDateMustBeAfterStartDate = Error.Problem(
+            "Date.EndDateMustBeAfterStartDate",
+            "The end date must be after the start date.");
+
+        public static readonly Error StreetIsRequired = Error.Problem(
+           "Location.StreetIsRequired",
+           "The street is required.");
+
+        public static readonly Error NumberIsRequired = Error.Problem(
+            "Location.NumberIsRequired",
+            "The number is required.");
+
+        public static readonly Error NeighborhoodIsRequired = Error.Problem(
+            "Location.NeighborhoodIsRequired",
+            "The neighborhood is required.");
+
+        public static readonly Error ZipCodeIsRequired = Error.Problem(
+            "Location.ZipCodeIsRequired",
+            "The zip code is required.");
+
+        public static readonly Error CityIsRequired = Error.Problem(
+            "Location.CityIsRequired",
+            "The city is required.");
+
+        public static readonly Error StateIsRequired = Error.Problem(
+            "Location.StateIsRequired",
+            "The state is required.");
     }
 }

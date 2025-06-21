@@ -1,7 +1,7 @@
 ﻿using Eventix.Shared.Domain.DomainObjects;
 using Eventix.Shared.Domain.ValueObjects.Errors;
 
-namespace Eventix.Modules.Users.Domain.Users.ValueObjects
+namespace Eventix.Shared.Domain.ValueObjects
 {
     public record Name : ValueObject
     {

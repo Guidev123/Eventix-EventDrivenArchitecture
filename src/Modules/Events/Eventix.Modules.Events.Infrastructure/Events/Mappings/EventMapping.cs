@@ -1,6 +1,7 @@
 ﻿using Eventix.Modules.Events.Domain.Categories.Entities;
 using Eventix.Modules.Events.Domain.Events.Entities;
 using Eventix.Modules.Events.Domain.Events.ValueObjects;
+using Eventix.Shared.Domain.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

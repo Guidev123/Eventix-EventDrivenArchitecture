@@ -1,4 +1,5 @@
 ﻿using Eventix.Modules.Events.Domain.TicketTypes.Errors;
+using Eventix.Shared.Domain.ValueObjects.Errors;
 using FluentValidation;
 
 namespace Eventix.Modules.Events.Application.TicketTypes.UseCases.UpdatePrice
@@ -9,7 +10,7 @@ namespace Eventix.Modules.Events.Application.TicketTypes.UseCases.UpdatePrice
         {
             RuleFor(x => x.Price)
                 .GreaterThan(0)
-                .WithMessage(TicketTypeErrors.PriceMustBeGreaterThanZero.Description);
+                .WithMessage(ValueObjectErrors.PriceMustBeGreaterThanZero.Description);
         }
     }
 }

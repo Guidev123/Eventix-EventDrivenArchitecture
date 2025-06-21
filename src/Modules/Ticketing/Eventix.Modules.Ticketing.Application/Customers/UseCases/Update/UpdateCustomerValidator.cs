@@ -1,5 +1,5 @@
 ﻿using Eventix.Modules.Ticketing.Domain.Customers.Errors;
-using Eventix.Modules.Users.Domain.Users.ValueObjects;
+using Eventix.Shared.Domain.ValueObjects;
 using FluentValidation;
 
 namespace Eventix.Modules.Ticketing.Application.Customers.UseCases.Update

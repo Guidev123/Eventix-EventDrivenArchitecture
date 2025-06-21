@@ -32,10 +32,6 @@ namespace Eventix.Modules.Users.Domain.Users.Errors
             "Users.AuditInfoMustBeNotEmpty",
             "Audit info must be not empty");
 
-        public static readonly Error UserNameMustBeNotEmpty = Error.Failure(
-            "Users.UserNameMustBeNotEmpty",
-            "User name must be not empty");
-
         public static Error UserNameLengthMustNotExceedTheLimitCharacters(int maxLength) => Error.Failure(
             "Users.UserNameLengthMustNotExceedTheLimitCharacters",
             $"User name length must not exceed {maxLength} characters");
