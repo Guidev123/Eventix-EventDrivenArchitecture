@@ -9,7 +9,7 @@ using MidR.Interfaces;
 
 namespace Eventix.Modules.Ticketing.Presentation.Carts
 {
-    internal sealed class RemoveItem : IEndpoint
+    internal sealed class RemoveCartItem : IEndpoint
     {
         public void MapEndpoint(IEndpointRouteBuilder app)
         {

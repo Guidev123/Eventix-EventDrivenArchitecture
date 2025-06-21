@@ -8,7 +8,7 @@ using MidR.Interfaces;
 
 namespace Eventix.Modules.Ticketing.Presentation.Orders
 {
-    internal sealed class GetById : IEndpoint
+    internal sealed class GetOrderById : IEndpoint
     {
         public void MapEndpoint(IEndpointRouteBuilder app)
         {

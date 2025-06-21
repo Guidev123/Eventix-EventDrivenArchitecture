@@ -1,4 +1,4 @@
-﻿using Eventix.Modules.Ticketing.Application.Tickets.UseCases.GetByCode;
+﻿using Eventix.Modules.Ticketing.Application.Tickets.UseCases.GetByOrder;
 using Eventix.Shared.Presentation.Endpoints;
 using Eventix.Shared.Presentation.Extensions;
 using Microsoft.AspNetCore.Builder;
@@ -8,13 +8,13 @@ using MidR.Interfaces;
 
 namespace Eventix.Modules.Ticketing.Presentation.Tickets
 {
-    internal sealed class GetByCode : IEndpoint
+    internal sealed class GetTicketByOrder : IEndpoint
     {
         public void MapEndpoint(IEndpointRouteBuilder app)
         {
-            app.MapGet("api/v1/tickets/code/{code}", async (string code, IMediator mediator) =>
+            app.MapGet("api/v1/tickets/order/{orderId:guid}", async (Guid orderId, IMediator mediator) =>
             {
-                var result = await mediator.DispatchAsync(new GetTicketByCodeQuery(code));
+                var result = await mediator.DispatchAsync(new GetTicketsByOrderQuery(orderId));
 
                 return result.Match(Results.Ok, ApiResults.Problem);
             })
