@@ -17,7 +17,7 @@ namespace Eventix.Modules.Ticketing.Application.Payments.UseCases.RefundForEvent
         public async Task<Result> ExecuteAsync(RefundPaymentsForEventCommand request, CancellationToken cancellationToken = default)
         {
             using var connection = sqlConnectionFactory.Create();
-            var transaction = await connection.BeginTransactionAsync(cancellationToken);
+            using var transaction = await connection.BeginTransactionAsync(cancellationToken);
 
             try
             {
@@ -38,12 +38,15 @@ namespace Eventix.Modules.Ticketing.Application.Payments.UseCases.RefundForEvent
                 @event.PaymentsRefunded();
 
                 var saveChanges = await unitOfWork.CommitAsync(cancellationToken);
+                if (!saveChanges)
+                {
+                    await transaction.RollbackAsync(cancellationToken);
+                    Result.Failure(PaymentErrors.FailToPersistRefundInformation);
+                }
 
                 await transaction.CommitAsync(cancellationToken);
 
-                return saveChanges
-                    ? Result.Success()
-                    : Result.Failure(PaymentErrors.FailToPersistRefundInformation);
+                return Result.Success();
             }
             catch
             {

@@ -17,7 +17,7 @@ namespace Eventix.Modules.Ticketing.Application.Tickets.UseCases.ArchiveForEvent
         public async Task<Result> ExecuteAsync(ArchiveTicketsForEventCommand request, CancellationToken cancellationToken = default)
         {
             using var connection = sqlConnectionFactory.Create();
-            var transaction = await connection.BeginTransactionAsync(cancellationToken);
+            using var transaction = await connection.BeginTransactionAsync(cancellationToken);
 
             try
             {
@@ -35,12 +35,15 @@ namespace Eventix.Modules.Ticketing.Application.Tickets.UseCases.ArchiveForEvent
                 @event.TicketsArchived();
 
                 var saveChanges = await unitOfWork.CommitAsync(cancellationToken);
+                if (!saveChanges)
+                {
+                    await transaction.RollbackAsync(cancellationToken);
+                    Result.Failure(TicketErrors.FailToPersistArchiveTickets);
+                }
 
                 await transaction.CommitAsync(cancellationToken);
 
-                return saveChanges
-                    ? Result.Success()
-                    : Result.Failure(TicketErrors.FailToPersistArchiveTickets);
+                return Result.Success();
             }
             catch
             {

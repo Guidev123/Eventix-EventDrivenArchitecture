@@ -10,6 +10,7 @@ using Eventix.Modules.Ticketing.Domain.Orders.Entities;
 using Eventix.Modules.Ticketing.Domain.Orders.Errors;
 using Eventix.Modules.Ticketing.Domain.Orders.Interfaces;
 using Eventix.Modules.Ticketing.Domain.Payments.Entities;
+using Eventix.Modules.Ticketing.Domain.Payments.Errors;
 using Eventix.Modules.Ticketing.Domain.Payments.Interfaces;
 using Eventix.Shared.Application.Factories;
 using Eventix.Shared.Application.Messaging;
@@ -30,7 +31,7 @@ namespace Eventix.Modules.Ticketing.Application.Orders.UseCases.Create
         public async Task<Result> ExecuteAsync(CreateOrderCommand request, CancellationToken cancellationToken = default)
         {
             using var connection = sqlConnectionFactory.Create();
-            var transaction = await connection.BeginTransactionAsync(cancellationToken);
+            using var transaction = await connection.BeginTransactionAsync(cancellationToken);
 
             try
             {
@@ -71,23 +72,32 @@ namespace Eventix.Modules.Ticketing.Application.Orders.UseCases.Create
 
                 var paymentResponse = await paymentService.ChargeAsync(order.TotalPrice.Amount, order.TotalPrice.Currency);
 
+                if (paymentResponse.IsFailure)
+                {
+                    await transaction.RollbackAsync(cancellationToken);
+                    return Result.Failure(PaymentErrors.FailToCreatePayment);
+                }
+
                 var payment = Payment.Create(
                     order,
-                    paymentResponse.TransactionId,
-                    paymentResponse.Amount,
-                    paymentResponse.Currency);
+                    paymentResponse.Value.TransactionId,
+                    paymentResponse.Value.Amount,
+                    paymentResponse.Value.Currency);
 
                 paymentRepository.Insert(payment);
 
                 var saveChanges = await unitOfWork.CommitAsync(cancellationToken);
+                if (!saveChanges)
+                {
+                    await transaction.RollbackAsync(cancellationToken);
+                    return Result.Failure(OrderErrors.FailToCreateOrder);
+                }
 
                 await transaction.CommitAsync(cancellationToken);
 
                 await cartService.ClearAsync(customer.Id, cancellationToken);
 
-                return saveChanges
-                    ? Result.Success()
-                    : Result.Failure(OrderErrors.FailToCreateOrder);
+                return Result.Success();
             }
             catch
             {
