@@ -29,6 +29,9 @@ namespace Eventix.Api.Configurations
 
             app.UseSerilogRequestLogging();
 
+            app.UseAuthentication();
+            app.UseAuthorization();
+
             return app;
         }
     }

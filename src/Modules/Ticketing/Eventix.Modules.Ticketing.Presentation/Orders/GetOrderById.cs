@@ -17,7 +17,7 @@ namespace Eventix.Modules.Ticketing.Presentation.Orders
                 var result = await mediator.DispatchAsync(new GetOrderByIdQuery(id)).ConfigureAwait(false);
 
                 return result.Match(Results.Ok, ApiResults.Problem);
-            }).WithTags(Tags.Orders);
+            }).RequireAuthorization().WithTags(Tags.Orders);
         }
     }
 }

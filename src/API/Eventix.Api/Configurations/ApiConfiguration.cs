@@ -24,8 +24,6 @@ namespace Eventix.Api.Configurations
 
             builder.Services.AddOpenApi();
 
-            builder.Services.AddHttpContextAccessor();
-
             builder.AddSwaggerConfig();
 
             builder.Host.UseSerilog((context, loggerConfig)
@@ -64,7 +62,8 @@ namespace Eventix.Api.Configurations
         {
             builder.Services.AddHealthChecks()
                 .AddSqlServer(dbConnectionString)
-                .AddRedis(redisConnectionString);
+                .AddRedis(redisConnectionString)
+                .AddUrlGroup(new Uri(builder.Configuration.GetValue<string>("KeyCloak:HealthUrl") ?? string.Empty), HttpMethod.Get, "keycloak");
 
             return builder;
         }

@@ -18,7 +18,7 @@ namespace Eventix.Modules.Events.Presentation.Events
                 .DispatchAsync(new CancelEventCommand(id))
                 .ConfigureAwait(false))
                 .Match(Results.NoContent, ApiResults.Problem);
-            }).WithTags(Tags.Events);
+            }).RequireAuthorization().WithTags(Tags.Events);
         }
     }
 }

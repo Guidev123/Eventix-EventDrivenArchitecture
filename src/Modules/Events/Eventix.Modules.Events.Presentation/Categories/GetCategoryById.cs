@@ -17,7 +17,7 @@ namespace Eventix.Modules.Events.Presentation.Categories
                 var result = await mediator.DispatchAsync(new GetCategoryByIdQuery(id)).ConfigureAwait(false);
 
                 return result.Match(Results.Ok, ApiResults.Problem);
-            })
+            }).RequireAuthorization()
             .WithTags(Tags.Categories);
         }
     }

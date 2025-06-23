@@ -18,7 +18,7 @@ namespace Eventix.Modules.Users.Presentation.Users
                 .DispatchAsync(new GetUserByIdQuery(id))
                 .ConfigureAwait(false))
                 .Match(Results.Ok, ApiResults.Problem);
-            }).WithTags(Tags.Users);
+            }).RequireAuthorization().WithTags(Tags.Users);
         }
     }
 }

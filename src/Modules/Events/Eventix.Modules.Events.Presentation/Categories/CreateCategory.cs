@@ -20,7 +20,7 @@ namespace Eventix.Modules.Events.Presentation.Categories
                     success => Results.Created($"/categories/{success.CategoryId}", success),
                     failure => ApiResults.Problem(failure)
                 );
-            })
+            }).RequireAuthorization()
             .WithTags(Tags.Categories);
         }
     }

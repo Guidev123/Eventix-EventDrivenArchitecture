@@ -20,7 +20,7 @@ namespace Eventix.Modules.Events.Presentation.Events
                     success => Results.Created($"/events/{result.Value.Id}", result.Value),
                     failure => ApiResults.Problem(failure)
                 );
-            }).WithTags(Tags.Events);
+            }).RequireAuthorization().WithTags(Tags.Events);
         }
     }
 }

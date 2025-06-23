@@ -16,7 +16,7 @@ namespace Eventix.Modules.Events.Presentation.TicketTypes
             {
                 var result = await mediator.DispatchAsync(new GetTicketTypeByIdQuery(id)).ConfigureAwait(false);
                 return result.Match(Results.Ok, ApiResults.Problem);
-            })
+            }).RequireAuthorization()
             .WithTags(Tags.TicketTypes);
         }
     }

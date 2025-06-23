@@ -17,7 +17,7 @@ namespace Eventix.Modules.Events.Presentation.Categories
                 return (await mediator
                 .DispatchAsync(new ArchiveCategoryCommand(id)))
                 .Match(Results.NoContent, ApiResults.Problem);
-            })
+            }).RequireAuthorization()
             .WithTags(Tags.Categories);
         }
     }

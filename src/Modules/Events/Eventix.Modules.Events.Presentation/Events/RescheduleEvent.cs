@@ -18,7 +18,7 @@ namespace Eventix.Modules.Events.Presentation.Events
                 return (await mediator.DispatchAsync(command)
                 .ConfigureAwait(false))
                 .Match(Results.NoContent, ApiResults.Problem);
-            })
+            }).RequireAuthorization()
             .WithTags(Tags.Events);
         }
     }

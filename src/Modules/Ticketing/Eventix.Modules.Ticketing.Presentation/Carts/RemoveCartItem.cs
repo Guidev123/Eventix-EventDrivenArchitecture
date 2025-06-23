@@ -21,7 +21,7 @@ namespace Eventix.Modules.Ticketing.Presentation.Carts
                 var result = await mediator.DispatchAsync(command).ConfigureAwait(false);
 
                 result.Match(Results.NoContent, ApiResults.Problem);
-            }).WithTags(Tags.Carts);
+            }).RequireAuthorization().WithTags(Tags.Carts);
         }
     }
 }

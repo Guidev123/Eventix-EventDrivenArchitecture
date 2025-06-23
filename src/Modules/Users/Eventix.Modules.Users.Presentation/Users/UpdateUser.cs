@@ -19,7 +19,7 @@ namespace Eventix.Modules.Users.Presentation.Users
                 .DispatchAsync(command)
                 .ConfigureAwait(false))
                 .Match(Results.NoContent, ApiResults.Problem);
-            }).WithTags(Tags.Users);
+            }).RequireAuthorization().WithTags(Tags.Users);
         }
     }
 }
