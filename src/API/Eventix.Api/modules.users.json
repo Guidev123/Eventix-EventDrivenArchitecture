@@ -1,4 +1,12 @@
 {
   "Users": {
+    "KeyCloak": {
+      "AdminUrl": "",
+      "CurrentRealm": "",
+      "BaseUrl": "",
+      "ConfidentialClientId": "",
+      "ConfidentialClientSecret": "",
+      "PublicClientId": ""
+    }
   }
 }

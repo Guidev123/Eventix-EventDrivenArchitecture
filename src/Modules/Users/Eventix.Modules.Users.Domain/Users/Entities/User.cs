@@ -8,8 +8,9 @@ namespace Eventix.Modules.Users.Domain.Users.Entities
 {
     public sealed class User : Entity, IAggregateRoot
     {
-        private User(string email, string firstName, string lastName)
+        private User(Guid identityId, string email, string firstName, string lastName)
         {
+            Id = identityId;
             Email = email;
             Name = (firstName, lastName);
             AuditInfo = new(DateTime.UtcNow);
@@ -23,9 +24,9 @@ namespace Eventix.Modules.Users.Domain.Users.Entities
         public Name Name { get; private set; } = null!;
         public UserAuditInfo AuditInfo { get; private set; } = null!;
 
-        public static User Create(string email, string firstName, string lastName)
+        public static User Create(Guid identityId, string email, string firstName, string lastName)
         {
-            var user = new User(email, firstName, lastName);
+            var user = new User(identityId, email, firstName, lastName);
 
             user.Raise(new UserCreatedDomainEvent(user.Id));
 

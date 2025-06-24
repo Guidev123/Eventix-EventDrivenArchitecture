@@ -10,9 +10,9 @@ namespace Eventix.Modules.Users.Infrastructure.Users.Repositories
         public async Task<User?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
             => await context.Users.AsNoTracking().FirstOrDefaultAsync(user => user.Id == id, cancellationToken);
 
-        public void Insert(User user) => context.Add(user);
+        public void Insert(User user) => context.Users.Add(user);
 
-        public void Update(User user) => context.Update(user);
+        public void Update(User user) => context.Users.Update(user);
 
         public async Task<bool> ExistsAsync(string email, CancellationToken cancellationToken = default)
             => await context.Users.AnyAsync(user => user.Email.Address == email, cancellationToken);

@@ -6,8 +6,9 @@ namespace Eventix.Modules.Users.Application.Users.Mappers
 {
     public static class UserMappers
     {
-        public static User MapToUser(this RegisterUserCommand command)
+        public static User MapToUser(this RegisterUserCommand command, Guid identityId)
             => User.Create(
+                identityId,
                 command.Email,
                 command.FirstName,
                 command.LastName);
