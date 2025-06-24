@@ -8,8 +8,7 @@ using Eventix.Shared.Domain.Responses;
 namespace Eventix.Modules.Events.Application.Events.UseCases.Cancel
 {
     internal sealed class CancelEventHandler(IEventRepository eventRepository,
-                                             IDateTimeProvider dateTimeProvider,
-                                             IUnitOfWork unitOfWork) : ICommandHandler<CancelEventCommand>
+                                             IDateTimeProvider dateTimeProvider) : ICommandHandler<CancelEventCommand>
     {
         public async Task<Result> ExecuteAsync(CancelEventCommand request, CancellationToken cancellationToken = default)
         {
@@ -23,7 +22,7 @@ namespace Eventix.Modules.Events.Application.Events.UseCases.Cancel
 
             eventRepository.Update(@event);
 
-            var saveChanges = await unitOfWork.CommitAsync(cancellationToken).ConfigureAwait(false);
+            var saveChanges = await eventRepository.UnitOfWork.CommitAsync(cancellationToken).ConfigureAwait(false);
             return saveChanges ? Result.Success() : Result.Failure(EventErrors.UnableToCancelEvent(request.EventId));
         }
     }

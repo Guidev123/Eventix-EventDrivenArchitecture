@@ -16,5 +16,7 @@ namespace Eventix.Modules.Ticketing.Domain.Tickets.Interfaces
         Task<Ticket?> GetByCodeAsync(string code, CancellationToken cancellationToken = default);
 
         void InsertRange(IEnumerable<Ticket> tickets);
+
+        void UpdateRange(IEnumerable<Ticket> tickets);
     }
 }

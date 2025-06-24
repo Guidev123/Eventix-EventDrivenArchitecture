@@ -14,8 +14,7 @@ namespace Eventix.Modules.Ticketing.Application.Tickets.UseCases.CrateTicketBatc
 {
     internal sealed class CreateTicketBatchHandler(IOrderRepository orderRepository,
                                                    ITicketRepository ticketRepository,
-                                                   ITicketTypeRepository ticketTypeRepository,
-                                                   IUnitOfWork unitOfWork) : ICommandHandler<CreateTicketBatchCommand>
+                                                   ITicketTypeRepository ticketTypeRepository) : ICommandHandler<CreateTicketBatchCommand>
     {
         public async Task<Result> ExecuteAsync(CreateTicketBatchCommand request, CancellationToken cancellationToken = default)
         {
@@ -33,7 +32,7 @@ namespace Eventix.Modules.Ticketing.Application.Tickets.UseCases.CrateTicketBatc
 
             ticketRepository.InsertRange(ticketsResult.Value);
 
-            var saveChanges = await unitOfWork.CommitAsync(cancellationToken);
+            var saveChanges = await ticketRepository.UnitOfWork.CommitAsync(cancellationToken);
 
             return saveChanges
                 ? Result.Success()

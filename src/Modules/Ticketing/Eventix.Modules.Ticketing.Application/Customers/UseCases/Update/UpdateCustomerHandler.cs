@@ -7,8 +7,7 @@ using Eventix.Shared.Domain.Responses;
 
 namespace Eventix.Modules.Ticketing.Application.Customers.UseCases.Update
 {
-    public sealed class UpdateCustomerHandler(ICustomerRepository customerRepository,
-                                              IUnitOfWork unitOfWork) : ICommandHandler<UpdateCustomerCommand>
+    public sealed class UpdateCustomerHandler(ICustomerRepository customerRepository) : ICommandHandler<UpdateCustomerCommand>
     {
         public async Task<Result> ExecuteAsync(UpdateCustomerCommand request, CancellationToken cancellationToken = default)
         {
@@ -18,7 +17,7 @@ namespace Eventix.Modules.Ticketing.Application.Customers.UseCases.Update
 
             UpdateProperties(customer, request);
 
-            var saveChanges = await unitOfWork.CommitAsync(cancellationToken).ConfigureAwait(false);
+            var saveChanges = await customerRepository.UnitOfWork.CommitAsync(cancellationToken).ConfigureAwait(false);
             return saveChanges ? Result.Success() : Result.Failure(CustomerErrors.FailToUpdate);
         }
 

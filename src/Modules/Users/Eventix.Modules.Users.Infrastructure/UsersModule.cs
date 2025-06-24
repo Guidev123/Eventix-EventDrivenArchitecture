@@ -49,7 +49,6 @@ namespace Eventix.Modules.Users.Infrastructure
         private static void AddRepositories(this IServiceCollection services)
         {
             services.AddScoped<IUserRepository, UserRepository>();
-            services.AddScoped<IUnitOfWork>(sp => sp.GetRequiredService<UsersDbContext>());
         }
 
         private static void AddEntityFrameworkDbContext(this IServiceCollection services, IConfiguration configuration)

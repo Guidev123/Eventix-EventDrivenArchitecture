@@ -1,12 +1,15 @@
 ﻿using Eventix.Modules.Ticketing.Domain.Customers.Entities;
 using Eventix.Modules.Ticketing.Domain.Customers.Interfaces;
 using Eventix.Modules.Ticketing.Infrastructure.Database;
+using Eventix.Shared.Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace Eventix.Modules.Ticketing.Infrastructure.Customers.Repositories
 {
     internal sealed class CustomerRepository(TicketingDbContext context) : ICustomerRepository
     {
+        public IUnitOfWork UnitOfWork => context;
+
         public async Task<bool> ExistsAsync(Guid id, CancellationToken cancellationToken = default)
             => await context.Customers.AsNoTracking().AnyAsync(cancellationToken);
 

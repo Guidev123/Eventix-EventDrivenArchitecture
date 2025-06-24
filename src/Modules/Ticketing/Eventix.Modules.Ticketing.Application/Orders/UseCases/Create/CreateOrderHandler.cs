@@ -25,8 +25,7 @@ namespace Eventix.Modules.Ticketing.Application.Orders.UseCases.Create
                                              IPaymentRepository paymentRepository,
                                              IPaymentService paymentService,
                                              ISqlConnectionFactory sqlConnectionFactory,
-                                             ICartService cartService,
-                                             IUnitOfWork unitOfWork) : ICommandHandler<CreateOrderCommand>
+                                             ICartService cartService) : ICommandHandler<CreateOrderCommand>
     {
         public async Task<Result> ExecuteAsync(CreateOrderCommand request, CancellationToken cancellationToken = default)
         {
@@ -86,8 +85,10 @@ namespace Eventix.Modules.Ticketing.Application.Orders.UseCases.Create
 
                 paymentRepository.Insert(payment);
 
-                var saveChanges = await unitOfWork.CommitAsync(cancellationToken);
-                if (!saveChanges)
+                var saveChangesPayment = await paymentRepository.UnitOfWork.CommitAsync(cancellationToken);
+                var saveChangesOrder = await orderRepository.UnitOfWork.CommitAsync(cancellationToken);
+
+                if (!saveChangesPayment || !saveChangesOrder)
                 {
                     await transaction.RollbackAsync(cancellationToken);
                     return Result.Failure(OrderErrors.FailToCreateOrder);

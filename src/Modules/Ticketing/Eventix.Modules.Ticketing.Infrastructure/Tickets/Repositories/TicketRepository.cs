@@ -2,12 +2,15 @@
 using Eventix.Modules.Ticketing.Domain.Tickets.Entities;
 using Eventix.Modules.Ticketing.Domain.Tickets.Interfaces;
 using Eventix.Modules.Ticketing.Infrastructure.Database;
+using Eventix.Shared.Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace Eventix.Modules.Ticketing.Infrastructure.Tickets.Repositories
 {
     internal sealed class TicketRepository(TicketingDbContext context) : ITicketRepository
     {
+        public IUnitOfWork UnitOfWork => context;
+
         public async Task<Ticket?> GetByCodeAsync(string code, CancellationToken cancellationToken = default)
             => await context.Tickets.AsNoTracking().FirstOrDefaultAsync(c => c.Code == code, cancellationToken);
 
@@ -22,6 +25,9 @@ namespace Eventix.Modules.Ticketing.Infrastructure.Tickets.Repositories
 
         public void InsertRange(IEnumerable<Ticket> tickets)
             => context.Tickets.AddRange(tickets);
+
+        public void UpdateRange(IEnumerable<Ticket> tickets)
+            => context.Tickets.UpdateRange(tickets);
 
         public void Dispose() => context.Dispose();
     }

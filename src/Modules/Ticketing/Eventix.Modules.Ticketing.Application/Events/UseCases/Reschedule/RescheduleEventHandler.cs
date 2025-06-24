@@ -9,8 +9,7 @@ namespace Eventix.Modules.Ticketing.Application.Events.UseCases.Reschedule
 {
     internal sealed class RescheduleEventHandler(
             IDateTimeProvider dateTimeProvider,
-            IEventRepository eventRepository,
-            IUnitOfWork unitOfWork) : ICommandHandler<RescheduleEventCommand>
+            IEventRepository eventRepository) : ICommandHandler<RescheduleEventCommand>
     {
         public async Task<Result> ExecuteAsync(RescheduleEventCommand request, CancellationToken cancellationToken = default)
         {
@@ -23,7 +22,7 @@ namespace Eventix.Modules.Ticketing.Application.Events.UseCases.Reschedule
 
             @event.Reschedule(request.StartsAtUtc, request.EndsAtUtc);
 
-            var saveChanges = await unitOfWork.CommitAsync(cancellationToken);
+            var saveChanges = await eventRepository.UnitOfWork.CommitAsync(cancellationToken);
             return saveChanges
                 ? Result.Success()
                 : Result.Failure(EventErrors.FailToRescheduleEvent);

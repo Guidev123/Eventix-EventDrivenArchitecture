@@ -6,7 +6,7 @@ using Eventix.Shared.Domain.Responses;
 
 namespace Eventix.Modules.Events.Application.TicketTypes.UseCases.UpdatePrice
 {
-    internal sealed class UpdateTicketTypePriceHandler(ITicketTypeRepository ticketTypeRepository, IUnitOfWork unitOfWork) : ICommandHandler<UpdateTicketTypePriceCommand>
+    internal sealed class UpdateTicketTypePriceHandler(ITicketTypeRepository ticketTypeRepository) : ICommandHandler<UpdateTicketTypePriceCommand>
     {
         public async Task<Result> ExecuteAsync(UpdateTicketTypePriceCommand request, CancellationToken cancellationToken = default)
         {
@@ -17,7 +17,7 @@ namespace Eventix.Modules.Events.Application.TicketTypes.UseCases.UpdatePrice
             ticketType.UpdatePrice(request.Price);
             ticketTypeRepository.Update(ticketType);
 
-            var saveChanges = await unitOfWork.CommitAsync(cancellationToken).ConfigureAwait(false);
+            var saveChanges = await ticketTypeRepository.UnitOfWork.CommitAsync(cancellationToken).ConfigureAwait(false);
             return saveChanges
                 ? Result.Success()
                 : Result.Failure(TicketTypeErrors.UnableToUpdate(ticketType.GetType().Name, ticketType.Id));

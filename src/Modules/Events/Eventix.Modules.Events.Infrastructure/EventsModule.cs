@@ -38,7 +38,6 @@ namespace Eventix.Modules.Events.Infrastructure
             services.AddScoped<IEventRepository, EventRepository>();
             services.AddScoped<ITicketTypeRepository, TicketTypeRepository>();
             services.AddScoped<ICategoryRepository, CategoryRepository>();
-            services.AddScoped<IUnitOfWork>(sp => sp.GetRequiredService<EventsDbContext>());
         }
 
         private static void AddEntityFrameworkDbContext(this IServiceCollection services, IConfiguration configuration)

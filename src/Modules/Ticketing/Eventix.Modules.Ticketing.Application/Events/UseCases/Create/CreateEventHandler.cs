@@ -9,8 +9,7 @@ namespace Eventix.Modules.Ticketing.Application.Events.UseCases.Create
 {
     internal sealed class CreateEventHandler(
             IEventRepository eventRepository,
-            ITicketTypeRepository ticketTypeRepository,
-            IUnitOfWork unitOfWork) : ICommandHandler<CreateEventCommand, CreateEventResponse>
+            ITicketTypeRepository ticketTypeRepository) : ICommandHandler<CreateEventCommand, CreateEventResponse>
     {
         public async Task<Result<CreateEventResponse>> ExecuteAsync(CreateEventCommand request, CancellationToken cancellationToken = default)
         {
@@ -32,9 +31,10 @@ namespace Eventix.Modules.Ticketing.Application.Events.UseCases.Create
 
             ticketTypeRepository.InsertRange(ticketTypes);
 
-            var saveChanges = await unitOfWork.CommitAsync(cancellationToken);
+            var saveChangesTicketType = await ticketTypeRepository.UnitOfWork.CommitAsync(cancellationToken);
+            var saveChangesEvents = await eventRepository.UnitOfWork.CommitAsync(cancellationToken);
 
-            return saveChanges
+            return saveChangesTicketType && saveChangesEvents
                 ? Result.Success(new CreateEventResponse(@event.Id))
                 : Result.Failure<CreateEventResponse>(EventErrors.FailToCreateEvent);
         }

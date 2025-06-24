@@ -7,8 +7,7 @@ using Eventix.Shared.Domain.Responses;
 
 namespace Eventix.Modules.Ticketing.Application.Customers.UseCases.Create
 {
-    public sealed class CreateCustomerHandler(ICustomerRepository customerRepository,
-                                              IUnitOfWork unitOfWork) : ICommandHandler<CreateCustomerCommand, CreateCustomerResponse>
+    public sealed class CreateCustomerHandler(ICustomerRepository customerRepository) : ICommandHandler<CreateCustomerCommand, CreateCustomerResponse>
     {
         public async Task<Result<CreateCustomerResponse>> ExecuteAsync(CreateCustomerCommand request, CancellationToken cancellationToken = default)
         {
@@ -20,7 +19,7 @@ namespace Eventix.Modules.Ticketing.Application.Customers.UseCases.Create
 
             customerRepository.Insert(customer);
 
-            var saveChanges = await unitOfWork.CommitAsync(cancellationToken).ConfigureAwait(false);
+            var saveChanges = await customerRepository.UnitOfWork.CommitAsync(cancellationToken).ConfigureAwait(false);
             return saveChanges
                 ? Result.Success(new CreateCustomerResponse(customer.Id))
                 : Result.Failure<CreateCustomerResponse>(CustomerErrors.SomethingHasFailedDuringPersistence);

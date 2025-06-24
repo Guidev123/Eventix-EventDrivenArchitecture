@@ -1,13 +1,11 @@
 ﻿using Eventix.Modules.Ticketing.Domain.Payments.Errors;
 using Eventix.Modules.Ticketing.Domain.Payments.Interfaces;
 using Eventix.Shared.Application.Messaging;
-using Eventix.Shared.Domain.Interfaces;
 using Eventix.Shared.Domain.Responses;
 
 namespace Eventix.Modules.Ticketing.Application.Payments.UseCases.Refund
 {
-    internal sealed class RefundPaymentHandler(IPaymentRepository paymentRepository,
-                                               IUnitOfWork unitOfWork) : ICommandHandler<RefundPaymentCommand>
+    internal sealed class RefundPaymentHandler(IPaymentRepository paymentRepository) : ICommandHandler<RefundPaymentCommand>
     {
         public async Task<Result> ExecuteAsync(RefundPaymentCommand request, CancellationToken cancellationToken = default)
         {
@@ -21,7 +19,7 @@ namespace Eventix.Modules.Ticketing.Application.Payments.UseCases.Refund
                 && paymentResult.Error is not null)
                 return Result.Failure(paymentResult.Error);
 
-            var saveChanges = await unitOfWork.CommitAsync(cancellationToken);
+            var saveChanges = await paymentRepository.UnitOfWork.CommitAsync(cancellationToken);
             return saveChanges
                 ? Result.Success()
                 : Result.Failure(PaymentErrors.FailToPersistRefundInformation);

@@ -11,7 +11,6 @@ namespace Eventix.Modules.Ticketing.Application.Tickets.UseCases.ArchiveForEvent
 {
     internal sealed class ArchiveTicketsForEventHandler(IEventRepository eventRepository,
                                                         ITicketRepository ticketRepository,
-                                                        IUnitOfWork unitOfWork,
                                                         ISqlConnectionFactory sqlConnectionFactory) : ICommandHandler<ArchiveTicketsForEventCommand>
     {
         public async Task<Result> ExecuteAsync(ArchiveTicketsForEventCommand request, CancellationToken cancellationToken = default)
@@ -32,14 +31,16 @@ namespace Eventix.Modules.Ticketing.Application.Tickets.UseCases.ArchiveForEvent
                     ticket.Archive();
                 }
 
-                @event.TicketsArchived();
+                ticketRepository.UpdateRange(tickets);
 
-                var saveChanges = await unitOfWork.CommitAsync(cancellationToken);
+                var saveChanges = await ticketRepository.UnitOfWork.CommitAsync(cancellationToken);
                 if (!saveChanges)
                 {
                     await transaction.RollbackAsync(cancellationToken);
                     Result.Failure(TicketErrors.FailToPersistArchiveTickets);
                 }
+
+                @event.TicketsArchived();
 
                 await transaction.CommitAsync(cancellationToken);
 

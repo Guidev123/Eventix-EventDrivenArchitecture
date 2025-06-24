@@ -6,7 +6,7 @@ using Eventix.Shared.Domain.Responses;
 
 namespace Eventix.Modules.Events.Application.Categories.UseCases.Update
 {
-    internal sealed class UpdateCategoryHandler(ICategoryRepository categoryRepository, IUnitOfWork unitOfWork) : ICommandHandler<UpdateCategoryCommand>
+    internal sealed class UpdateCategoryHandler(ICategoryRepository categoryRepository) : ICommandHandler<UpdateCategoryCommand>
     {
         public async Task<Result> ExecuteAsync(UpdateCategoryCommand request, CancellationToken cancellationToken = default)
         {
@@ -17,7 +17,7 @@ namespace Eventix.Modules.Events.Application.Categories.UseCases.Update
             category.Rename(request.Name);
             categoryRepository.Update(category);
 
-            var saveChanges = await unitOfWork.CommitAsync(cancellationToken).ConfigureAwait(false);
+            var saveChanges = await categoryRepository.UnitOfWork.CommitAsync(cancellationToken).ConfigureAwait(false);
             return saveChanges
                 ? Result.Success()
                 : Result.Failure(CategoryErrors.FailToUpdate);

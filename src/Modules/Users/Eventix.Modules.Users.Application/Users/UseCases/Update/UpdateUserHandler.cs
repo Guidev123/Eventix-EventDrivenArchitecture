@@ -2,13 +2,11 @@
 using Eventix.Modules.Users.Domain.Users.Errors;
 using Eventix.Modules.Users.Domain.Users.Interfaces;
 using Eventix.Shared.Application.Messaging;
-using Eventix.Shared.Domain.Interfaces;
 using Eventix.Shared.Domain.Responses;
 
 namespace Eventix.Modules.Users.Application.Users.UseCases.Update
 {
-    internal sealed class UpdateUserHandler(IUserRepository userRepository,
-                                            IUnitOfWork unitOfWork) : ICommandHandler<UpdateUserCommand>
+    internal sealed class UpdateUserHandler(IUserRepository userRepository) : ICommandHandler<UpdateUserCommand>
     {
         public async Task<Result> ExecuteAsync(UpdateUserCommand request, CancellationToken cancellationToken = default)
         {
@@ -18,7 +16,7 @@ namespace Eventix.Modules.Users.Application.Users.UseCases.Update
 
             UpdateProperties(user, request);
 
-            var saveChanges = await unitOfWork.CommitAsync(cancellationToken).ConfigureAwait(false);
+            var saveChanges = await userRepository.UnitOfWork.CommitAsync(cancellationToken).ConfigureAwait(false);
             return saveChanges ? Result.Success() : Result.Failure(UserErrors.FailToUpdate);
         }
 

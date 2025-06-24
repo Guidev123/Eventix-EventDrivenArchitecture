@@ -9,7 +9,6 @@ using Eventix.Shared.Domain.Responses;
 namespace Eventix.Modules.Events.Application.TicketTypes.UseCases.Create
 {
     internal sealed class CreateTicketTypeHandler(ITicketTypeRepository ticketTypeRepository,
-                                                  IUnitOfWork unitOfWork,
                                                   IEventRepository eventRepository) : ICommandHandler<CreateTicketTypeCommand, CreateTicketTypeResponse>
     {
         public async Task<Result<CreateTicketTypeResponse>> ExecuteAsync(CreateTicketTypeCommand request, CancellationToken cancellationToken = default)
@@ -22,7 +21,7 @@ namespace Eventix.Modules.Events.Application.TicketTypes.UseCases.Create
 
             ticketTypeRepository.Insert(ticketType);
 
-            var saveChanges = await unitOfWork.CommitAsync(cancellationToken).ConfigureAwait(false);
+            var saveChanges = await ticketTypeRepository.UnitOfWork.CommitAsync(cancellationToken).ConfigureAwait(false);
             return saveChanges
                 ? Result.Success(new CreateTicketTypeResponse(ticketType.Id))
                 : Result.Failure<CreateTicketTypeResponse>(TicketTypeErrors.FailToCreateTicket);

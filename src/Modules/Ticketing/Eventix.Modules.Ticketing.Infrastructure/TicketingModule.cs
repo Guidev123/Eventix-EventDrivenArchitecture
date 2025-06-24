@@ -62,7 +62,6 @@ namespace Eventix.Modules.Ticketing.Infrastructure
             services.AddScoped<IPaymentRepository, PaymentRepository>();
             services.AddScoped<IOrderRepository, OrderRepository>();
             services.AddScoped<IEventRepository, EventRepository>();
-            services.AddScoped<IUnitOfWork>(sp => sp.GetRequiredService<TicketingDbContext>());
         }
 
         private static void AddEntityFrameworkDbContext(this IServiceCollection services, IConfiguration configuration)

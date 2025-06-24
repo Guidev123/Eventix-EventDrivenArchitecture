@@ -11,7 +11,6 @@ namespace Eventix.Modules.Ticketing.Application.Payments.UseCases.RefundForEvent
 {
     internal sealed class RefundPaymentsForEventHandler(IEventRepository eventRepository,
                                                         IPaymentRepository paymentRepository,
-                                                        IUnitOfWork unitOfWork,
                                                         ISqlConnectionFactory sqlConnectionFactory) : ICommandHandler<RefundPaymentsForEventCommand>
     {
         public async Task<Result> ExecuteAsync(RefundPaymentsForEventCommand request, CancellationToken cancellationToken = default)
@@ -35,14 +34,16 @@ namespace Eventix.Modules.Ticketing.Application.Payments.UseCases.RefundForEvent
                     payment.Refund(payment.Amount.Amount - reundAmount);
                 }
 
-                @event.PaymentsRefunded();
+                paymentRepository.UpdateRange(payments);
 
-                var saveChanges = await unitOfWork.CommitAsync(cancellationToken);
+                var saveChanges = await paymentRepository.UnitOfWork.CommitAsync(cancellationToken);
                 if (!saveChanges)
                 {
                     await transaction.RollbackAsync(cancellationToken);
                     Result.Failure(PaymentErrors.FailToPersistRefundInformation);
                 }
+
+                @event.PaymentsRefunded();
 
                 await transaction.CommitAsync(cancellationToken);
 

@@ -10,6 +10,8 @@ namespace Eventix.Modules.Ticketing.Domain.Payments.Interfaces
 
         Task<IEnumerable<Payment>> GetForEventAsync(Event @event, CancellationToken cancellationToken = default);
 
+        void UpdateRange(IEnumerable<Payment> payments);
+
         void Insert(Payment payment);
     }
 }
