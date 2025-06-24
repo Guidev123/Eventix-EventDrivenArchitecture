@@ -364,3 +364,6 @@ FodyWeavers.xsd
 /src/API/Eventix.Api/appsettings.Development.json
 /docker-compose.yml
 .containers/
+/src/API/Eventix.Api/modules.users.Development.json
+/src/API/Eventix.Api/modules.ticketing.Development.json
+/src/API/Eventix.Api/modules.events.Development.json
