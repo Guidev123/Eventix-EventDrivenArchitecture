@@ -12,13 +12,13 @@ namespace Eventix.Modules.Users.Presentation.Users
     {
         public void MapEndpoint(IEndpointRouteBuilder app)
         {
-            app.MapGet("api/v1/users/{id:guid}", async (Guid id, IMediator mediator) =>
+            app.MapGet("api/v1/users/me", async (Guid id, IMediator mediator) =>
             {
                 return (await mediator
                 .DispatchAsync(new GetUserByIdQuery(id))
                 .ConfigureAwait(false))
                 .Match(Results.Ok, ApiResults.Problem);
-            }).RequireAuthorization().WithTags(Tags.Users);
+            }).RequireAuthorization("users:read").WithTags(Tags.Users);
         }
     }
 }

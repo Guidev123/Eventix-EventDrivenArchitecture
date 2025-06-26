@@ -6,8 +6,8 @@ namespace Eventix.Shared.Infrastructure.Authentication
     {
         internal static IServiceCollection AddAuthenticationInternal(this IServiceCollection services)
         {
-            services.AddAuthorization();
             services.AddAuthentication().AddJwtBearer();
+            services.AddAuthorization();
 
             services.AddHttpContextAccessor();
 

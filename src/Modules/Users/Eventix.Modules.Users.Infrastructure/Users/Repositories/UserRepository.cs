@@ -13,7 +13,15 @@ namespace Eventix.Modules.Users.Infrastructure.Users.Repositories
         public async Task<User?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
             => await context.Users.AsNoTracking().FirstOrDefaultAsync(user => user.Id == id, cancellationToken);
 
-        public void Insert(User user) => context.Users.Add(user);
+        public void Insert(User user)
+        {
+            foreach (var role in user.Roles)
+            {
+                context.Attach(role);
+            }
+
+            context.Users.Add(user);
+        }
 
         public void Update(User user) => context.Users.Update(user);
 

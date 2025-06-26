@@ -4,6 +4,12 @@ namespace Eventix.Modules.Users.Domain.Users.Errors
 {
     public static class UserErrors
     {
+        public static Error NotFound(Guid userId) =>
+            Error.NotFound("Users.NotFound", $"The user with the identifier {userId} not found");
+
+        public static Error NotFound(string identityId) =>
+            Error.NotFound("Users.NotFound", $"The user with the IDP identifier {identityId} not found");
+
         public static readonly Error UnableToCreateAccount = Error.Conflict(
             "Users.UnableToCreateAccount",
             "Unable to create account. Please check that the details are correct");
@@ -11,10 +17,6 @@ namespace Eventix.Modules.Users.Domain.Users.Errors
         public static readonly Error FailToCreate = Error.Problem(
             "Users.FailToCreate",
             "Fail to create user");
-
-        public static readonly Error NotFound = Error.Problem(
-            "Users.UserNotFound",
-            "User not found");
 
         public static readonly Error FailToUpdate = Error.Problem(
             "Users.FailToUpdate",

@@ -13,7 +13,7 @@ namespace Eventix.Modules.Users.Application.Users.UseCases.GetById
             var user = await userRepository.GetByIdAsync(request.UserId, cancellationToken).ConfigureAwait(false);
 
             return user is null
-                ? Result.Failure<GetUserByIdResponse>(UserErrors.NotFound)
+                ? Result.Failure<GetUserByIdResponse>(UserErrors.NotFound(request.UserId))
                 : Result.Success(user.MapFromUser());
         }
     }

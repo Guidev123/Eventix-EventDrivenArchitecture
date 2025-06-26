@@ -1,5 +1,6 @@
 ﻿using Eventix.Modules.Users.Domain.Users.DomainEvents;
 using Eventix.Modules.Users.Domain.Users.Errors;
+using Eventix.Modules.Users.Domain.Users.Models;
 using Eventix.Modules.Users.Domain.Users.ValueObjects;
 using Eventix.Shared.Domain.DomainObjects;
 using Eventix.Shared.Domain.ValueObjects;
@@ -8,12 +9,15 @@ namespace Eventix.Modules.Users.Domain.Users.Entities
 {
     public sealed class User : Entity, IAggregateRoot
     {
+        private readonly List<Role> _roles = [];
+
         private User(Guid identityId, string email, string firstName, string lastName)
         {
             Id = identityId;
             Email = email;
             Name = (firstName, lastName);
             AuditInfo = new(DateTime.UtcNow);
+            IdentiyProviderId = identityId;
             Validate();
         }
 
@@ -23,10 +27,14 @@ namespace Eventix.Modules.Users.Domain.Users.Entities
         public Email Email { get; private set; } = null!;
         public Name Name { get; private set; } = null!;
         public UserAuditInfo AuditInfo { get; private set; } = null!;
+        public Guid IdentiyProviderId { get; private set; }
+        public IReadOnlyCollection<Role> Roles => _roles.ToList();
 
         public static User Create(Guid identityId, string email, string firstName, string lastName)
         {
             var user = new User(identityId, email, firstName, lastName);
+
+            user._roles.Add(Role.Member);
 
             user.Raise(new UserCreatedDomainEvent(user.Id));
 

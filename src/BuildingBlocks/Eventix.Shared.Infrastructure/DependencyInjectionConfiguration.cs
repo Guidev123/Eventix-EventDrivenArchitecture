@@ -4,6 +4,7 @@ using Eventix.Shared.Application.Decorators;
 using Eventix.Shared.Application.EventBus;
 using Eventix.Shared.Application.Factories;
 using Eventix.Shared.Infrastructure.Authentication;
+using Eventix.Shared.Infrastructure.Authorization;
 using Eventix.Shared.Infrastructure.Cache;
 using Eventix.Shared.Infrastructure.Clock;
 using Eventix.Shared.Infrastructure.Factories;
@@ -27,7 +28,8 @@ namespace Eventix.Shared.Infrastructure
             string databaseConnectionString,
             string redisConnectionString)
         {
-            services.AddAuthenticationInternal().AddData(databaseConnectionString)
+            services.AddAuthenticationInternal()
+                .AddAuthorizationInternal().AddData(databaseConnectionString)
                 .AddCacheService(redisConnectionString)
                 .AddBus(moduleConfigureConsumers);
 

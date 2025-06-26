@@ -12,7 +12,7 @@ namespace Eventix.Modules.Users.Application.Users.UseCases.Update
         {
             var user = await userRepository.GetByIdAsync(request.UserId, cancellationToken).ConfigureAwait(false);
             if (user is null)
-                return Result.Failure(UserErrors.NotFound);
+                return Result.Failure(UserErrors.NotFound(request.UserId));
 
             UpdateProperties(user, request);
 

@@ -50,6 +50,8 @@ namespace Eventix.Modules.Users.Infrastructure.Users.Mappings
                     .HasColumnName("DeletedAtUtc")
                     .IsRequired(false);
             });
+
+            builder.HasIndex(u => u.IdentiyProviderId).IsUnique();
         }
     }
 }
