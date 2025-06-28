@@ -28,7 +28,7 @@ namespace Eventix.Modules.Users.Application.Users.UseCases.GetPermissions
             if (permissions.Count == 0)
                 return Result.Failure<PermissionResponse>(UserErrors.NotFound(request.IdentiyProviderId));
 
-            PermissionResponse permissionResponse = new(permissions[0].UserId, permissions.Select(c => c.Permission).ToHashSet());
+            PermissionResponse permissionResponse = new(permissions[0].Id, permissions.Select(c => c.PermissionCode).ToHashSet());
 
             return Result.Success(permissionResponse);
         }

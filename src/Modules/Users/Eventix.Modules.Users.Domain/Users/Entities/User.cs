@@ -13,7 +13,6 @@ namespace Eventix.Modules.Users.Domain.Users.Entities
 
         private User(Guid identityId, string email, string firstName, string lastName)
         {
-            Id = identityId;
             Email = email;
             Name = (firstName, lastName);
             AuditInfo = new(DateTime.UtcNow);

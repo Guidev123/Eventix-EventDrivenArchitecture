@@ -5,7 +5,7 @@ namespace Eventix.Shared.Infrastructure.Authentication
 {
     public static class ClaimsPrincipalExtensions
     {
-        public static Guid? GetUserId(this ClaimsPrincipal claimsPrincipal)
+        public static Guid GetUserId(this ClaimsPrincipal claimsPrincipal)
         {
             var userId = claimsPrincipal?.FindFirst(CustomClaims.SUB)?.Value;
             return Guid.TryParse(userId, out var parsedUserId)
