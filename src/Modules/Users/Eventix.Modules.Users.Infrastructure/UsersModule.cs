@@ -7,13 +7,16 @@ using Eventix.Modules.Users.Infrastructure.Users.Repositories;
 using Eventix.Modules.Users.Presentation;
 using Eventix.Shared.Application.Authorization;
 using Eventix.Shared.Domain.Interfaces;
+using Eventix.Shared.Infrastructure.Http;
 using Eventix.Shared.Infrastructure.Interceptors;
 using Eventix.Shared.Presentation.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Http.Resilience;
 using Microsoft.Extensions.Options;
+using Polly;
 
 namespace Eventix.Modules.Users.Infrastructure
 {
@@ -50,7 +53,10 @@ namespace Eventix.Modules.Users.Infrastructure
                 var keyCloakOptions = serviceProvider.GetRequiredService<IOptions<KeyCloakOptions>>().Value;
 
                 httpClient.BaseAddress = new Uri(keyCloakOptions.AdminUrl);
-            }).AddHttpMessageHandler<KeyCloakAuthDelegatingHandler>();
+            }).AddHttpMessageHandler<KeyCloakAuthDelegatingHandler>()
+            .ConfigurePrimaryHttpMessageHandler(HttpMessageHandlerFactory.CreateSocketsHttpHandler)
+            .SetHandlerLifetime(Timeout.InfiniteTimeSpan)
+            .AddResilienceHandler(nameof(ResiliencePipelineExtensions), pipeline => pipeline.ConfigureResilience());
 
             services.AddTransient<IIdentityProviderService, IdentityProviderService>();
         }
