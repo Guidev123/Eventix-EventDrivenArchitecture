@@ -14,10 +14,10 @@ namespace Eventix.Modules.Events.Presentation.Categories
         {
             app.MapPut("api/v1/categories/{id:guid}/archive", async (Guid id, IMediator mediator) =>
             {
-                return (await mediator
-                .DispatchAsync(new ArchiveCategoryCommand(id)))
-                .Match(Results.NoContent, ApiResults.Problem);
-            }).RequireAuthorization()
+                var result = await mediator.DispatchAsync(new ArchiveCategoryCommand(id)).ConfigureAwait(false);
+
+                return result.Match(Results.NoContent, ApiResults.Problem);
+            }).RequireAuthorization(PolicyExtensions.ModifyCategories)
             .WithTags(Tags.Categories);
         }
     }

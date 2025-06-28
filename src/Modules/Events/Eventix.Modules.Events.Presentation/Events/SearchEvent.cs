@@ -23,9 +23,9 @@ namespace Eventix.Modules.Events.Presentation.Events
             {
                 return (await mediator.DispatchAsync(
                     new SearchEventsQuery(categoryId, startDate,
-                                          endDate, page, pageSize)).ConfigureAwait(false))
-                                                                   .Match(Results.Ok, ApiResults.Problem);
-            }).RequireAuthorization()
+                                          endDate, page, pageSize))
+                .ConfigureAwait(false)).Match(Results.Ok, ApiResults.Problem);
+            }).RequireAuthorization(PolicyExtensions.SearchEvents)
             .WithTags(Tags.Events);
         }
     }

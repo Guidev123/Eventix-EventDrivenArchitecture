@@ -17,11 +17,10 @@ namespace Eventix.Modules.Events.Presentation.Events
                                                [FromQuery] int page = PresentationModule.DEFAULT_PAGE,
                                                [FromQuery] int pageSize = PresentationModule.DEFAULT_PAGE_SIZE) =>
             {
-                return (await mediator
-                .DispatchAsync(new GetAllEventsQuery(page, pageSize))
-                .ConfigureAwait(false))
-                .Match(Results.Ok, ApiResults.Problem);
-            }).RequireAuthorization()
+                var result = await mediator.DispatchAsync(new GetAllEventsQuery(page, pageSize)).ConfigureAwait(false);
+
+                return result.Match(Results.Ok, ApiResults.Problem);
+            }).RequireAuthorization(PolicyExtensions.GetEvents)
             .WithTags(Tags.Events);
         }
     }

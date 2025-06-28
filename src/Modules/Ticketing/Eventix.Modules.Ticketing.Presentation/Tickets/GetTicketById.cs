@@ -17,7 +17,7 @@ namespace Eventix.Modules.Ticketing.Presentation.Tickets
                 var result = await mediator.DispatchAsync(new GetTicketByIdQuery(id));
 
                 return result.Match(Results.Ok, ApiResults.Problem);
-            }).RequireAuthorization()
+            }).RequireAuthorization(PolicyExtensions.GetTickets)
             .WithTags(Tags.Tickets);
         }
     }

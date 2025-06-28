@@ -15,11 +15,10 @@ namespace Eventix.Modules.Users.Presentation.Users
             app.MapPut("api/v1/users/{id:guid}", async (Guid id, UpdateUserCommand command, IMediator mediator) =>
             {
                 command.SetUserId(id);
-                return (await mediator
-                .DispatchAsync(command)
-                .ConfigureAwait(false))
-                .Match(Results.NoContent, ApiResults.Problem);
-            }).RequireAuthorization().WithTags(Tags.Users);
+                var result = await mediator.DispatchAsync(command).ConfigureAwait(false);
+
+                return result.Match(Results.NoContent, ApiResults.Problem);
+            }).RequireAuthorization(PolicyExtensions.ModifyUser).WithTags(Tags.Users);
         }
     }
 }

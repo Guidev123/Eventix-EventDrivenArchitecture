@@ -19,7 +19,7 @@ namespace Eventix.Modules.Users.Presentation.Users
                 var result = await mediator.DispatchAsync(new GetUserByIdQuery(claims.GetUserId())).ConfigureAwait(false);
 
                 return result.Match(Results.Ok, ApiResults.Problem);
-            }).RequireAuthorization("users:read").WithTags(Tags.Users);
+            }).RequireAuthorization(PolicyExtensions.GetUser).WithTags(Tags.Users);
         }
     }
 }

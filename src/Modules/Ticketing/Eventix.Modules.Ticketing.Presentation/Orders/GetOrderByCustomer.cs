@@ -1,4 +1,5 @@
-﻿using Eventix.Modules.Ticketing.Application.Orders.UseCases.GetById;
+﻿using Eventix.Modules.Ticketing.Application.Abstractions.Authentication;
+using Eventix.Modules.Ticketing.Application.Orders.UseCases.GetByCustomer;
 using Eventix.Shared.Presentation.Endpoints;
 using Eventix.Shared.Presentation.Extensions;
 using Microsoft.AspNetCore.Builder;
@@ -8,13 +9,13 @@ using MidR.Interfaces;
 
 namespace Eventix.Modules.Ticketing.Presentation.Orders
 {
-    internal sealed class GetOrderById : IEndpoint
+    internal sealed class GetOrderByCustomer : IEndpoint
     {
         public void MapEndpoint(IEndpointRouteBuilder app)
         {
-            app.MapGet("api/v1/orders/{id:guid}", async (Guid id, IMediator mediator) =>
+            app.MapGet("api/v1/orders", async (ICustomerContext customer, IMediator mediator) =>
             {
-                var result = await mediator.DispatchAsync(new GetOrderByIdQuery(id)).ConfigureAwait(false);
+                var result = await mediator.DispatchAsync(new GetOrdersByCustomerQuery(customer.CustomerId)).ConfigureAwait(false);
 
                 return result.Match(Results.Ok, ApiResults.Problem);
             }).RequireAuthorization(PolicyExtensions.GetOrders).WithTags(Tags.Orders);

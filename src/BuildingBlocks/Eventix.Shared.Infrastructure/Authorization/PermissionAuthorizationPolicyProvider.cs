@@ -1,31 +1,28 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Options;
+using System.Collections.Concurrent;
 
 namespace Eventix.Shared.Infrastructure.Authorization
 {
     internal sealed class PermissionAuthorizationPolicyProvider : DefaultAuthorizationPolicyProvider
     {
-        private readonly AuthorizationOptions _authorizationOptions;
+        private readonly ConcurrentDictionary<string, AuthorizationPolicy> _policyCache = new();
 
-        public PermissionAuthorizationPolicyProvider(IOptions<AuthorizationOptions> options) : base(options)
+        public PermissionAuthorizationPolicyProvider(IOptions<AuthorizationOptions> options)
+            : base(options) { }
+
+        public override Task<AuthorizationPolicy?> GetPolicyAsync(string policyName)
         {
-            _authorizationOptions = options.Value;
-        }
+            if (_policyCache.TryGetValue(policyName, out var cachedPolicy))
+                return Task.FromResult<AuthorizationPolicy?>(cachedPolicy);
 
-        public override async Task<AuthorizationPolicy?> GetPolicyAsync(string policyName)
-        {
-            var policy = await base.GetPolicyAsync(policyName);
-
-            if (policy is not null)
-                return policy;
-
-            var permissionPolicy = new AuthorizationPolicyBuilder()
+            var policy = new AuthorizationPolicyBuilder()
                 .AddRequirements(new PermissionRequirement(policyName))
                 .Build();
 
-            _authorizationOptions.AddPolicy(policyName, permissionPolicy);
+            _policyCache[policyName] = policy;
 
-            return policy;
+            return Task.FromResult<AuthorizationPolicy?>(policy);
         }
     }
 }

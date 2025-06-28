@@ -14,11 +14,10 @@ namespace Eventix.Modules.Events.Presentation.Events
         {
             app.MapGet("api/v1/events/{id:guid}", async (Guid id, IMediator mediator) =>
             {
-                return (await mediator
-                .DispatchAsync(new GetEventByIdQuery(id))
-                .ConfigureAwait(false))
-                .Match(Results.Ok, ApiResults.Problem);
-            }).RequireAuthorization().WithTags(Tags.Events);
+                var result = await mediator.DispatchAsync(new GetEventByIdQuery(id)).ConfigureAwait(false);
+
+                return result.Match(Results.Ok, ApiResults.Problem);
+            }).RequireAuthorization(PolicyExtensions.GetEvents).WithTags(Tags.Events);
         }
     }
 }

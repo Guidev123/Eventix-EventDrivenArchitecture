@@ -14,11 +14,10 @@ namespace Eventix.Modules.Events.Presentation.Events
         {
             app.MapPut("api/v1/events/{id:guid}/publish", async (Guid id, IMediator mediator) =>
             {
-                return (await mediator
-                .DispatchAsync(new PublishEventCommand(id))
-                .ConfigureAwait(false))
-                .Match(Results.NoContent, ApiResults.Problem);
-            }).RequireAuthorization()
+                var result = await mediator.DispatchAsync(new PublishEventCommand(id)).ConfigureAwait(false);
+
+                return result.Match(Results.NoContent, ApiResults.Problem);
+            }).RequireAuthorization(PolicyExtensions.GetEvents)
             .WithTags(Tags.Events);
         }
     }

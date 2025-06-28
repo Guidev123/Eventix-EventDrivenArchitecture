@@ -20,7 +20,7 @@ namespace Eventix.Modules.Events.Presentation.TicketTypes
                     success => Results.Created($"/events/ticket-types/{success.Id}", success),
                     failure => ApiResults.Problem(failure)
                 );
-            }).RequireAuthorization()
+            }).RequireAuthorization(PolicyExtensions.ModifyTicketTypes)
             .WithTags(Tags.TicketTypes);
         }
     }

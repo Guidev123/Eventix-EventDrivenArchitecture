@@ -18,7 +18,7 @@ namespace Eventix.Api.Middlewares
                 Status = StatusCodes.Status500InternalServerError,
                 Type = "https://datatracker.ietf.org/doc/html/rfc7231#section-6.6.1",
                 Title = "Server failure",
-                Detail = exception.InnerException?.Message,
+                Detail = exception.InnerException is not null ? exception.InnerException.Message : exception.Message,
             };
 
             httpContext.Response.StatusCode = problemDetails.Status.Value;
