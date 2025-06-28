@@ -1,6 +1,6 @@
 ﻿namespace Eventix.Modules.Users.Application.Users.UseCases.Register
 {
-    public record RegisterUserResponse(
+    public sealed record RegisterUserResponse(
         Guid UserId
         );
 }

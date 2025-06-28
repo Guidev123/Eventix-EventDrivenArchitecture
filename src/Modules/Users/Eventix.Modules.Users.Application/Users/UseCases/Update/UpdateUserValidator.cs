@@ -3,7 +3,7 @@ using FluentValidation;
 
 namespace Eventix.Modules.Users.Application.Users.UseCases.Update
 {
-    public sealed class UpdateUserValidator : AbstractValidator<UpdateUserCommand>
+    internal sealed class UpdateUserValidator : AbstractValidator<UpdateUserCommand>
     {
         public UpdateUserValidator()
         {

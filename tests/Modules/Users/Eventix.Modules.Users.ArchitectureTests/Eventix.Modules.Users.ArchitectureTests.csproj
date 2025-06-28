@@ -23,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\API\Eventix.Api\Eventix.Api.csproj" />
+    <ProjectReference Include="..\..\..\..\src\API\Eventix.Api\Eventix.Api.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
 using NetArchTest.Rules;
 
-namespace Eventix.ArchitectureTests.Abstractions
+namespace Eventix.Modules.ArchitectureTests.Abstractions
 {
     internal static class TestResultsExtension
     {

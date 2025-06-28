@@ -2,7 +2,7 @@
 
 namespace Eventix.Modules.Users.Domain.Users.DomainEvents
 {
-    public record UserNameUpdatedDomainEvent(
+    public sealed record UserNameUpdatedDomainEvent(
         Guid UserId,
         string FirstName,
         string LastName

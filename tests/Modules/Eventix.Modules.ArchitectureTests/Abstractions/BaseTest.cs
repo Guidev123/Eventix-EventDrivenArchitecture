@@ -1,4 +1,4 @@
-﻿namespace Eventix.ArchitectureTests.Abstractions
+﻿namespace Eventix.Modules.ArchitectureTests.Abstractions
 {
     public abstract class BaseTest
     {

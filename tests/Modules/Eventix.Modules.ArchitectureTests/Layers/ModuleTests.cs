@@ -1,5 +1,4 @@
-﻿using Eventix.ArchitectureTests.Abstractions;
-using Eventix.Modules.Ticketing.Domain.Orders.Entities;
+﻿using Eventix.Modules.Ticketing.Domain.Orders.Entities;
 using Eventix.Modules.Ticketing.Infrastructure;
 using Eventix.Modules.Users.Domain.Users.Entities;
 using Eventix.Modules.Users.Infrastructure;
@@ -13,8 +12,9 @@ using EventsPresentation = Eventix.Modules.Events.Presentation.PresentationModul
 using AttendancePresentation = Eventix.Modules.Attendance.Presentation.PresentationModule;
 using UsersPresentation = Eventix.Modules.Users.Presentation.PresentationModule;
 using TicketingPresentation = Eventix.Modules.Ticketing.Presentation.PresentationModule;
+using Eventix.Modules.ArchitectureTests.Abstractions;
 
-namespace Eventix.ArchitectureTests.Layers
+namespace Eventix.Modules.ArchitectureTests.Layers
 {
     public sealed class ModuleTests : BaseTest
     {

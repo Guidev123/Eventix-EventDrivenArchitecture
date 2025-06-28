@@ -1,11 +1,10 @@
 ﻿using Eventix.Modules.Users.Domain.Users.Errors;
 using FluentValidation;
-using System.Reflection.Metadata;
 using System.Text.RegularExpressions;
 
 namespace Eventix.Modules.Users.Application.Users.UseCases.Register
 {
-    public sealed class RegisterUserValidator : AbstractValidator<RegisterUserCommand>
+    internal sealed class RegisterUserValidator : AbstractValidator<RegisterUserCommand>
     {
         public RegisterUserValidator()
         {
