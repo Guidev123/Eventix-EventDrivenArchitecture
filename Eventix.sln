@@ -55,9 +55,27 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eventix.Modules.Ticketing.I
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eventix.Modules.Ticketing.Presentation", "src\Modules\Ticketing\Eventix.Modules.Ticketing.Presentation\Eventix.Modules.Ticketing.Presentation.csproj", "{025A1F68-0E32-487B-A03E-3E289CA066F6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eventix.Modules.Events.PublicApi", "src\Modules\Events\Eventix.Modules.Events.PublicApi\Eventix.Modules.Events.PublicApi.csproj", "{D8836813-90E1-44D3-A189-CC82778719CD}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eventix.Modules.Users.IntegrationEvents", "src\Modules\Users\Eventix.Modules.Users.IntegrationEvents\Eventix.Modules.Users.IntegrationEvents.csproj", "{D68C6AB8-6F1F-4B8F-9F7B-5CFC820ABD55}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{CB4EB993-74E4-496B-9570-72FA9C7967A2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eventix.ArchitectureTests", "tests\Eventix.ArchitectureTests\Eventix.ArchitectureTests.csproj", "{AE2733D5-7567-42ED-872C-35E57D9394E9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eventix.Modules.Ticketing.IntegrationEvents", "src\Modules\Ticketing\Eventix.Modules.Ticketing.IntegrationEvents\Eventix.Modules.Ticketing.IntegrationEvents.csproj", "{719FAA08-D9D2-4207-97E4-F5E4F5B0B00B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eventix.Modules.Events.IntegrationEvents", "src\Modules\Events\Eventix.Modules.Events.IntegrationEvents\Eventix.Modules.Events.IntegrationEvents.csproj", "{95A5E353-4170-4E13-AF00-2A0B103A08AF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Attendance", "Attendance", "{18146A9B-5264-4D73-8308-B7712F5D3E8D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eventix.Modules.Attendance.Application", "src\Modules\Attendance\Eventix.Modules.Attendance.Application\Eventix.Modules.Attendance.Application.csproj", "{9BFEDF98-BF1C-4A39-9444-5AF257C7AA7D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eventix.Modules.Attendance.Infrastructure", "src\Modules\Attendance\Eventix.Modules.Attendance.Infrastructure\Eventix.Modules.Attendance.Infrastructure.csproj", "{A867E748-9B71-4ACD-9492-2DB00F6595E0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eventix.Modules.Attendance.Domain", "src\Modules\Attendance\Eventix.Modules.Attendance.Domain\Eventix.Modules.Attendance.Domain.csproj", "{76F55912-11EF-43B7-80B5-5B939E3AD957}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eventix.Modules.Attendance.Presentation", "src\Modules\Attendance\Eventix.Modules.Attendance.Presentation\Eventix.Modules.Attendance.Presentation.csproj", "{48F4C01A-EC67-4F8A-83B4-27FE5AEBF03F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eventix.Modules.Attendance.IntegrationEvents", "src\Modules\Attendance\Eventix.Modules.Attendance.IntegrationEvents\Eventix.Modules.Attendance.IntegrationEvents.csproj", "{8551ABD6-E6B4-4F66-924A-AAFA8CEEAA58}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -137,14 +155,42 @@ Global
 		{025A1F68-0E32-487B-A03E-3E289CA066F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{025A1F68-0E32-487B-A03E-3E289CA066F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{025A1F68-0E32-487B-A03E-3E289CA066F6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D8836813-90E1-44D3-A189-CC82778719CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D8836813-90E1-44D3-A189-CC82778719CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D8836813-90E1-44D3-A189-CC82778719CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D8836813-90E1-44D3-A189-CC82778719CD}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D68C6AB8-6F1F-4B8F-9F7B-5CFC820ABD55}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D68C6AB8-6F1F-4B8F-9F7B-5CFC820ABD55}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D68C6AB8-6F1F-4B8F-9F7B-5CFC820ABD55}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D68C6AB8-6F1F-4B8F-9F7B-5CFC820ABD55}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AE2733D5-7567-42ED-872C-35E57D9394E9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AE2733D5-7567-42ED-872C-35E57D9394E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AE2733D5-7567-42ED-872C-35E57D9394E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AE2733D5-7567-42ED-872C-35E57D9394E9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{719FAA08-D9D2-4207-97E4-F5E4F5B0B00B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{719FAA08-D9D2-4207-97E4-F5E4F5B0B00B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{719FAA08-D9D2-4207-97E4-F5E4F5B0B00B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{719FAA08-D9D2-4207-97E4-F5E4F5B0B00B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{95A5E353-4170-4E13-AF00-2A0B103A08AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{95A5E353-4170-4E13-AF00-2A0B103A08AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{95A5E353-4170-4E13-AF00-2A0B103A08AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{95A5E353-4170-4E13-AF00-2A0B103A08AF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9BFEDF98-BF1C-4A39-9444-5AF257C7AA7D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9BFEDF98-BF1C-4A39-9444-5AF257C7AA7D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9BFEDF98-BF1C-4A39-9444-5AF257C7AA7D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9BFEDF98-BF1C-4A39-9444-5AF257C7AA7D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A867E748-9B71-4ACD-9492-2DB00F6595E0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A867E748-9B71-4ACD-9492-2DB00F6595E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A867E748-9B71-4ACD-9492-2DB00F6595E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A867E748-9B71-4ACD-9492-2DB00F6595E0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{76F55912-11EF-43B7-80B5-5B939E3AD957}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{76F55912-11EF-43B7-80B5-5B939E3AD957}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{76F55912-11EF-43B7-80B5-5B939E3AD957}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{76F55912-11EF-43B7-80B5-5B939E3AD957}.Release|Any CPU.Build.0 = Release|Any CPU
+		{48F4C01A-EC67-4F8A-83B4-27FE5AEBF03F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{48F4C01A-EC67-4F8A-83B4-27FE5AEBF03F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{48F4C01A-EC67-4F8A-83B4-27FE5AEBF03F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{48F4C01A-EC67-4F8A-83B4-27FE5AEBF03F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8551ABD6-E6B4-4F66-924A-AAFA8CEEAA58}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8551ABD6-E6B4-4F66-924A-AAFA8CEEAA58}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8551ABD6-E6B4-4F66-924A-AAFA8CEEAA58}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8551ABD6-E6B4-4F66-924A-AAFA8CEEAA58}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -174,8 +220,16 @@ Global
 		{D594F03A-6BBA-4779-8C1B-36D5FBCA7116} = {8E852857-DDCD-4E30-BEFB-E8A497B1337A}
 		{3D488ACB-8AF1-4B9F-9E48-161DACF02C9E} = {8E852857-DDCD-4E30-BEFB-E8A497B1337A}
 		{025A1F68-0E32-487B-A03E-3E289CA066F6} = {8E852857-DDCD-4E30-BEFB-E8A497B1337A}
-		{D8836813-90E1-44D3-A189-CC82778719CD} = {F283DBEE-17BA-4AC7-B725-A52C1F55B776}
 		{D68C6AB8-6F1F-4B8F-9F7B-5CFC820ABD55} = {8A4BBE81-E466-45E7-8066-BD2CD8196B8D}
+		{AE2733D5-7567-42ED-872C-35E57D9394E9} = {CB4EB993-74E4-496B-9570-72FA9C7967A2}
+		{719FAA08-D9D2-4207-97E4-F5E4F5B0B00B} = {8E852857-DDCD-4E30-BEFB-E8A497B1337A}
+		{95A5E353-4170-4E13-AF00-2A0B103A08AF} = {F283DBEE-17BA-4AC7-B725-A52C1F55B776}
+		{18146A9B-5264-4D73-8308-B7712F5D3E8D} = {E02BAA5C-ECFF-43BF-AAC8-9CF985E13310}
+		{9BFEDF98-BF1C-4A39-9444-5AF257C7AA7D} = {18146A9B-5264-4D73-8308-B7712F5D3E8D}
+		{A867E748-9B71-4ACD-9492-2DB00F6595E0} = {18146A9B-5264-4D73-8308-B7712F5D3E8D}
+		{76F55912-11EF-43B7-80B5-5B939E3AD957} = {18146A9B-5264-4D73-8308-B7712F5D3E8D}
+		{48F4C01A-EC67-4F8A-83B4-27FE5AEBF03F} = {18146A9B-5264-4D73-8308-B7712F5D3E8D}
+		{8551ABD6-E6B4-4F66-924A-AAFA8CEEAA58} = {18146A9B-5264-4D73-8308-B7712F5D3E8D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {148A9F60-4D1F-455F-9A54-21778D353BE0}

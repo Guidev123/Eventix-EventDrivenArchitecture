@@ -22,7 +22,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\..\BuildingBlocks\Eventix.Shared.Infrastructure\Eventix.Shared.Infrastructure.csproj" />
+	  <ProjectReference Include="..\..\Modules\Attendance\Eventix.Modules.Attendance.Infrastructure\Eventix.Modules.Attendance.Infrastructure.csproj" />
 	  <ProjectReference Include="..\..\Modules\Events\Eventix.Modules.Events.Infrastructure\Eventix.Modules.Events.Infrastructure.csproj" />
 	  <ProjectReference Include="..\..\Modules\Ticketing\Eventix.Modules.Ticketing.Infrastructure\Eventix.Modules.Ticketing.Infrastructure.csproj" />
 	  <ProjectReference Include="..\..\Modules\Users\Eventix.Modules.Users.Infrastructure\Eventix.Modules.Users.Infrastructure.csproj" />

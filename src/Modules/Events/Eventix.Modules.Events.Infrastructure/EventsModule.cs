@@ -4,11 +4,8 @@ using Eventix.Modules.Events.Domain.TicketTypes.Interfaces;
 using Eventix.Modules.Events.Infrastructure.Categories.Repositories;
 using Eventix.Modules.Events.Infrastructure.Database;
 using Eventix.Modules.Events.Infrastructure.Events.Repositories;
-using Eventix.Modules.Events.Infrastructure.PublicApi;
 using Eventix.Modules.Events.Infrastructure.TicketTypes.Repositories;
 using Eventix.Modules.Events.Presentation;
-using Eventix.Modules.Events.PublicApi;
-using Eventix.Shared.Domain.Interfaces;
 using Eventix.Shared.Infrastructure.Interceptors;
 using Eventix.Shared.Presentation.Extensions;
 using Microsoft.EntityFrameworkCore;
@@ -25,7 +22,6 @@ namespace Eventix.Modules.Events.Infrastructure
         public static IServiceCollection AddEventsModule(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddEndpoints(typeof(PresentationModule).Assembly);
-            services.AddTransient<IEventsApi, EventsApi>();
 
             AddRepositories(services);
             AddEntityFrameworkDbContext(services, configuration);
