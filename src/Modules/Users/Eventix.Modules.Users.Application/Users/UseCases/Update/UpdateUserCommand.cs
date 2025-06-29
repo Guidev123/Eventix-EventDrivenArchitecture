@@ -2,7 +2,7 @@
 
 namespace Eventix.Modules.Users.Application.Users.UseCases.Update
 {
-    public record UpdateUserCommand : ICommand
+    public sealed record UpdateUserCommand : ICommand
     {
         public UpdateUserCommand(string firstName, string lastName, string email)
         {

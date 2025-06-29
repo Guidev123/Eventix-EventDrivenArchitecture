@@ -7,7 +7,7 @@ using Eventix.Shared.Domain.Responses;
 
 namespace Eventix.Modules.Users.Application.Users.UseCases.GetPermissions
 {
-    public sealed class GetUserPermissionsHandler(ISqlConnectionFactory sqlConnectionFactory) : IQueryHandler<GetUserPermissionsQuery, PermissionResponse>
+    internal sealed class GetUserPermissionsHandler(ISqlConnectionFactory sqlConnectionFactory) : IQueryHandler<GetUserPermissionsQuery, PermissionResponse>
     {
         public async Task<Result<PermissionResponse>> ExecuteAsync(GetUserPermissionsQuery request, CancellationToken cancellationToken = default)
         {

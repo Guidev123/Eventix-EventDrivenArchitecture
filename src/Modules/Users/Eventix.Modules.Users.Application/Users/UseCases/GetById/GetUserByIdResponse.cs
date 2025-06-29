@@ -1,6 +1,6 @@
 ﻿namespace Eventix.Modules.Users.Application.Users.UseCases.GetById
 {
-    public record GetUserByIdResponse(
+    public sealed record GetUserByIdResponse(
         Guid Id,
         string FirstName,
         string LastName,

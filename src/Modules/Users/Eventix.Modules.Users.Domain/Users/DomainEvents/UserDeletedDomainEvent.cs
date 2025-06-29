@@ -2,5 +2,7 @@
 
 namespace Eventix.Modules.Users.Domain.Users.DomainEvents
 {
-    public record UserDeletedDomainEvent(Guid UserId) : DomainEvent;
+    public sealed record UserDeletedDomainEvent(
+        Guid UserId
+        ) : DomainEvent;
 }

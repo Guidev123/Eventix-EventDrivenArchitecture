@@ -2,5 +2,8 @@
 
 namespace Eventix.Modules.Users.Domain.Users.DomainEvents
 {
-    public record UserEmailUpdatedDomainEvent(Guid UserId, string Email) : DomainEvent;
+    public sealed record UserEmailUpdatedDomainEvent(
+        Guid UserId,
+        string Email
+        ) : DomainEvent;
 }

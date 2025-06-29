@@ -4,7 +4,7 @@ using Eventix.Modules.Users.Domain.Users.Entities;
 
 namespace Eventix.Modules.Users.Application.Users.Mappers
 {
-    public static class UserMappers
+    internal static class UserMappers
     {
         public static User MapToUser(this RegisterUserCommand command, Guid identityId)
             => User.Create(

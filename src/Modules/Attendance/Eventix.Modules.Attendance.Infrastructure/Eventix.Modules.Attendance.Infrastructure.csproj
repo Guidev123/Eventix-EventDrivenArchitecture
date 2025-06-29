@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\BuildingBlocks\Eventix.Shared.Infrastructure\Eventix.Shared.Infrastructure.csproj" />
+    <ProjectReference Include="..\Eventix.Modules.Attendance.Application\Eventix.Modules.Attendance.Application.csproj" />
+    <ProjectReference Include="..\Eventix.Modules.Attendance.Presentation\Eventix.Modules.Attendance.Presentation.csproj" />
+  </ItemGroup>
+
+</Project>

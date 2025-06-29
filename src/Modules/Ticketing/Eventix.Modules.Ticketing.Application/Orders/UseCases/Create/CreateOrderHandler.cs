@@ -14,7 +14,6 @@ using Eventix.Modules.Ticketing.Domain.Payments.Errors;
 using Eventix.Modules.Ticketing.Domain.Payments.Interfaces;
 using Eventix.Shared.Application.Factories;
 using Eventix.Shared.Application.Messaging;
-using Eventix.Shared.Domain.Interfaces;
 using Eventix.Shared.Domain.Responses;
 
 namespace Eventix.Modules.Ticketing.Application.Orders.UseCases.Create
