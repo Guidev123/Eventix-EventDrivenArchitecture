@@ -3,8 +3,6 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
-
 namespace Eventix.Modules.Users.Infrastructure.Database.Migrations
 {
     /// <inheritdoc />
@@ -110,77 +108,6 @@ namespace Eventix.Modules.Users.Infrastructure.Database.Migrations
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.InsertData(
-                schema: "users",
-                table: "Permissions",
-                column: "Code",
-                values: new object[]
-                {
-                    "carts:add",
-                    "carts:read",
-                    "carts:remove",
-                    "categories:read",
-                    "categories:update",
-                    "event-statistics:read",
-                    "events:read",
-                    "events:search",
-                    "events:update",
-                    "orders:create",
-                    "orders:read",
-                    "ticket-types:read",
-                    "ticket-types:update",
-                    "tickets:check-in",
-                    "tickets:read",
-                    "users:read",
-                    "users:update"
-                });
-
-            migrationBuilder.InsertData(
-                schema: "users",
-                table: "Roles",
-                column: "Name",
-                values: new object[]
-                {
-                    "Administrator",
-                    "Member"
-                });
-
-            migrationBuilder.InsertData(
-                schema: "users",
-                table: "RolePermissions",
-                columns: new[] { "PermissionCode", "RoleName" },
-                values: new object[,]
-                {
-                    { "carts:add", "Administrator" },
-                    { "carts:add", "Member" },
-                    { "carts:read", "Administrator" },
-                    { "carts:read", "Member" },
-                    { "carts:remove", "Administrator" },
-                    { "carts:remove", "Member" },
-                    { "categories:read", "Administrator" },
-                    { "categories:update", "Administrator" },
-                    { "event-statistics:read", "Administrator" },
-                    { "events:read", "Administrator" },
-                    { "events:search", "Administrator" },
-                    { "events:search", "Member" },
-                    { "events:update", "Administrator" },
-                    { "orders:create", "Administrator" },
-                    { "orders:create", "Member" },
-                    { "orders:read", "Administrator" },
-                    { "orders:read", "Member" },
-                    { "ticket-types:read", "Administrator" },
-                    { "ticket-types:read", "Member" },
-                    { "ticket-types:update", "Administrator" },
-                    { "tickets:check-in", "Administrator" },
-                    { "tickets:check-in", "Member" },
-                    { "tickets:read", "Administrator" },
-                    { "tickets:read", "Member" },
-                    { "users:read", "Administrator" },
-                    { "users:read", "Member" },
-                    { "users:update", "Administrator" },
-                    { "users:update", "Member" }
                 });
 
             migrationBuilder.CreateIndex(

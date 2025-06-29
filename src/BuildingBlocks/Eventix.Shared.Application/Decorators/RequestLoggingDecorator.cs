@@ -3,6 +3,7 @@ using Eventix.Shared.Domain.Responses;
 using Microsoft.Extensions.Logging;
 using MidR.Interfaces;
 using Serilog.Context;
+using System.Diagnostics;
 
 namespace Eventix.Shared.Application.Decorators
 {
@@ -18,7 +19,7 @@ namespace Eventix.Shared.Application.Decorators
             {
                 var requestName = typeof(TRequest).Name;
                 var requestModule = GetRequestModule(typeof(TRequest).FullName!);
-                var stopwatch = System.Diagnostics.Stopwatch.StartNew();
+                var stopwatch = Stopwatch.StartNew();
                 using (LogContext.PushProperty("Module", requestModule))
                 {
                     try

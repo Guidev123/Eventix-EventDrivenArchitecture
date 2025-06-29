@@ -24,10 +24,6 @@ namespace Eventix.Modules.Users.Infrastructure.Users.Mappings
 
                     joinBuilder.Property("RolesName").HasColumnName("RoleName");
                 });
-
-            builder.HasData(
-                Role.Member,
-                Role.Administrator);
         }
     }
 }
