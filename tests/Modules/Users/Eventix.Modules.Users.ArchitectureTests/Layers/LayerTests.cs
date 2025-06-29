@@ -9,6 +9,7 @@ public class LayerTests : BaseTest
     [Trait("Users Architecture Tests", "Layers Test")]
     public void DomainLayer_ShouldNotHaveDependencyOn_ApplicationLayer()
     {
+        // Assert & Act & Assert
         Types.InAssembly(DomainAssembly)
             .Should()
             .NotHaveDependencyOn(ApplicationAssembly.GetName().Name)
@@ -20,6 +21,7 @@ public class LayerTests : BaseTest
     [Trait("Users Architecture Tests", "Layers Test")]
     public void DomainLayer_ShouldNotHaveDependencyOn_InfrastructureLayer()
     {
+        // Assert & Act & Assert
         Types
             .InAssembly(DomainAssembly)
             .Should()
@@ -32,6 +34,7 @@ public class LayerTests : BaseTest
     [Trait("Users Architecture Tests", "Layers Test")]
     public void ApplicationLayer_ShouldNotHaveDependencyOn_InfrastructureLayer()
     {
+        // Assert & Act & Assert
         Types.InAssembly(ApplicationAssembly)
             .Should()
             .NotHaveDependencyOn(InfrastructureAssembly.GetName().Name)
@@ -43,6 +46,7 @@ public class LayerTests : BaseTest
     [Trait("Users Architecture Tests", "Layers Test")]
     public void ApplicationLayer_ShouldNotHaveDependencyOn_PresentationLayer()
     {
+        // Assert & Act & Assert
         Types.InAssembly(ApplicationAssembly)
             .Should()
             .NotHaveDependencyOn(PresentationAssembly.GetName().Name)
@@ -54,6 +58,7 @@ public class LayerTests : BaseTest
     [Trait("Users Architecture Tests", "Layers Test")]
     public void PresentationLayer_ShouldNotHaveDependencyOn_InfrastructureLayer()
     {
+        // Assert & Act & Assert
         Types.InAssembly(PresentationAssembly)
             .Should()
             .NotHaveDependencyOn(InfrastructureAssembly.GetName().Name)
