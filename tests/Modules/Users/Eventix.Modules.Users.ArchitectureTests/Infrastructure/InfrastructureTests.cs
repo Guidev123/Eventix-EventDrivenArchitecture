@@ -20,9 +20,9 @@ public class InfrastructureTests : BaseTest
             .ShouldBeSuccessful();
     }
 
-    [Fact(DisplayName = "Integration Event Handler Should Have Name Ending With DomainEventHandler")]
+    [Fact(DisplayName = "Integration Event Handler Should Have Name Ending With Consumer")]
     [Trait("Users Arhcitecture Tests", "Infrastructure Tests")]
-    public void IntegrationEventHandler_ShouldHave_NameEndingWith_DomainEventHandler()
+    public void IntegrationEventHandler_ShouldHave_NameEndingWith_Consumer()
     {
         // Arrange & Act & Assert
         Types.InAssembly(PresentationAssembly)
