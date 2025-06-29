@@ -11,7 +11,7 @@ namespace Eventix.Modules.Ticketing.Infrastructure.Customers.Repositories
         public IUnitOfWork UnitOfWork => context;
 
         public async Task<bool> ExistsAsync(Guid id, CancellationToken cancellationToken = default)
-            => await context.Customers.AsNoTracking().AnyAsync(cancellationToken);
+            => await context.Customers.AsNoTracking().AnyAsync(x => x.Id == id, cancellationToken);
 
         public async Task<Customer?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
             => await context.Customers.AsNoTracking().FirstOrDefaultAsync(c => c.Id == id, cancellationToken);

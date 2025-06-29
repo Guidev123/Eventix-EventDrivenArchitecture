@@ -60,10 +60,14 @@ namespace Eventix.Api.Configurations
             string redisConnectionString
             )
         {
+            var appSettingsSection = builder.Configuration.GetSection(nameof(KeyCloakExtensions));
+            var appSettings = appSettingsSection.Get<KeyCloakExtensions>()
+                ?? throw new InvalidOperationException("Keycloak settings not found.");
+
             builder.Services.AddHealthChecks()
                 .AddSqlServer(dbConnectionString)
                 .AddRedis(redisConnectionString)
-                .AddUrlGroup(new Uri(builder.Configuration.GetValue<string>("KeyCloak:HealthUrl") ?? string.Empty), HttpMethod.Get, "keycloak");
+                .AddUrlGroup(new Uri(appSettings.HealthUrl), HttpMethod.Get, "keycloak");
 
             return builder;
         }

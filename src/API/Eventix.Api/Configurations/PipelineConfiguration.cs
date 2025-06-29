@@ -8,14 +8,14 @@ namespace Eventix.Api.Configurations
 {
     public static class PipelineConfiguration
     {
-        public static WebApplication UsePipeline(this WebApplication app)
+        public static WebApplication UsePipeline(this WebApplication app, WebApplicationBuilder builder)
         {
             app.UseExceptionHandler();
 
             if (app.Environment.IsDevelopment())
             {
                 app.MapOpenApi();
-                app.UseSwaggerConfig();
+                app.UseSwaggerConfig(builder);
 
                 app.ApplyMigrations();
             }
