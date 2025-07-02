@@ -8,9 +8,9 @@ using MidR.Interfaces;
 
 namespace Eventix.Modules.Users.Application.Users.DomainEvents
 {
-    internal sealed class UserCreatedDomainEventHandler(IEventBus eventBus, IMediator mediator) : IDomainEventHandler<UserCreatedDomainEvent>
+    internal sealed class UserCreatedDomainEventHandler(IEventBus eventBus, IMediator mediator) : DomainEventHandler<UserCreatedDomainEvent>
     {
-        public async Task ExecuteAsync(UserCreatedDomainEvent notification, CancellationToken cancellationToken)
+        public override async Task ExecuteAsync(UserCreatedDomainEvent notification, CancellationToken cancellationToken = default)
         {
             var userResult = await mediator.DispatchAsync(new GetUserByIdQuery(notification.UserId), cancellationToken);
 

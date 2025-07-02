@@ -1,5 +1,6 @@
 ﻿using Eventix.Modules.Users.Domain.Users.Entities;
 using Eventix.Shared.Domain.Interfaces;
+using Eventix.Shared.Infrastructure.Outbox.Mappings;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 
@@ -13,6 +14,8 @@ namespace Eventix.Modules.Users.Infrastructure.Database
         {
             modelBuilder.HasDefaultSchema(Schemas.Users);
 
+            modelBuilder.ApplyConfiguration(new OutboxMessageMapping());
+            modelBuilder.ApplyConfiguration(new OutboxMessageConsumerMapping());
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         }
 

@@ -15,6 +15,36 @@ namespace Eventix.Modules.Users.Infrastructure.Database.Migrations
                 name: "users");
 
             migrationBuilder.CreateTable(
+                name: "OutboxMessageConsumers",
+                schema: "users",
+                columns: table => new
+                {
+                    OutboxMessageId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "VARCHAR(256)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OutboxMessageConsumers", x => new { x.OutboxMessageId, x.Name });
+                });
+
+            migrationBuilder.CreateTable(
+                name: "OutboxMessages",
+                schema: "users",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Type = table.Column<string>(type: "VARCHAR(200)", nullable: false),
+                    Content = table.Column<string>(type: "VARCHAR(3000)", nullable: false),
+                    OccurredOnUtc = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ProcessedOnUtc = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Error = table.Column<string>(type: "VARCHAR(256)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OutboxMessages", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Permissions",
                 schema: "users",
                 columns: table => new
@@ -140,6 +170,14 @@ namespace Eventix.Modules.Users.Infrastructure.Database.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "OutboxMessageConsumers",
+                schema: "users");
+
+            migrationBuilder.DropTable(
+                name: "OutboxMessages",
+                schema: "users");
+
             migrationBuilder.DropTable(
                 name: "RolePermissions",
                 schema: "users");

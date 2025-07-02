@@ -16,6 +16,8 @@ namespace Eventix.Modules.Ticketing.Application.Payments.UseCases.RefundForEvent
         public async Task<Result> ExecuteAsync(RefundPaymentsForEventCommand request, CancellationToken cancellationToken = default)
         {
             using var connection = sqlConnectionFactory.Create();
+            await connection.OpenAsync(cancellationToken);
+
             using var transaction = await connection.BeginTransactionAsync(cancellationToken);
 
             try

@@ -13,6 +13,10 @@ namespace Eventix.Modules.Users.Application.Users.UseCases.Register
     {
         public async Task<Result<RegisterUserResponse>> ExecuteAsync(RegisterUserCommand request, CancellationToken cancellationToken = default)
         {
+            var userAlreadyExists = await userRepository.ExistsAsync(request.Email, cancellationToken).ConfigureAwait(false);
+            if (userAlreadyExists)
+                return Result.Failure<RegisterUserResponse>(UserErrors.UnableToCreateAccount);
+
             var identityProviderResult = await identityProviderService.RegisterAsync(
                 new(request.Email, request.Password, request.FirstName, request.LastName), cancellationToken);
 
@@ -23,10 +27,6 @@ namespace Eventix.Modules.Users.Application.Users.UseCases.Register
                 return Result.Failure<RegisterUserResponse>(IdentityProviderErrors.FailToGetIdentityId);
 
             var user = request.MapToUser(identityId);
-
-            var userAlreadyExists = await userRepository.ExistsAsync(user.Email.Address, cancellationToken).ConfigureAwait(false);
-            if (userAlreadyExists)
-                return Result.Failure<RegisterUserResponse>(UserErrors.UnableToCreateAccount);
 
             userRepository.Insert(user);
 

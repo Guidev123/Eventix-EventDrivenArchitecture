@@ -8,13 +8,14 @@ using Eventix.Shared.Infrastructure.Authorization;
 using Eventix.Shared.Infrastructure.Cache;
 using Eventix.Shared.Infrastructure.Clock;
 using Eventix.Shared.Infrastructure.Factories;
-using Eventix.Shared.Infrastructure.Interceptors;
+using Eventix.Shared.Infrastructure.Outbox.Interceptors;
 using FluentValidation;
 using MassTransit;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using MidR.DependencyInjection;
 using MidR.Interfaces;
+using Quartz;
 using StackExchange.Redis;
 using System.Reflection;
 
@@ -28,10 +29,13 @@ namespace Eventix.Shared.Infrastructure
             string databaseConnectionString,
             string redisConnectionString)
         {
-            services.AddAuthenticationInternal()
-                .AddAuthorizationInternal().AddData(databaseConnectionString)
+            services
+                .AddAuthenticationInternal()
+                .AddAuthorizationInternal()
+                .AddData(databaseConnectionString)
                 .AddCacheService(redisConnectionString)
-                .AddBus(moduleConfigureConsumers);
+                .AddBus(moduleConfigureConsumers)
+                .AddBackgroundJobs();
 
             return services;
         }
@@ -45,6 +49,15 @@ namespace Eventix.Shared.Infrastructure
             return services;
         }
 
+        private static IServiceCollection AddBackgroundJobs(this IServiceCollection services)
+        {
+            services.AddQuartz();
+
+            services.AddQuartzHostedService(options => options.WaitForJobsToComplete = true);
+
+            return services;
+        }
+
         private static IServiceCollection AddData(this IServiceCollection services, string databaseConnectionString)
         {
             services.AddSingleton<ISqlConnectionFactory, SqlConnectionFactory>(sp =>
@@ -52,7 +65,7 @@ namespace Eventix.Shared.Infrastructure
                 return new SqlConnectionFactory(databaseConnectionString);
             });
 
-            services.TryAddSingleton<PublishDomainEventsInterceptors>();
+            services.TryAddSingleton<InsertOutboxMessagesInterceptors>();
 
             return services;
         }
@@ -96,7 +109,7 @@ namespace Eventix.Shared.Infrastructure
             return services;
         }
 
-        public static IServiceCollection AddBus(this IServiceCollection services, Action<IRegistrationConfigurator>[] moduleConfigureConsumers)
+        private static IServiceCollection AddBus(this IServiceCollection services, Action<IRegistrationConfigurator>[] moduleConfigureConsumers)
         {
             services.TryAddSingleton<IEventBus, EventBus.EventBus>();
             services.AddMassTransit(opt =>

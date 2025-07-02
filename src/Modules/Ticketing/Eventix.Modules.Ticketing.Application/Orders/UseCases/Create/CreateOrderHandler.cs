@@ -29,6 +29,8 @@ namespace Eventix.Modules.Ticketing.Application.Orders.UseCases.Create
         public async Task<Result> ExecuteAsync(CreateOrderCommand request, CancellationToken cancellationToken = default)
         {
             using var connection = sqlConnectionFactory.Create();
+            await connection.OpenAsync(cancellationToken);
+
             using var transaction = await connection.BeginTransactionAsync(cancellationToken);
 
             try

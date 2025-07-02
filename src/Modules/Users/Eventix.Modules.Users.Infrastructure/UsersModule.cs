@@ -3,20 +3,20 @@ using Eventix.Modules.Users.Domain.Users.Interfaces;
 using Eventix.Modules.Users.Infrastructure.Authorization;
 using Eventix.Modules.Users.Infrastructure.Database;
 using Eventix.Modules.Users.Infrastructure.Identity;
+using Eventix.Modules.Users.Infrastructure.Outbox;
 using Eventix.Modules.Users.Infrastructure.Users.Repositories;
 using Eventix.Modules.Users.Presentation;
 using Eventix.Shared.Application.Authorization;
-using Eventix.Shared.Domain.Interfaces;
+using Eventix.Shared.Application.Messaging;
 using Eventix.Shared.Infrastructure.Http;
-using Eventix.Shared.Infrastructure.Interceptors;
+using Eventix.Shared.Infrastructure.Outbox;
+using Eventix.Shared.Infrastructure.Outbox.Interceptors;
 using Eventix.Shared.Presentation.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using Microsoft.Extensions.Http.Resilience;
 using Microsoft.Extensions.Options;
-using Polly;
 
 namespace Eventix.Modules.Users.Infrastructure
 {
@@ -30,9 +30,11 @@ namespace Eventix.Modules.Users.Infrastructure
             services.AddEndpoints(typeof(PresentationModule).Assembly);
 
             AddServices(services);
+            AddDomainEventHandlers(services);
             AddHttpClientServices(services, configuration);
             AddRepositories(services);
             AddEntityFrameworkDbContext(services, configuration);
+            AddOutbox(services, configuration);
 
             return services;
         }
@@ -73,10 +75,35 @@ namespace Eventix.Modules.Users.Infrastructure
 
             services.AddDbContext<UsersDbContext>((sp, options) =>
             {
-                var publishDomainEventsInterceptor = sp.GetRequiredService<PublishDomainEventsInterceptors>();
+                var publishDomainEventsInterceptor = sp.GetRequiredService<InsertOutboxMessagesInterceptors>();
 
                 options.UseSqlServer(connectionString).AddInterceptors(publishDomainEventsInterceptor).LogTo(Console.WriteLine);
             });
+        }
+
+        private static void AddOutbox(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.Configure<OutboxOptions>(configuration.GetSection("Users:Outbox"));
+            services.ConfigureOptions<ConfigureProcessOutboxJob>();
+        }
+
+        private static void AddDomainEventHandlers(this IServiceCollection services)
+        {
+            var domainEventHandlers = Application.AssemblyReference.Assembly
+                .GetTypes()
+                .Where(c => c.IsAssignableTo(typeof(IDomainEventHandler)))
+                .ToArray();
+
+            foreach (var domainEventHandler in domainEventHandlers)
+            {
+                services.TryAddTransient(domainEventHandler);
+
+                var domainEvent = domainEventHandler.GetInterfaces().Single(c => c.IsGenericType).GetGenericArguments().Single();
+
+                var closedIdempotentHandler = typeof(IdempotentDomainEventHandler<>).MakeGenericType(domainEvent);
+
+                services.Decorate(domainEventHandler, closedIdempotentHandler);
+            }
         }
     }
 }

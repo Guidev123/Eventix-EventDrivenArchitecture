@@ -16,13 +16,15 @@ using Eventix.Modules.Ticketing.Infrastructure.Payments.Repositories;
 using Eventix.Modules.Ticketing.Infrastructure.Payments.Services;
 using Eventix.Modules.Ticketing.Infrastructure.Tickets.Repositories;
 using Eventix.Modules.Ticketing.Presentation;
+using Eventix.Shared.Application.Messaging;
 using Eventix.Shared.Domain.Interfaces;
-using Eventix.Shared.Infrastructure.Interceptors;
+using Eventix.Shared.Infrastructure.Outbox.Interceptors;
 using Eventix.Shared.Presentation.Extensions;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace Eventix.Modules.Ticketing.Infrastructure
 {
@@ -35,6 +37,7 @@ namespace Eventix.Modules.Ticketing.Infrastructure
         {
             services.AddEndpoints(typeof(PresentationModule).Assembly);
 
+            AddDomainEventHandlers(services);
             AddRepositories(services);
             AddServices(services);
             AddEntityFrameworkDbContext(services, configuration);
@@ -71,10 +74,23 @@ namespace Eventix.Modules.Ticketing.Infrastructure
 
             services.AddDbContext<TicketingDbContext>((sp, options) =>
             {
-                var publishDomainEventsInterceptor = sp.GetRequiredService<PublishDomainEventsInterceptors>();
+                var publishDomainEventsInterceptor = sp.GetRequiredService<InsertOutboxMessagesInterceptors>();
 
                 options.UseSqlServer(connectionString).AddInterceptors(publishDomainEventsInterceptor).LogTo(Console.WriteLine);
             });
+        }
+
+        private static void AddDomainEventHandlers(this IServiceCollection services)
+        {
+            var domainEventHandlers = Application.AssemblyReference.Assembly
+                .GetTypes()
+                .Where(c => c.IsAssignableTo(typeof(IDomainEventHandler)))
+                .ToArray();
+
+            foreach (var domainEventHandler in domainEventHandlers)
+            {
+                services.TryAddTransient(domainEventHandler);
+            }
         }
     }
 }

@@ -60,6 +60,47 @@ namespace Eventix.Modules.Users.Infrastructure.Database.Migrations
                     b.ToTable("Roles", "users");
                 });
 
+            modelBuilder.Entity("Eventix.Shared.Infrastructure.Outbox.OutboxMessage", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("VARCHAR(3000)");
+
+                    b.Property<string>("Error")
+                        .HasColumnType("VARCHAR(256)");
+
+                    b.Property<DateTime>("OccurredOnUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("ProcessedOnUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("VARCHAR(200)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("OutboxMessages", "users");
+                });
+
+            modelBuilder.Entity("Eventix.Shared.Infrastructure.Outbox.OutboxMessageConsumer", b =>
+                {
+                    b.Property<Guid>("OutboxMessageId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("VARCHAR(256)");
+
+                    b.HasKey("OutboxMessageId", "Name");
+
+                    b.ToTable("OutboxMessageConsumers", "users");
+                });
+
             modelBuilder.Entity("PermissionRole", b =>
                 {
                     b.Property<string>("PermissionCode")

@@ -174,9 +174,71 @@ namespace Eventix.Modules.Ticketing.Infrastructure.Database.Migrations
                     b.ToTable("Tickets", "ticketing");
                 });
 
+            modelBuilder.Entity("Eventix.Shared.Infrastructure.Outbox.OutboxMessage", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("VARCHAR(3000)");
+
+                    b.Property<string>("Error")
+                        .HasColumnType("VARCHAR(256)");
+
+                    b.Property<DateTime>("OccurredOnUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("ProcessedOnUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("VARCHAR(200)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("OutboxMessages", "ticketing");
+                });
+
+            modelBuilder.Entity("Eventix.Shared.Infrastructure.Outbox.OutboxMessageConsumer", b =>
+                {
+                    b.Property<Guid>("OutboxMessageId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("VARCHAR(256)");
+
+                    b.HasKey("OutboxMessageId", "Name");
+
+                    b.ToTable("OutboxMessageConsumers", "ticketing");
+                });
+
             modelBuilder.Entity("Eventix.Modules.Ticketing.Domain.Customers.Entities.Customer", b =>
                 {
-                    b.OwnsOne("Eventix.Modules.Ticketing.Domain.Customers.ValueObjects.CustomerName", "Name", b1 =>
+                    b.OwnsOne("Eventix.Shared.Domain.ValueObjects.Email", "Email", b1 =>
+                        {
+                            b1.Property<Guid>("CustomerId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<string>("Address")
+                                .IsRequired()
+                                .HasColumnType("VARCHAR(160)")
+                                .HasColumnName("Email");
+
+                            b1.HasKey("CustomerId");
+
+                            b1.HasIndex("Address")
+                                .IsUnique();
+
+                            b1.ToTable("Customers", "ticketing");
+
+                            b1.WithOwner()
+                                .HasForeignKey("CustomerId");
+                        });
+
+                    b.OwnsOne("Eventix.Shared.Domain.ValueObjects.Name", "Name", b1 =>
                         {
                             b1.Property<Guid>("CustomerId")
                                 .HasColumnType("uniqueidentifier");
@@ -199,27 +261,6 @@ namespace Eventix.Modules.Ticketing.Infrastructure.Database.Migrations
                                 .HasForeignKey("CustomerId");
                         });
 
-                    b.OwnsOne("Eventix.Modules.Ticketing.Domain.Customers.ValueObjects.Email", "Email", b1 =>
-                        {
-                            b1.Property<Guid>("CustomerId")
-                                .HasColumnType("uniqueidentifier");
-
-                            b1.Property<string>("Address")
-                                .IsRequired()
-                                .HasColumnType("VARCHAR(160)")
-                                .HasColumnName("Email");
-
-                            b1.HasKey("CustomerId");
-
-                            b1.HasIndex("Address")
-                                .IsUnique();
-
-                            b1.ToTable("Customers", "ticketing");
-
-                            b1.WithOwner()
-                                .HasForeignKey("CustomerId");
-                        });
-
                     b.Navigation("Email")
                         .IsRequired();
 
@@ -229,27 +270,6 @@ namespace Eventix.Modules.Ticketing.Infrastructure.Database.Migrations
 
             modelBuilder.Entity("Eventix.Modules.Ticketing.Domain.Events.Entities.Event", b =>
                 {
-                    b.OwnsOne("Eventix.Modules.Ticketing.Domain.Events.ValueObjects.DateRange", "DateRange", b1 =>
-                        {
-                            b1.Property<Guid>("EventId")
-                                .HasColumnType("uniqueidentifier");
-
-                            b1.Property<DateTime?>("EndsAtUtc")
-                                .HasColumnType("datetime2")
-                                .HasColumnName("EndsAtUtc");
-
-                            b1.Property<DateTime>("StartsAtUtc")
-                                .HasColumnType("datetime2")
-                                .HasColumnName("StartsAtUtc");
-
-                            b1.HasKey("EventId");
-
-                            b1.ToTable("Events", "ticketing");
-
-                            b1.WithOwner()
-                                .HasForeignKey("EventId");
-                        });
-
                     b.OwnsOne("Eventix.Modules.Ticketing.Domain.Events.ValueObjects.EventSpecification", "Specification", b1 =>
                         {
                             b1.Property<Guid>("EventId")
@@ -273,7 +293,28 @@ namespace Eventix.Modules.Ticketing.Infrastructure.Database.Migrations
                                 .HasForeignKey("EventId");
                         });
 
-                    b.OwnsOne("Eventix.Modules.Ticketing.Domain.Events.ValueObjects.Location", "Location", b1 =>
+                    b.OwnsOne("Eventix.Shared.Domain.ValueObjects.DateRange", "DateRange", b1 =>
+                        {
+                            b1.Property<Guid>("EventId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<DateTime?>("EndsAtUtc")
+                                .HasColumnType("datetime2")
+                                .HasColumnName("EndsAtUtc");
+
+                            b1.Property<DateTime>("StartsAtUtc")
+                                .HasColumnType("datetime2")
+                                .HasColumnName("StartsAtUtc");
+
+                            b1.HasKey("EventId");
+
+                            b1.ToTable("Events", "ticketing");
+
+                            b1.WithOwner()
+                                .HasForeignKey("EventId");
+                        });
+
+                    b.OwnsOne("Eventix.Shared.Domain.ValueObjects.Location", "Location", b1 =>
                         {
                             b1.Property<Guid>("EventId")
                                 .HasColumnType("uniqueidentifier");
@@ -332,7 +373,7 @@ namespace Eventix.Modules.Ticketing.Infrastructure.Database.Migrations
 
             modelBuilder.Entity("Eventix.Modules.Ticketing.Domain.Events.Entities.TicketType", b =>
                 {
-                    b.OwnsOne("Eventix.Modules.Ticketing.Domain.Shared.ValueObjects.Money", "Price", b1 =>
+                    b.OwnsOne("Eventix.Shared.Domain.ValueObjects.Money", "Price", b1 =>
                         {
                             b1.Property<Guid>("TicketTypeId")
                                 .HasColumnType("uniqueidentifier");
@@ -395,7 +436,7 @@ namespace Eventix.Modules.Ticketing.Infrastructure.Database.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.OwnsOne("Eventix.Modules.Ticketing.Domain.Shared.ValueObjects.Money", "TotalPrice", b1 =>
+                    b.OwnsOne("Eventix.Shared.Domain.ValueObjects.Money", "TotalPrice", b1 =>
                         {
                             b1.Property<Guid>("OrderId")
                                 .HasColumnType("uniqueidentifier");
@@ -434,7 +475,7 @@ namespace Eventix.Modules.Ticketing.Infrastructure.Database.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.OwnsOne("Eventix.Modules.Ticketing.Domain.Shared.ValueObjects.Money", "Price", b1 =>
+                    b.OwnsOne("Eventix.Shared.Domain.ValueObjects.Money", "Price", b1 =>
                         {
                             b1.Property<Guid>("OrderItemId")
                                 .HasColumnType("uniqueidentifier");
@@ -456,7 +497,7 @@ namespace Eventix.Modules.Ticketing.Infrastructure.Database.Migrations
                                 .HasForeignKey("OrderItemId");
                         });
 
-                    b.OwnsOne("Eventix.Modules.Ticketing.Domain.Shared.ValueObjects.Money", "UnitPrice", b1 =>
+                    b.OwnsOne("Eventix.Shared.Domain.ValueObjects.Money", "UnitPrice", b1 =>
                         {
                             b1.Property<Guid>("OrderItemId")
                                 .HasColumnType("uniqueidentifier");
@@ -513,7 +554,7 @@ namespace Eventix.Modules.Ticketing.Infrastructure.Database.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.OwnsOne("Eventix.Modules.Ticketing.Domain.Shared.ValueObjects.Money", "Amount", b1 =>
+                    b.OwnsOne("Eventix.Shared.Domain.ValueObjects.Money", "Amount", b1 =>
                         {
                             b1.Property<Guid>("PaymentId")
                                 .HasColumnType("uniqueidentifier");
@@ -535,7 +576,7 @@ namespace Eventix.Modules.Ticketing.Infrastructure.Database.Migrations
                                 .HasForeignKey("PaymentId");
                         });
 
-                    b.OwnsOne("Eventix.Modules.Ticketing.Domain.Shared.ValueObjects.Money", "AmountRefunded", b1 =>
+                    b.OwnsOne("Eventix.Shared.Domain.ValueObjects.Money", "AmountRefunded", b1 =>
                         {
                             b1.Property<Guid>("PaymentId")
                                 .HasColumnType("uniqueidentifier");
