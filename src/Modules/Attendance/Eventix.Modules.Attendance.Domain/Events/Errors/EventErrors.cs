@@ -30,5 +30,25 @@ namespace Eventix.Modules.Attendance.Domain.Events.Errors
         public static readonly Error DateRangeIsRequired = Error.Problem(
             "Events.DateRangeIsRequired",
             "The event date range is required.");
+
+        public static readonly Error EndDateMustBeAfterStartDate = Error.Problem(
+          "DateRange.EndDateMustBeAfterStartDate",
+          "The end date must be after the start date.");
+
+        public static readonly Error EventIdIsRequired = Error.Problem(
+            "Events.EventIdIsRequired",
+            "The event ID must not be empty or an empty GUID.");
+
+        public static readonly Error StartDateMustBeInFuture = Error.Problem(
+            "DateRange.StartDateMustBeInFuture",
+            "The start date must be in the future.");
+
+        public static readonly Error FailToRescheduleEvent = Error.Problem(
+            "Events.FailToRescheduleEvent",
+            "Something has failed to reschedule event");
+
+        public static readonly Error StartDateInPast = Error.Problem(
+            "Events.StartDateInPast",
+            "The event start date is in the past");
     }
 }

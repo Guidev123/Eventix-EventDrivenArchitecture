@@ -1,11 +1,12 @@
-﻿using Eventix.Modules.Ticketing.Application.Abstractions.Authentication;
-using Eventix.Modules.Ticketing.Application.Carts.UseCases.RemoveItem;
+﻿using Eventix.Modules.Ticketing.Application.Carts.UseCases.RemoveItem;
+using Eventix.Shared.Infrastructure.Authentication;
 using Eventix.Shared.Presentation.Endpoints;
 using Eventix.Shared.Presentation.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 using MidR.Interfaces;
+using System.Security.Claims;
 
 namespace Eventix.Modules.Ticketing.Presentation.Carts
 {
@@ -13,10 +14,10 @@ namespace Eventix.Modules.Ticketing.Presentation.Carts
     {
         public void MapEndpoint(IEndpointRouteBuilder app)
         {
-            app.MapDelete("api/v1/carts/{ticketTypeId:guid}", async (Guid ticketTypeId, ICustomerContext customerContext, IMediator mediator) =>
+            app.MapDelete("api/v1/carts/{ticketTypeId:guid}", async (Guid ticketTypeId, ClaimsPrincipal claimsPrincipal, IMediator mediator) =>
             {
                 var command = new RemoveItemCommand(ticketTypeId);
-                command.SetCustomerId(customerContext.CustomerId);
+                command.SetCustomerId(claimsPrincipal.GetUserId());
 
                 var result = await mediator.DispatchAsync(command).ConfigureAwait(false);
 

@@ -9,6 +9,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\BuildingBlocks\Eventix.Shared.Application\Eventix.Shared.Application.csproj" />
     <ProjectReference Include="..\Eventix.Modules.Ticketing.Domain\Eventix.Modules.Ticketing.Domain.csproj" />
+    <ProjectReference Include="..\Eventix.Modules.Ticketing.IntegrationEvents\Eventix.Modules.Ticketing.IntegrationEvents.csproj" />
   </ItemGroup>
 
 </Project>

@@ -8,6 +8,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\BuildingBlocks\Eventix.Shared.Infrastructure\Eventix.Shared.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\Attendance\Eventix.Modules.Attendance.IntegrationEvents\Eventix.Modules.Attendance.IntegrationEvents.csproj" />
+    <ProjectReference Include="..\..\Events\Eventix.Modules.Events.IntegrationEvents\Eventix.Modules.Events.IntegrationEvents.csproj" />
+    <ProjectReference Include="..\..\Ticketing\Eventix.Modules.Ticketing.IntegrationEvents\Eventix.Modules.Ticketing.IntegrationEvents.csproj" />
     <ProjectReference Include="..\Eventix.Modules.Users.Application\Eventix.Modules.Users.Application.csproj" />
     <ProjectReference Include="..\Eventix.Modules.Users.Presentation\Eventix.Modules.Users.Presentation.csproj" />
   </ItemGroup>

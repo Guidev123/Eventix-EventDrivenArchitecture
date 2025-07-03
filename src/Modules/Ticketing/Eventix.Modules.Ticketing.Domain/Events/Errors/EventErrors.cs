@@ -10,10 +10,6 @@ namespace Eventix.Modules.Ticketing.Domain.Events.Errors
         public static Error UnableToCancelEvent(Guid eventId) =>
             Error.Problem("Events.UnableToCancelEvent", $"Unable to cancel the event with identifier {eventId}");
 
-        public static readonly Error StartDateInPast = Error.Problem(
-            "Events.StartDateInPast",
-            "The event start date is in the past");
-
         public static readonly Error EndDatePrecedesStartDate = Error.Problem(
             "Events.EndDatePrecedesStartDate",
             "The event end date precedes the start date");
@@ -64,18 +60,6 @@ namespace Eventix.Modules.Ticketing.Domain.Events.Errors
             "Events.DateRangeIsRequired",
             "The event date range is required.");
 
-        public static readonly Error StartDateMustBeInFuture = Error.Problem(
-            "DateRange.StartDateMustBeInFuture",
-            "The start date must be in the future.");
-
-        public static readonly Error EndDateMustBeAfterStartDate = Error.Problem(
-            "DateRange.EndDateMustBeAfterStartDate",
-            "The end date must be after the start date.");
-
-        public static readonly Error EventIdIsRequired = Error.Problem(
-            "Events.EventIdIsRequired",
-            "The event ID must not be empty or an empty GUID.");
-
         public static readonly Error EndDateBeforeStartDate = Error.Problem(
             "Events.EndDateBeforeStartDate",
             "The event end date must be after the start date.");
@@ -88,9 +72,25 @@ namespace Eventix.Modules.Ticketing.Domain.Events.Errors
             "Events.FailToCreateEvent",
             "Something has failed to create event");
 
+        public static readonly Error EndDateMustBeAfterStartDate = Error.Problem(
+            "DateRange.EndDateMustBeAfterStartDate",
+            "The end date must be after the start date.");
+
+        public static readonly Error EventIdIsRequired = Error.Problem(
+            "Events.EventIdIsRequired",
+            "The event ID must not be empty or an empty GUID.");
+
+        public static readonly Error StartDateMustBeInFuture = Error.Problem(
+            "DateRange.StartDateMustBeInFuture",
+            "The start date must be in the future.");
+
         public static readonly Error FailToRescheduleEvent = Error.Problem(
             "Events.FailToRescheduleEvent",
             "Something has failed to reschedule event");
+
+        public static readonly Error StartDateInPast = Error.Problem(
+            "Events.StartDateInPast",
+            "The event start date is in the past");
 
         public static readonly Error InvalidEventId = Error.Problem(
              "Event.InvalidEventId",

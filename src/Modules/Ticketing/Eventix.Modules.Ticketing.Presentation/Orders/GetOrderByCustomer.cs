@@ -1,11 +1,12 @@
-﻿using Eventix.Modules.Ticketing.Application.Abstractions.Authentication;
-using Eventix.Modules.Ticketing.Application.Orders.UseCases.GetByCustomer;
+﻿using Eventix.Modules.Ticketing.Application.Orders.UseCases.GetByCustomer;
+using Eventix.Shared.Infrastructure.Authentication;
 using Eventix.Shared.Presentation.Endpoints;
 using Eventix.Shared.Presentation.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 using MidR.Interfaces;
+using System.Security.Claims;
 
 namespace Eventix.Modules.Ticketing.Presentation.Orders
 {
@@ -13,9 +14,9 @@ namespace Eventix.Modules.Ticketing.Presentation.Orders
     {
         public void MapEndpoint(IEndpointRouteBuilder app)
         {
-            app.MapGet("api/v1/orders", async (ICustomerContext customer, IMediator mediator) =>
+            app.MapGet("api/v1/orders", async (ClaimsPrincipal claimsPrincipal, IMediator mediator) =>
             {
-                var result = await mediator.DispatchAsync(new GetOrdersByCustomerQuery(customer.CustomerId)).ConfigureAwait(false);
+                var result = await mediator.DispatchAsync(new GetOrdersByCustomerQuery(claimsPrincipal.GetUserId())).ConfigureAwait(false);
 
                 return result.Match(Results.Ok, ApiResults.Problem);
             }).RequireAuthorization(PolicyExtensions.GetOrders).WithTags(Tags.Orders);

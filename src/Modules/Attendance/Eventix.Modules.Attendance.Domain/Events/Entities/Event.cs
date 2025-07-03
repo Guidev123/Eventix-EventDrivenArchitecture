@@ -44,6 +44,14 @@ namespace Eventix.Modules.Attendance.Domain.Events.Entities
             return @event;
         }
 
+        public void Reschedule(DateTime startsAtUtc, DateTime? endsAtUtc)
+        {
+            if (DateRange.StartsAtUtc == startsAtUtc
+                && DateRange.EndsAtUtc == endsAtUtc) return;
+
+            DateRange = (startsAtUtc, endsAtUtc);
+        }
+
         protected override void Validate()
         {
             AssertionConcern.EnsureNotNull(Specification, EventErrors.SpecificationIsRequired.Description);

@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\BuildingBlocks\Eventix.Shared.Infrastructure\Eventix.Shared.Infrastructure.csproj" />
     <ProjectReference Include="..\..\..\BuildingBlocks\Eventix.Shared.Presentation\Eventix.Shared.Presentation.csproj" />
     <ProjectReference Include="..\Eventix.Modules.Attendance.Application\Eventix.Modules.Attendance.Application.csproj" />
   </ItemGroup>

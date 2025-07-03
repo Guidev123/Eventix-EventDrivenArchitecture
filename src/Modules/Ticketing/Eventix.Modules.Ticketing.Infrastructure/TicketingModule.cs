@@ -1,12 +1,10 @@
-﻿using Eventix.Modules.Ticketing.Application.Abstractions.Authentication;
-using Eventix.Modules.Ticketing.Application.Abstractions.Services;
+﻿using Eventix.Modules.Ticketing.Application.Abstractions.Services;
 using Eventix.Modules.Ticketing.Application.Carts.Services;
 using Eventix.Modules.Ticketing.Domain.Customers.Interfaces;
 using Eventix.Modules.Ticketing.Domain.Events.Interfaces;
 using Eventix.Modules.Ticketing.Domain.Orders.Interfaces;
 using Eventix.Modules.Ticketing.Domain.Payments.Interfaces;
 using Eventix.Modules.Ticketing.Domain.Tickets.Interfaces;
-using Eventix.Modules.Ticketing.Infrastructure.Authentication;
 using Eventix.Modules.Ticketing.Infrastructure.Customers.Repositories;
 using Eventix.Modules.Ticketing.Infrastructure.Database;
 using Eventix.Modules.Ticketing.Infrastructure.Events.Repositories;
@@ -59,7 +57,6 @@ namespace Eventix.Modules.Ticketing.Infrastructure
         {
             services.AddSingleton<ICartService, CartService>();
             services.AddTransient<IPaymentService, PaymentService>();
-            services.AddScoped<ICustomerContext, CustomerContext>();
 
             return services;
         }
