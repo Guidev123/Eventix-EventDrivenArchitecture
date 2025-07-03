@@ -1,5 +1,4 @@
 ﻿using Dapper;
-using Eventix.Shared.Application.Factories;
 using Eventix.Shared.Application.Messaging;
 using Eventix.Shared.Domain.DomainEvents;
 using Eventix.Shared.Infrastructure.Outbox.Models;

@@ -2,7 +2,7 @@
 
 namespace Eventix.Modules.Ticketing.Application.Carts.UseCases.AddItem
 {
-    public record AddItemToCartCommand : ICommand
+    public sealed record AddItemToCartCommand : ICommand
     {
         public AddItemToCartCommand(Guid ticketTypeId, decimal quantity)
         {

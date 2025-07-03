@@ -5,7 +5,7 @@ using Eventix.Shared.Domain.Responses;
 
 namespace Eventix.Modules.Ticketing.Application.Orders.UseCases.GetByCustomer
 {
-    internal record GetOrdersByCustomerHandler(IOrderRepository orderRepository) : IQueryHandler<GetOrdersByCustomerQuery, List<GetOrdersByCustomerResponse>>
+    internal sealed class GetOrdersByCustomerHandler(IOrderRepository orderRepository) : IQueryHandler<GetOrdersByCustomerQuery, List<GetOrdersByCustomerResponse>>
     {
         public async Task<Result<List<GetOrdersByCustomerResponse>>> ExecuteAsync(GetOrdersByCustomerQuery request, CancellationToken cancellationToken = default)
         {

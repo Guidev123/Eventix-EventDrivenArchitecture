@@ -3,7 +3,7 @@ using FluentValidation;
 
 namespace Eventix.Modules.Events.Application.Categories.UseCases.Archive
 {
-    public sealed class ArchiveCategoryValidator : AbstractValidator<ArchiveCategoryCommand>
+    internal sealed class ArchiveCategoryValidator : AbstractValidator<ArchiveCategoryCommand>
     {
         public ArchiveCategoryValidator()
         {

@@ -174,7 +174,48 @@ namespace Eventix.Modules.Ticketing.Infrastructure.Database.Migrations
                     b.ToTable("Tickets", "ticketing");
                 });
 
-            modelBuilder.Entity("Eventix.Shared.Infrastructure.Outbox.OutboxMessage", b =>
+            modelBuilder.Entity("Eventix.Shared.Infrastructure.Inbox.Models.InboxMessage", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("VARCHAR(3000)");
+
+                    b.Property<string>("Error")
+                        .HasColumnType("VARCHAR(256)");
+
+                    b.Property<DateTime>("OccurredOnUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("ProcessedOnUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("VARCHAR(200)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("InboxMessages", "ticketing");
+                });
+
+            modelBuilder.Entity("Eventix.Shared.Infrastructure.Inbox.Models.InboxMessageConsumer", b =>
+                {
+                    b.Property<Guid>("InboxMessageId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("VARCHAR(256)");
+
+                    b.HasKey("InboxMessageId", "Name");
+
+                    b.ToTable("InboxMessageConsumers", "ticketing");
+                });
+
+            modelBuilder.Entity("Eventix.Shared.Infrastructure.Outbox.Models.OutboxMessage", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -202,7 +243,7 @@ namespace Eventix.Modules.Ticketing.Infrastructure.Database.Migrations
                     b.ToTable("OutboxMessages", "ticketing");
                 });
 
-            modelBuilder.Entity("Eventix.Shared.Infrastructure.Outbox.OutboxMessageConsumer", b =>
+            modelBuilder.Entity("Eventix.Shared.Infrastructure.Outbox.Models.OutboxMessageConsumer", b =>
                 {
                     b.Property<Guid>("OutboxMessageId")
                         .HasColumnType("uniqueidentifier");

@@ -3,7 +3,7 @@ using Eventix.Shared.Application.Messaging;
 
 namespace Eventix.Modules.Events.Application.TicketTypes.UseCases.Create
 {
-    public record CreateTicketTypeCommand(
+    public sealed record CreateTicketTypeCommand(
         Guid EventId,
         string Name,
         decimal Price,

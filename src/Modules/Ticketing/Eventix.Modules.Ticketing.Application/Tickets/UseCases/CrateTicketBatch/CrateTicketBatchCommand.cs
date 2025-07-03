@@ -2,5 +2,5 @@
 
 namespace Eventix.Modules.Ticketing.Application.Tickets.UseCases.CrateTicketBatch
 {
-    public record CreateTicketBatchCommand(Guid OrderId) : ICommand;
+    public sealed record CreateTicketBatchCommand(Guid OrderId) : ICommand;
 }

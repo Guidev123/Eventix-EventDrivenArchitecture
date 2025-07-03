@@ -2,7 +2,7 @@
 
 namespace Eventix.Modules.Events.Application.TicketTypes.UseCases.GetAll
 {
-    public record GetAllTicketTypesResponse(
+    public sealed record GetAllTicketTypesResponse(
         int Page,
         int PageSize,
         int TotalCount,

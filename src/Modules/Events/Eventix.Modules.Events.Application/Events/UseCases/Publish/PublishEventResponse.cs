@@ -1,4 +1,4 @@
 ﻿namespace Eventix.Modules.Events.Application.Events.UseCases.Publish
 {
-    public record PublishEventResponse(Guid EventId);
+    public sealed record PublishEventResponse(Guid EventId);
 }

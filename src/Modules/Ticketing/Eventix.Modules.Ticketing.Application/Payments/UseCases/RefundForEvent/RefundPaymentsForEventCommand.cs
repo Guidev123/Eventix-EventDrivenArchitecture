@@ -2,5 +2,5 @@
 
 namespace Eventix.Modules.Ticketing.Application.Payments.UseCases.RefundForEvent
 {
-    public record RefundPaymentsForEventCommand(Guid EventId) : ICommand;
+    public sealed record RefundPaymentsForEventCommand(Guid EventId) : ICommand;
 }

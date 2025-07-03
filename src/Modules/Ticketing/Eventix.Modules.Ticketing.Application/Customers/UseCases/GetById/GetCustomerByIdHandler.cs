@@ -5,7 +5,7 @@ using Eventix.Shared.Domain.Responses;
 
 namespace Eventix.Modules.Ticketing.Application.Customers.UseCases.GetById
 {
-    public sealed class GetCustomerByIdHandler(ICustomerRepository customerRepository) : IQueryHandler<GetCustomerByIdQuery, GetCustomerByIdResponse>
+    internal sealed class GetCustomerByIdHandler(ICustomerRepository customerRepository) : IQueryHandler<GetCustomerByIdQuery, GetCustomerByIdResponse>
     {
         public async Task<Result<GetCustomerByIdResponse>> ExecuteAsync(GetCustomerByIdQuery request, CancellationToken cancellationToken = default)
         {

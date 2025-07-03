@@ -3,7 +3,7 @@ using Eventix.Shared.Application.Messaging;
 
 namespace Eventix.Modules.Events.Application.Events.UseCases.Create
 {
-    public record CreateEventCommand(
+    public sealed record CreateEventCommand(
             string Title,
             string Description,
             Guid CategoryId,

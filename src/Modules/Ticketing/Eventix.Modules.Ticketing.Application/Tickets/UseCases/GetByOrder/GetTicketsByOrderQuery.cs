@@ -3,5 +3,5 @@ using Eventix.Shared.Application.Messaging;
 
 namespace Eventix.Modules.Ticketing.Application.Tickets.UseCases.GetByOrder
 {
-    public record GetTicketsByOrderQuery(Guid OrderId) : IQuery<List<TicketDto>>;
+    public sealed record GetTicketsByOrderQuery(Guid OrderId) : IQuery<List<TicketDto>>;
 }

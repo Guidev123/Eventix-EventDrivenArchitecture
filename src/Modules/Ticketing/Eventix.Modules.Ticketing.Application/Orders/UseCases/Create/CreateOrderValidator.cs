@@ -3,7 +3,7 @@ using FluentValidation;
 
 namespace Eventix.Modules.Ticketing.Application.Orders.UseCases.Create
 {
-    public sealed class CreateOrderValidator : AbstractValidator<CreateOrderCommand>
+    internal sealed class CreateOrderValidator : AbstractValidator<CreateOrderCommand>
     {
         public CreateOrderValidator()
         {

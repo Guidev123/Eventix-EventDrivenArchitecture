@@ -2,6 +2,7 @@
 using Eventix.Modules.Events.Domain.Events.Entities;
 using Eventix.Modules.Events.Domain.TicketTypes.Entities;
 using Eventix.Shared.Domain.Interfaces;
+using Eventix.Shared.Infrastructure.Inbox.Mappings;
 using Eventix.Shared.Infrastructure.Outbox.Mappings;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,6 +20,8 @@ namespace Eventix.Modules.Events.Infrastructure.Database
 
             modelBuilder.ApplyConfiguration(new OutboxMessageMapping());
             modelBuilder.ApplyConfiguration(new OutboxMessageConsumerMapping());
+            modelBuilder.ApplyConfiguration(new InboxMessageMapping());
+            modelBuilder.ApplyConfiguration(new InboxMessageConsumerMapping());
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(EventsDbContext).Assembly);
         }
 

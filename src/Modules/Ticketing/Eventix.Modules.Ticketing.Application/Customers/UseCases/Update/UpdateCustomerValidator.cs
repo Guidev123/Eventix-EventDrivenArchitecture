@@ -4,7 +4,7 @@ using FluentValidation;
 
 namespace Eventix.Modules.Ticketing.Application.Customers.UseCases.Update
 {
-    public sealed class UpdateCustomerValidator : AbstractValidator<UpdateCustomerCommand>
+    internal sealed class UpdateCustomerValidator : AbstractValidator<UpdateCustomerCommand>
     {
         public UpdateCustomerValidator()
         {

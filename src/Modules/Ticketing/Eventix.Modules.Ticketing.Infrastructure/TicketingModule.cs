@@ -7,17 +7,19 @@ using Eventix.Modules.Ticketing.Domain.Orders.Interfaces;
 using Eventix.Modules.Ticketing.Domain.Payments.Interfaces;
 using Eventix.Modules.Ticketing.Domain.Tickets.Interfaces;
 using Eventix.Modules.Ticketing.Infrastructure.Authentication;
-using Eventix.Modules.Ticketing.Infrastructure.Customers.Consumers;
 using Eventix.Modules.Ticketing.Infrastructure.Customers.Repositories;
 using Eventix.Modules.Ticketing.Infrastructure.Database;
 using Eventix.Modules.Ticketing.Infrastructure.Events.Repositories;
+using Eventix.Modules.Ticketing.Infrastructure.Inbox;
 using Eventix.Modules.Ticketing.Infrastructure.Orders.Repositories;
+using Eventix.Modules.Ticketing.Infrastructure.Outbox;
 using Eventix.Modules.Ticketing.Infrastructure.Payments.Repositories;
 using Eventix.Modules.Ticketing.Infrastructure.Payments.Services;
 using Eventix.Modules.Ticketing.Infrastructure.Tickets.Repositories;
 using Eventix.Modules.Ticketing.Presentation;
+using Eventix.Modules.Users.IntegrationEvents.Users;
+using Eventix.Shared.Application.EventBus;
 using Eventix.Shared.Application.Messaging;
-using Eventix.Shared.Domain.Interfaces;
 using Eventix.Shared.Infrastructure.Outbox.Interceptors;
 using Eventix.Shared.Presentation.Extensions;
 using MassTransit;
@@ -35,29 +37,34 @@ namespace Eventix.Modules.Ticketing.Infrastructure
 
         public static IServiceCollection AddTicketingModule(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddEndpoints(typeof(PresentationModule).Assembly);
-
-            AddDomainEventHandlers(services);
-            AddRepositories(services);
-            AddServices(services);
-            AddEntityFrameworkDbContext(services, configuration);
+            services
+                .AddEndpoints(typeof(PresentationModule).Assembly)
+                .AddServices()
+                .AddRepositories()
+                .AddDomainEventHandlers()
+                .AddIntegrationEventHandlers()
+                .AddInbox(configuration)
+                .AddOutbox(configuration)
+                .AddEntityFrameworkDbContext(configuration);
 
             return services;
         }
 
         public static void ConfigureConsumers(IRegistrationConfigurator registrationConfigurator)
         {
-            registrationConfigurator.AddConsumer<UserRegisteredIntegrationEventConsumer>();
+            registrationConfigurator.AddConsumer<IntegrationEventConsumer<UserRegisteredIntegrationEvent>>();
         }
 
-        private static void AddServices(this IServiceCollection services)
+        private static IServiceCollection AddServices(this IServiceCollection services)
         {
             services.AddSingleton<ICartService, CartService>();
             services.AddTransient<IPaymentService, PaymentService>();
             services.AddScoped<ICustomerContext, CustomerContext>();
+
+            return services;
         }
 
-        private static void AddRepositories(this IServiceCollection services)
+        private static IServiceCollection AddRepositories(this IServiceCollection services)
         {
             services.AddScoped<ICustomerRepository, CustomerRepository>();
             services.AddScoped<ITicketRepository, TicketRepository>();
@@ -65,22 +72,42 @@ namespace Eventix.Modules.Ticketing.Infrastructure
             services.AddScoped<IPaymentRepository, PaymentRepository>();
             services.AddScoped<IOrderRepository, OrderRepository>();
             services.AddScoped<IEventRepository, EventRepository>();
+
+            return services;
         }
 
-        private static void AddEntityFrameworkDbContext(this IServiceCollection services, IConfiguration configuration)
+        private static IServiceCollection AddEntityFrameworkDbContext(this IServiceCollection services, IConfiguration configuration)
         {
             var connectionString = configuration.GetConnectionString(DATABASE_CONNECTION)
                 ?? throw new InvalidOperationException(CONNECTION_ERROR_MESSAGE);
 
             services.AddDbContext<TicketingDbContext>((sp, options) =>
             {
-                var publishDomainEventsInterceptor = sp.GetRequiredService<InsertOutboxMessagesInterceptors>();
+                var insertOutboxMessagesInterceptor = sp.GetRequiredService<InsertOutboxMessagesInterceptors>();
 
-                options.UseSqlServer(connectionString).AddInterceptors(publishDomainEventsInterceptor).LogTo(Console.WriteLine);
+                options.UseSqlServer(connectionString).AddInterceptors(insertOutboxMessagesInterceptor).LogTo(Console.WriteLine);
             });
+
+            return services;
         }
 
-        private static void AddDomainEventHandlers(this IServiceCollection services)
+        private static IServiceCollection AddOutbox(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.Configure<OutboxOptions>(configuration.GetSection("Ticketing:Outbox"));
+            services.ConfigureOptions<ConfigureProcessOutboxJob>();
+
+            return services;
+        }
+
+        private static IServiceCollection AddInbox(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.Configure<InboxOptions>(configuration.GetSection("Ticketing:Inbox"));
+            services.ConfigureOptions<ConfigureProcessInboxJob>();
+
+            return services;
+        }
+
+        private static IServiceCollection AddDomainEventHandlers(this IServiceCollection services)
         {
             var domainEventHandlers = Application.AssemblyReference.Assembly
                 .GetTypes()
@@ -90,7 +117,46 @@ namespace Eventix.Modules.Ticketing.Infrastructure
             foreach (var domainEventHandler in domainEventHandlers)
             {
                 services.TryAddTransient(domainEventHandler);
+
+                var domainEvent = domainEventHandler
+                    .GetInterfaces()
+                    .Single(c => c.IsGenericType)
+                    .GetGenericArguments()
+                    .Single();
+
+                var closedIdempotentHandler = typeof(TicketingIdempotentDomainEventHandler<>)
+                    .MakeGenericType(domainEvent);
+
+                services.Decorate(domainEventHandler, closedIdempotentHandler);
             }
+
+            return services;
+        }
+
+        private static IServiceCollection AddIntegrationEventHandlers(this IServiceCollection services)
+        {
+            var integrationEventHandlers = Application.AssemblyReference.Assembly
+                .GetTypes()
+                .Where(c => c.IsAssignableTo(typeof(IIntegrationEventHandler)))
+                .ToArray();
+
+            foreach (var integrationEventHandler in integrationEventHandlers)
+            {
+                services.TryAddTransient(integrationEventHandler);
+
+                var integrationEvent = integrationEventHandler
+                    .GetInterfaces()
+                    .Single(c => c.IsGenericType)
+                    .GetGenericArguments()
+                    .Single();
+
+                var closedIdempotentHandler = typeof(TicketingIdempotentIntegrationEventHandler<>)
+                    .MakeGenericType(integrationEvent);
+
+                services.Decorate(integrationEventHandler, closedIdempotentHandler);
+            }
+
+            return services;
         }
     }
 }

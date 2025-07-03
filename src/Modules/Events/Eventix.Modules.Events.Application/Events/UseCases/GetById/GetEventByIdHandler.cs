@@ -6,7 +6,7 @@ using Eventix.Shared.Domain.Responses;
 
 namespace Eventix.Modules.Events.Application.Events.UseCases.GetById
 {
-    public sealed class GetEventByIdHandler(ISqlConnectionFactory connectionFactory) : IQueryHandler<GetEventByIdQuery, GetEventResponse>
+    internal sealed class GetEventByIdHandler(ISqlConnectionFactory connectionFactory) : IQueryHandler<GetEventByIdQuery, GetEventResponse>
     {
         public async Task<Result<GetEventResponse>> ExecuteAsync(GetEventByIdQuery request, CancellationToken cancellationToken = default)
         {

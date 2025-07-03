@@ -2,7 +2,7 @@
 
 namespace Eventix.Modules.Events.Application.Events.UseCases.Reschedule
 {
-    public record RescheduleEventCommand : ICommand
+    public sealed record RescheduleEventCommand : ICommand
     {
         public RescheduleEventCommand(DateTime startsAtUtc, DateTime? endsAtUtc)
         {

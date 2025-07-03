@@ -2,7 +2,7 @@
 
 namespace Eventix.Modules.Events.Application.Events.UseCases.Publish
 {
-    public record PublishEventCommand(Guid EventId) : ICommand<PublishEventResponse>
+    public sealed record PublishEventCommand(Guid EventId) : ICommand<PublishEventResponse>
     {
     }
 }

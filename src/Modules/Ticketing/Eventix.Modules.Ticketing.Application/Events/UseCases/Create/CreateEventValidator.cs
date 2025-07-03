@@ -5,7 +5,7 @@ using FluentValidation;
 
 namespace Eventix.Modules.Ticketing.Application.Events.UseCases.Create
 {
-    public sealed class CreateEventValidator : AbstractValidator<CreateEventCommand>
+    internal sealed class CreateEventValidator : AbstractValidator<CreateEventCommand>
     {
         public CreateEventValidator()
         {
@@ -48,7 +48,7 @@ namespace Eventix.Modules.Ticketing.Application.Events.UseCases.Create
                 .SetValidator(new TicketTypeRequestValidator());
         }
 
-        private class TicketTypeRequestValidator : AbstractValidator<CreateEventCommand.TicketTypeRequest>
+        internal sealed class TicketTypeRequestValidator : AbstractValidator<CreateEventCommand.TicketTypeRequest>
         {
             public TicketTypeRequestValidator()
             {

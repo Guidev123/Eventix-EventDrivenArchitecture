@@ -2,12 +2,11 @@
 using Eventix.Modules.Events.Domain.Events.Interfaces;
 using Eventix.Shared.Application.Clock;
 using Eventix.Shared.Application.Messaging;
-using Eventix.Shared.Domain.Interfaces;
 using Eventix.Shared.Domain.Responses;
 
 namespace Eventix.Modules.Events.Application.Events.UseCases.Reschedule
 {
-    public sealed class RescheduleEventHandler(IEventRepository eventRepository,
+    internal sealed class RescheduleEventHandler(IEventRepository eventRepository,
                                                IDateTimeProvider dateTimeProvider) : ICommandHandler<RescheduleEventCommand>
     {
         public async Task<Result> ExecuteAsync(RescheduleEventCommand request, CancellationToken cancellationToken = default)

@@ -2,7 +2,7 @@
 
 namespace Eventix.Modules.Events.Application.Events.UseCases.Reschedule
 {
-    public sealed class RescheduleEventValidator : AbstractValidator<RescheduleEventCommand>
+    internal sealed class RescheduleEventValidator : AbstractValidator<RescheduleEventCommand>
     {
         private const int MINIMUM_START_TIME = 1;
 

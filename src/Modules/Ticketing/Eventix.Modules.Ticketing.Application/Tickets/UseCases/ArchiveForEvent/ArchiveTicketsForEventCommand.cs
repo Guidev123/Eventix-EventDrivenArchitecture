@@ -2,5 +2,5 @@
 
 namespace Eventix.Modules.Ticketing.Application.Tickets.UseCases.ArchiveForEvent
 {
-    public record ArchiveTicketsForEventCommand(Guid EventId) : ICommand;
+    public sealed record ArchiveTicketsForEventCommand(Guid EventId) : ICommand;
 }

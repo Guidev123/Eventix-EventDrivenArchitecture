@@ -1,6 +1,7 @@
 ﻿using EventsAssembly = Eventix.Modules.Events.Application.AssemblyReference;
 using UsersAssembly = Eventix.Modules.Users.Application.AssemblyReference;
 using TicketingAssembly = Eventix.Modules.Ticketing.Application.AssemblyReference;
+using AttendanceAssembly = Eventix.Modules.Attendance.Application.AssemblyReference;
 using Eventix.Api.Extensions;
 using Eventix.Api.Middlewares;
 using Eventix.Modules.Events.Infrastructure;
@@ -8,6 +9,7 @@ using Eventix.Modules.Users.Infrastructure;
 using Eventix.Shared.Infrastructure;
 using Serilog;
 using Eventix.Modules.Ticketing.Infrastructure;
+using Eventix.Modules.Attendance.Infrastructure;
 
 namespace Eventix.Api.Configurations
 {
@@ -16,6 +18,7 @@ namespace Eventix.Api.Configurations
         private const string EVENTS_MODULE = "events";
         private const string USERS_MODULE = "users";
         private const string TICKETING_MODULE = "ticketing";
+        private const string ATTENDANCE_MODULE = "attendance";
 
         public static WebApplicationBuilder ConfigureServices(this WebApplicationBuilder builder)
         {
@@ -33,15 +36,7 @@ namespace Eventix.Api.Configurations
 
             builder.AddCustomHealthChecks(dbConnectionString, redisConnectionString);
 
-            builder.Services.AddInfrastructure([TicketingModule.ConfigureConsumers], dbConnectionString, redisConnectionString);
-
-            builder.AddAllModules();
-
-            builder.Services.AddApplication([
-                EventsAssembly.Assembly,
-                UsersAssembly.Assembly,
-                TicketingAssembly.Assembly
-                ]);
+            builder.AddAllModules(dbConnectionString, redisConnectionString);
 
             return builder;
         }
@@ -72,17 +67,35 @@ namespace Eventix.Api.Configurations
             return builder;
         }
 
-        private static WebApplicationBuilder AddAllModules(this WebApplicationBuilder builder)
+        private static WebApplicationBuilder AddAllModules(
+            this WebApplicationBuilder builder,
+            string dbConnectionString,
+            string redisConnectionString
+            )
         {
             builder.Services
                 .AddEventsModule(builder.Configuration)
                 .AddUsersModule(builder.Configuration)
-                .AddTicketingModule(builder.Configuration);
+                .AddTicketingModule(builder.Configuration)
+                .AddAttendanceModule(builder.Configuration)
+                .AddApplication([
+                    EventsAssembly.Assembly,
+                    UsersAssembly.Assembly,
+                    TicketingAssembly.Assembly,
+                    AttendanceAssembly.Assembly
+                ])
+                .AddInfrastructure([
+                    TicketingModule.ConfigureConsumers,
+                    UsersModule.ConfigureConsumers,
+                    EventsModule.ConfigureConsumers,
+                    AttendanceModule.ConfigureConsumers
+                ], dbConnectionString, redisConnectionString);
 
             builder.Configuration.AddModuleConfiguration([
                 EVENTS_MODULE,
                 USERS_MODULE,
-                TICKETING_MODULE
+                TICKETING_MODULE,
+                ATTENDANCE_MODULE
                 ]);
 
             return builder;

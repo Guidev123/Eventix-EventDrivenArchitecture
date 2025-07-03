@@ -6,7 +6,7 @@ using Eventix.Shared.Domain.Responses;
 
 namespace Eventix.Modules.Events.Application.Categories.UseCases.GetById
 {
-    public sealed class GetCategoryByIdHandler(ISqlConnectionFactory sqlConnectionFactory) : IQueryHandler<GetCategoryByIdQuery, GetCategoryResponse>
+    internal sealed class GetCategoryByIdHandler(ISqlConnectionFactory sqlConnectionFactory) : IQueryHandler<GetCategoryByIdQuery, GetCategoryResponse>
     {
         public async Task<Result<GetCategoryResponse>> ExecuteAsync(GetCategoryByIdQuery request, CancellationToken cancellationToken = default)
         {

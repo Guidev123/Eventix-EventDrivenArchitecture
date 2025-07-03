@@ -1,4 +1,4 @@
 ﻿namespace Eventix.Modules.Events.Application.Categories.UseCases.Create
 {
-    public record CreateCategoryResponse(Guid CategoryId);
+    public sealed record CreateCategoryResponse(Guid CategoryId);
 }

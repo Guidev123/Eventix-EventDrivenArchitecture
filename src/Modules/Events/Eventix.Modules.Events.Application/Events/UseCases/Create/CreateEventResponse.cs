@@ -1,4 +1,4 @@
 ﻿namespace Eventix.Modules.Events.Application.Events.UseCases.Create
 {
-    public record CreateEventResponse(Guid Id);
+    public sealed record CreateEventResponse(Guid Id);
 }

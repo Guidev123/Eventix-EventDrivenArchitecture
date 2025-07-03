@@ -3,7 +3,7 @@ using FluentValidation;
 
 namespace Eventix.Modules.Ticketing.Application.Carts.UseCases.AddItem
 {
-    public sealed class AddItemToCartValidator : AbstractValidator<AddItemToCartCommand>
+    internal sealed class AddItemToCartValidator : AbstractValidator<AddItemToCartCommand>
     {
         private const int MINIMUM_QUANTITY = 1;
 

@@ -3,7 +3,7 @@ using FluentValidation;
 
 namespace Eventix.Modules.Events.Application.Events.UseCases.Publish
 {
-    public sealed class PublishEventValidator : AbstractValidator<PublishEventCommand>
+    internal sealed class PublishEventValidator : AbstractValidator<PublishEventCommand>
     {
         public PublishEventValidator()
         {

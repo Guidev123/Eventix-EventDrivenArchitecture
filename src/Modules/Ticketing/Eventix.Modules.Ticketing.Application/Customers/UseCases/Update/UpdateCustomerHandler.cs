@@ -7,7 +7,7 @@ using Eventix.Shared.Domain.Responses;
 
 namespace Eventix.Modules.Ticketing.Application.Customers.UseCases.Update
 {
-    public sealed class UpdateCustomerHandler(ICustomerRepository customerRepository) : ICommandHandler<UpdateCustomerCommand>
+    internal sealed class UpdateCustomerHandler(ICustomerRepository customerRepository) : ICommandHandler<UpdateCustomerCommand>
     {
         public async Task<Result> ExecuteAsync(UpdateCustomerCommand request, CancellationToken cancellationToken = default)
         {

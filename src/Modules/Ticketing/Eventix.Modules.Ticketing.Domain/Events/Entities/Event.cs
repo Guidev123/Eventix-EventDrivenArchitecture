@@ -9,8 +9,9 @@ namespace Eventix.Modules.Ticketing.Domain.Events.Entities
 {
     public sealed class Event : Entity, IAggregateRoot
     {
-        private Event(string title, string description, Location location, DateTime startsAtUtc, DateTime? endsAtUtc)
+        private Event(Guid eventId, string title, string description, Location location, DateTime startsAtUtc, DateTime? endsAtUtc)
         {
+            Id = eventId;
             Specification = (title, description);
             DateRange = (startsAtUtc, endsAtUtc);
             Location = location;
@@ -26,12 +27,12 @@ namespace Eventix.Modules.Ticketing.Domain.Events.Entities
         public DateRange DateRange { get; private set; } = default!;
         public bool IsCanceled { get; private set; }
 
-        public static Result<Event> Create(string title, string description, Location location, DateTime startsAtUtc, DateTime? endsAtUtc)
+        public static Result<Event> Create(Guid eventId, string title, string description, Location location, DateTime startsAtUtc, DateTime? endsAtUtc)
         {
             if (endsAtUtc.HasValue && endsAtUtc < startsAtUtc)
                 return Result.Failure<Event>(EventErrors.EndDatePrecedesStartDate);
 
-            return new Event(title, description, location, startsAtUtc, endsAtUtc);
+            return new Event(eventId, title, description, location, startsAtUtc, endsAtUtc);
         }
 
         public void Reschedule(DateTime startsAtUtc, DateTime? endsAtUtc)

@@ -2,7 +2,7 @@
 
 namespace Eventix.Modules.Events.Application.Events.UseCases.Search
 {
-    public record SearchEventsQuery(
+    public sealed record SearchEventsQuery(
         Guid? CategoryId,
         DateTime? StartDate,
         DateTime? EndDate,

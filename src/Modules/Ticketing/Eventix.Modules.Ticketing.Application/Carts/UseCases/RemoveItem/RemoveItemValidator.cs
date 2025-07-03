@@ -3,7 +3,7 @@ using FluentValidation;
 
 namespace Eventix.Modules.Ticketing.Application.Carts.UseCases.RemoveItem
 {
-    public sealed class RemoveItemValidator : AbstractValidator<RemoveItemCommand>
+    internal sealed class RemoveItemValidator : AbstractValidator<RemoveItemCommand>
     {
         public RemoveItemValidator()
         {

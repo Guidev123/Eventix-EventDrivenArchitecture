@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace Eventix.Modules.Ticketing.Application.Orders.UseCases.GetByCustomer
 {
-    public record GetOrdersByCustomerResponse
+    public sealed record GetOrdersByCustomerResponse
     {
         public GetOrdersByCustomerResponse(Guid id, Guid customerId, OrderStatusEnum status, DateTime createdAtUtc, decimal? totalPrice = null)
         {

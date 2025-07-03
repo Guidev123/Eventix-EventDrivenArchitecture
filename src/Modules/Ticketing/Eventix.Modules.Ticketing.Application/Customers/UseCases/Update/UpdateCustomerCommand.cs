@@ -2,7 +2,7 @@
 
 namespace Eventix.Modules.Ticketing.Application.Customers.UseCases.Update
 {
-    public record UpdateCustomerCommand : ICommand
+    public sealed record UpdateCustomerCommand : ICommand
     {
         public UpdateCustomerCommand(string firstName, string lastName, string email)
         {

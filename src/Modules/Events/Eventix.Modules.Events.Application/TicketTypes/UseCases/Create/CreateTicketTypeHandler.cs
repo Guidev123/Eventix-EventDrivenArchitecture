@@ -3,7 +3,6 @@ using Eventix.Modules.Events.Domain.Events.Interfaces;
 using Eventix.Modules.Events.Domain.TicketTypes.Errors;
 using Eventix.Modules.Events.Domain.TicketTypes.Interfaces;
 using Eventix.Shared.Application.Messaging;
-using Eventix.Shared.Domain.Interfaces;
 using Eventix.Shared.Domain.Responses;
 
 namespace Eventix.Modules.Events.Application.TicketTypes.UseCases.Create

@@ -4,7 +4,7 @@ using FluentValidation;
 
 namespace Eventix.Modules.Events.Application.Categories.UseCases.Update
 {
-    public sealed class UpdateCategoryValidator : AbstractValidator<UpdateCategoryCommand>
+    internal sealed class UpdateCategoryValidator : AbstractValidator<UpdateCategoryCommand>
     {
         public UpdateCategoryValidator()
         {

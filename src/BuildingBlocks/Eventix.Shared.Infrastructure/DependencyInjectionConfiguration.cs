@@ -42,7 +42,7 @@ namespace Eventix.Shared.Infrastructure
 
         public static IServiceCollection AddApplication(this IServiceCollection services, Assembly[] modulesAssemblies)
         {
-            AddHandlers(services, modulesAssemblies);
+            services.AddHandlers(modulesAssemblies);
             services.AddValidatorsFromAssemblies(modulesAssemblies, includeInternalTypes: true);
             services.TryAddSingleton<IDateTimeProvider, DateTimeProvider>();
 
@@ -72,8 +72,9 @@ namespace Eventix.Shared.Infrastructure
 
         private static IServiceCollection AddHandlers(this IServiceCollection services, Assembly[] modulesAssemblies)
         {
-            services.AddMidR(modulesAssemblies);
-            AddRequestHandlerDecorators(services);
+            services
+                .AddMidR(modulesAssemblies)
+                .AddRequestHandlerDecorators();
 
             return services;
         }

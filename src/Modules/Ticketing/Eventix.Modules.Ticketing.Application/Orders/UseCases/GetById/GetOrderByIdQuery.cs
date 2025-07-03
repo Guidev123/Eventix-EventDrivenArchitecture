@@ -2,5 +2,5 @@
 
 namespace Eventix.Modules.Ticketing.Application.Orders.UseCases.GetById
 {
-    public record GetOrderByIdQuery(Guid OrderId) : IQuery<GetOrderByIdResponse>;
+    public sealed record GetOrderByIdQuery(Guid OrderId) : IQuery<GetOrderByIdResponse>;
 }

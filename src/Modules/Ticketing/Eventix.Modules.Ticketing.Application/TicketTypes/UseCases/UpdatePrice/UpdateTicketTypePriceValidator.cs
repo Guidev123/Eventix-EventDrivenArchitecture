@@ -5,7 +5,7 @@ using FluentValidation;
 
 namespace Eventix.Modules.Ticketing.Application.TicketTypes.UseCases.UpdatePrice
 {
-    public sealed class UpdateTicketTypePriceValidator : AbstractValidator<UpdateTicketTypePriceCommand>
+    internal sealed class UpdateTicketTypePriceValidator : AbstractValidator<UpdateTicketTypePriceCommand>
     {
         public UpdateTicketTypePriceValidator()
         {

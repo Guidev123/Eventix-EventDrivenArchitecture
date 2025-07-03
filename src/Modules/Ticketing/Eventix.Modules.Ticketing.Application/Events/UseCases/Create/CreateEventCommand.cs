@@ -4,7 +4,7 @@ using static Eventix.Modules.Ticketing.Application.Events.UseCases.Create.Create
 
 namespace Eventix.Modules.Ticketing.Application.Events.UseCases.Create
 {
-    public record CreateEventCommand(
+    public sealed record CreateEventCommand(
         Guid EventId,
         string Title,
         string Description,

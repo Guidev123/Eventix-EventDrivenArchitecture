@@ -3,7 +3,7 @@ using FluentValidation;
 
 namespace Eventix.Modules.Ticketing.Application.Carts.UseCases.Clear
 {
-    public sealed class ClearCartValidator : AbstractValidator<ClearCartCommand>
+    internal sealed class ClearCartValidator : AbstractValidator<ClearCartCommand>
     {
         public ClearCartValidator()
         {

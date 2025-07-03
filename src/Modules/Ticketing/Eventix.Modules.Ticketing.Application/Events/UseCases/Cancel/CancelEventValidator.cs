@@ -3,7 +3,7 @@ using FluentValidation;
 
 namespace Eventix.Modules.Ticketing.Application.Events.UseCases.Cancel
 {
-    public sealed class CancelEventValidator : AbstractValidator<CancelEventCommand>
+    internal sealed class CancelEventValidator : AbstractValidator<CancelEventCommand>
     {
         public CancelEventValidator()
         {

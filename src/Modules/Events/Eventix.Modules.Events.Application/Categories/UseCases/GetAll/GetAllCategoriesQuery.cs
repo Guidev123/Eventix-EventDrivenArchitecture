@@ -2,5 +2,5 @@
 
 namespace Eventix.Modules.Events.Application.Categories.UseCases.GetAll
 {
-    public record GetAllCategoriesQuery(int Page, int PageSize) : IQuery<GetAllCategoriesResponse>;
+    public sealed record GetAllCategoriesQuery(int Page, int PageSize) : IQuery<GetAllCategoriesResponse>;
 }

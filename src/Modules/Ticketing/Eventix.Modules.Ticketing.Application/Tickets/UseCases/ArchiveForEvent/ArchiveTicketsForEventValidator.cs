@@ -3,7 +3,7 @@ using FluentValidation;
 
 namespace Eventix.Modules.Ticketing.Application.Tickets.UseCases.ArchiveForEvent
 {
-    public sealed class ArchiveTicketsForEventValidator : AbstractValidator<ArchiveTicketsForEventCommand>
+    internal sealed class ArchiveTicketsForEventValidator : AbstractValidator<ArchiveTicketsForEventCommand>
     {
         public ArchiveTicketsForEventValidator()
         {

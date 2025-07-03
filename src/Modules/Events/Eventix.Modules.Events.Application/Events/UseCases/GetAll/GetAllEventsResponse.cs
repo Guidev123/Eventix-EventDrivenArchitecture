@@ -2,7 +2,7 @@
 
 namespace Eventix.Modules.Events.Application.Events.UseCases.GetAll
 {
-    public record GetAllEventsResponse(
+    public sealed record GetAllEventsResponse(
         int Page,
         int PageSize,
         int TotalCount,

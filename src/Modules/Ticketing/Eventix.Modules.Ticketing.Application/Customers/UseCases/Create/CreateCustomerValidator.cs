@@ -4,7 +4,7 @@ using FluentValidation;
 
 namespace Eventix.Modules.Ticketing.Application.Customers.UseCases.Create
 {
-    public sealed class CreateCustomerValidator : AbstractValidator<CreateCustomerCommand>
+    internal sealed class CreateCustomerValidator : AbstractValidator<CreateCustomerCommand>
     {
         public CreateCustomerValidator()
         {

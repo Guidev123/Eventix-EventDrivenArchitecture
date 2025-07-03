@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace Eventix.Modules.Events.Application.Events.UseCases.GetById
 {
-    public record GetEventResponse
+    public sealed record GetEventResponse
     {
         public GetEventResponse(Guid id, string title, string description,
                                     string? street, string? city, string? state,

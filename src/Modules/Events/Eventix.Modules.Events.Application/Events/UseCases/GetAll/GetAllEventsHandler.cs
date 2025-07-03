@@ -7,7 +7,7 @@ using System.Data;
 
 namespace Eventix.Modules.Events.Application.Events.UseCases.GetAll
 {
-    public sealed class GetAllEventsHandler(ISqlConnectionFactory connectionFactory) : IQueryHandler<GetAllEventsQuery, GetAllEventsResponse>
+    internal sealed class GetAllEventsHandler(ISqlConnectionFactory connectionFactory) : IQueryHandler<GetAllEventsQuery, GetAllEventsResponse>
     {
         public async Task<Result<GetAllEventsResponse>> ExecuteAsync(GetAllEventsQuery request, CancellationToken cancellationToken = default)
         {

@@ -1,6 +1,6 @@
 ﻿namespace Eventix.Modules.Events.Application.TicketTypes.UseCases.GetById
 {
-    public record GetTicketTypeResponse(
+    public sealed record GetTicketTypeResponse(
         Guid Id,
         Guid EventId,
         string Name,

@@ -2,5 +2,5 @@
 
 namespace Eventix.Modules.Events.Application.Events.UseCases.Cancel
 {
-    public record CancelEventCommand(Guid EventId) : ICommand;
+    public sealed record CancelEventCommand(Guid EventId) : ICommand;
 }

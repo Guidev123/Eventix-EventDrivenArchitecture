@@ -3,7 +3,7 @@ using FluentValidation;
 
 namespace Eventix.Modules.Ticketing.Application.Tickets.UseCases.CrateTicketBatch
 {
-    public sealed class CreateTicketBatchValidator : AbstractValidator<CreateTicketBatchCommand>
+    internal sealed class CreateTicketBatchValidator : AbstractValidator<CreateTicketBatchCommand>
     {
         public CreateTicketBatchValidator()
         {

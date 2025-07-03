@@ -3,7 +3,7 @@ using FluentValidation;
 
 namespace Eventix.Modules.Ticketing.Application.Events.UseCases.Reschedule
 {
-    public sealed class RescheduleEventValidator : AbstractValidator<RescheduleEventCommand>
+    internal sealed class RescheduleEventValidator : AbstractValidator<RescheduleEventCommand>
     {
         public RescheduleEventValidator()
         {

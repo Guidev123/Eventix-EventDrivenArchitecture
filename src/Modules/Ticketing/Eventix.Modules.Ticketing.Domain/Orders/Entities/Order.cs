@@ -20,6 +20,9 @@ namespace Eventix.Modules.Ticketing.Domain.Orders.Entities
             Validate();
         }
 
+        private Order()
+        { }
+
         public Guid CustomerId { get; private set; }
 
         public OrderStatusEnum Status { get; private set; }

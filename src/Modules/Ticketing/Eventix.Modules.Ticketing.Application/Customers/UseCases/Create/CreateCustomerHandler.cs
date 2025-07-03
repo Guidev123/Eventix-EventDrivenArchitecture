@@ -2,12 +2,11 @@
 using Eventix.Modules.Ticketing.Domain.Customers.Errors;
 using Eventix.Modules.Ticketing.Domain.Customers.Interfaces;
 using Eventix.Shared.Application.Messaging;
-using Eventix.Shared.Domain.Interfaces;
 using Eventix.Shared.Domain.Responses;
 
 namespace Eventix.Modules.Ticketing.Application.Customers.UseCases.Create
 {
-    public sealed class CreateCustomerHandler(ICustomerRepository customerRepository) : ICommandHandler<CreateCustomerCommand, CreateCustomerResponse>
+    internal sealed class CreateCustomerHandler(ICustomerRepository customerRepository) : ICommandHandler<CreateCustomerCommand, CreateCustomerResponse>
     {
         public async Task<Result<CreateCustomerResponse>> ExecuteAsync(CreateCustomerCommand request, CancellationToken cancellationToken = default)
         {

@@ -12,7 +12,7 @@ namespace Eventix.Modules.Ticketing.Domain.Tickets.Entities
         public const int TICKET_CODE_LEN = 34;
         public const string TICKET_CODE_PREFIX = "tc_";
 
-        public Ticket(Guid customerId, Guid orderId, Guid eventId, Guid ticketTypeId)
+        private Ticket(Guid customerId, Guid orderId, Guid eventId, Guid ticketTypeId)
         {
             CustomerId = customerId;
             OrderId = orderId;

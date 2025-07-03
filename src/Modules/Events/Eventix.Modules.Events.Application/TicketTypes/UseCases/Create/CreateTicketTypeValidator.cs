@@ -1,13 +1,12 @@
 ﻿using Eventix.Modules.Events.Domain.Events.Errors;
 using Eventix.Modules.Events.Domain.TicketTypes.Errors;
-using Eventix.Modules.Events.Domain.TicketTypes.ValueObjects;
 using Eventix.Shared.Domain.ValueObjects;
 using Eventix.Shared.Domain.ValueObjects.Errors;
 using FluentValidation;
 
 namespace Eventix.Modules.Events.Application.TicketTypes.UseCases.Create
 {
-    public sealed class CreateTicketTypeValidator : AbstractValidator<CreateTicketTypeCommand>
+    internal sealed class CreateTicketTypeValidator : AbstractValidator<CreateTicketTypeCommand>
     {
         public CreateTicketTypeValidator()
         {

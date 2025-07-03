@@ -2,7 +2,6 @@
 using Eventix.Modules.Ticketing.Domain.Events.Errors;
 using Eventix.Modules.Ticketing.Domain.Events.Interfaces;
 using Eventix.Shared.Application.Messaging;
-using Eventix.Shared.Domain.Interfaces;
 using Eventix.Shared.Domain.Responses;
 
 namespace Eventix.Modules.Ticketing.Application.Events.UseCases.Create
@@ -14,6 +13,7 @@ namespace Eventix.Modules.Ticketing.Application.Events.UseCases.Create
         public async Task<Result<CreateEventResponse>> ExecuteAsync(CreateEventCommand request, CancellationToken cancellationToken = default)
         {
             var eventResult = Event.Create(
+                request.EventId,
                 request.Title, request.Description,
                 request.Location, request.StartsAtUtc,
                 request.EndsAtUtc);
@@ -27,7 +27,7 @@ namespace Eventix.Modules.Ticketing.Application.Events.UseCases.Create
             eventRepository.Insert(@event);
 
             IEnumerable<TicketType> ticketTypes = request.TicketTypes
-                .Select(t => TicketType.Create(t.EventId, t.Name, t.Price, t.Currency, t.Quantity));
+                .Select(t => TicketType.Create(t.TicketTypeId, t.EventId, t.Name, t.Price, t.Currency, t.Quantity));
 
             ticketTypeRepository.InsertRange(ticketTypes);
 

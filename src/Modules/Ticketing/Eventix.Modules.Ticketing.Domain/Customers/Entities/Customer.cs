@@ -6,9 +6,9 @@ namespace Eventix.Modules.Ticketing.Domain.Customers.Entities
 {
     public sealed class Customer : Entity, IAggregateRoot
     {
-        private Customer(Guid id, string email, string firstName, string lastName)
+        private Customer(Guid customerId, string email, string firstName, string lastName)
         {
-            Id = id;
+            Id = customerId;
             Email = email;
             Name = (firstName, lastName);
             Validate();
@@ -20,9 +20,9 @@ namespace Eventix.Modules.Ticketing.Domain.Customers.Entities
         public Email Email { get; private set; } = null!;
         public Name Name { get; private set; } = null!;
 
-        public static Customer Create(Guid id, string email, string firstName, string lastName)
+        public static Customer Create(Guid customerId, string email, string firstName, string lastName)
         {
-            var customer = new Customer(id, email, firstName, lastName);
+            var customer = new Customer(customerId, email, firstName, lastName);
 
             return customer;
         }

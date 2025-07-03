@@ -4,7 +4,7 @@ using FluentValidation;
 
 namespace Eventix.Modules.Events.Application.Categories.UseCases.Create
 {
-    public sealed class CreateCategoryValidator : AbstractValidator<CreateCategoryCommand>
+    internal sealed class CreateCategoryValidator : AbstractValidator<CreateCategoryCommand>
     {
         public CreateCategoryValidator()
         {

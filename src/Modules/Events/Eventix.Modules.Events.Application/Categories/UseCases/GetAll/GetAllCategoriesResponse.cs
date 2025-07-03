@@ -2,7 +2,7 @@
 
 namespace Eventix.Modules.Events.Application.Categories.UseCases.GetAll
 {
-    public record GetAllCategoriesResponse(
+    public sealed record GetAllCategoriesResponse(
         int Page,
         int PageSize,
         int TotalCount,

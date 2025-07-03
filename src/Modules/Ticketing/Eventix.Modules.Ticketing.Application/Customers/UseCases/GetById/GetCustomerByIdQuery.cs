@@ -2,5 +2,5 @@
 
 namespace Eventix.Modules.Ticketing.Application.Customers.UseCases.GetById
 {
-    public record GetCustomerByIdQuery(Guid CustomerId) : IQuery<GetCustomerByIdResponse>;
+    public sealed record GetCustomerByIdQuery(Guid CustomerId) : IQuery<GetCustomerByIdResponse>;
 }

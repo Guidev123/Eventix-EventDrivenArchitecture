@@ -11,7 +11,7 @@ public class DomainTests : BaseTest
 {
     [Fact(DisplayName = "Domain Events Should Have Name Ending With DomainEvent")]
     [Trait("Users Architecture Tests", "Domain Tests")]
-    public void DomainEvent_ShouldHave_DomainEventPostfix()
+    public void DomainEvent_ShouldHaveNameEndingWith_DomainEvent()
     {
         // Arrange & Act & Assert
         Types.InAssembly(DomainAssembly)

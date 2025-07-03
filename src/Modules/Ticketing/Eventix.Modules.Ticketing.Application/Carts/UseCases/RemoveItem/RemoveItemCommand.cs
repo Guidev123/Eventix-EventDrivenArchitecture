@@ -2,7 +2,7 @@
 
 namespace Eventix.Modules.Ticketing.Application.Carts.UseCases.RemoveItem
 {
-    public record RemoveItemCommand : ICommand
+    public sealed record RemoveItemCommand : ICommand
     {
         public RemoveItemCommand(Guid ticketTypeId)
         {

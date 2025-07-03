@@ -2,7 +2,7 @@
 
 namespace Eventix.Modules.Events.Application.Categories.UseCases.Update
 {
-    public record UpdateCategoryCommand : ICommand
+    public sealed record UpdateCategoryCommand : ICommand
     {
         public UpdateCategoryCommand(string name)
         {

@@ -9,8 +9,9 @@ namespace Eventix.Modules.Ticketing.Domain.Events.Entities
 {
     public sealed class TicketType : Entity, IAggregateRoot
     {
-        private TicketType(Guid eventId, string name, decimal price, string currency, decimal quantity, decimal availableQuantity)
+        private TicketType(Guid ticketTypeId, Guid eventId, string name, decimal price, string currency, decimal quantity, decimal availableQuantity)
         {
+            Id = ticketTypeId;
             EventId = eventId;
             Specification = (name, quantity, availableQuantity);
             Price = (price, currency);
@@ -24,8 +25,8 @@ namespace Eventix.Modules.Ticketing.Domain.Events.Entities
         public TicketTypeSpecification Specification { get; private set; } = null!;
         public Money Price { get; private set; } = null!;
 
-        public static TicketType Create(Guid eventId, string name, decimal price, string currency, decimal quantity)
-            => new(eventId, name, price, currency, quantity, quantity);
+        public static TicketType Create(Guid ticketTypeId, Guid eventId, string name, decimal price, string currency, decimal quantity)
+            => new(ticketTypeId, eventId, name, price, currency, quantity, quantity);
 
         public void UpdatePrice(decimal price)
         {

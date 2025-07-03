@@ -2,7 +2,7 @@
 
 namespace Eventix.Modules.Ticketing.Application.Customers.UseCases.Create
 {
-    public record CreateCustomerCommand(
+    public sealed record CreateCustomerCommand(
         Guid CustomerId,
         string Email,
         string FirstName,

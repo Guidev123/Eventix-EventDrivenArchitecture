@@ -6,7 +6,7 @@ using Eventix.Shared.Domain.Responses;
 
 namespace Eventix.Modules.Ticketing.Application.Carts.UseCases.Clear
 {
-    public sealed class ClearCartHandler(ICustomerRepository customerRepository,
+    internal sealed class ClearCartHandler(ICustomerRepository customerRepository,
                                          ICartService cartService) : ICommandHandler<ClearCartCommand>
     {
         public async Task<Result> ExecuteAsync(ClearCartCommand request, CancellationToken cancellationToken = default)

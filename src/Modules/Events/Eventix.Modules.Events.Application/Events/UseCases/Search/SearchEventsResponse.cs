@@ -2,7 +2,7 @@
 
 namespace Eventix.Modules.Events.Application.Events.UseCases.Search
 {
-    public record SearchEventsResponse(
+    public sealed record SearchEventsResponse(
         int Page,
         int PageSize,
         int TotalCount,

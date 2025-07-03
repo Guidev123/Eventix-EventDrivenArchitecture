@@ -3,7 +3,7 @@ using FluentValidation;
 
 namespace Eventix.Modules.Ticketing.Application.Payments.UseCases.Refund
 {
-    public sealed class RefundPaymentValidator : AbstractValidator<RefundPaymentCommand>
+    internal sealed class RefundPaymentValidator : AbstractValidator<RefundPaymentCommand>
     {
         public RefundPaymentValidator()
         {
