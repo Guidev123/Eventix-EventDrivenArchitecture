@@ -1,5 +1,4 @@
-﻿using Eventix.Modules.Events.Domain.TicketTypes.ValueObjects;
-using Eventix.Shared.Domain.Responses;
+﻿using Eventix.Shared.Domain.Responses;
 
 namespace Eventix.Modules.Events.Domain.TicketTypes.Errors
 {

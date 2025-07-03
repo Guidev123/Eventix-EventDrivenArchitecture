@@ -1,15 +1,15 @@
-﻿using EventsAssembly = Eventix.Modules.Events.Application.AssemblyReference;
-using UsersAssembly = Eventix.Modules.Users.Application.AssemblyReference;
-using TicketingAssembly = Eventix.Modules.Ticketing.Application.AssemblyReference;
-using AttendanceAssembly = Eventix.Modules.Attendance.Application.AssemblyReference;
-using Eventix.Api.Extensions;
+﻿using Eventix.Api.Extensions;
 using Eventix.Api.Middlewares;
+using Eventix.Modules.Attendance.Infrastructure;
 using Eventix.Modules.Events.Infrastructure;
+using Eventix.Modules.Ticketing.Infrastructure;
 using Eventix.Modules.Users.Infrastructure;
 using Eventix.Shared.Infrastructure;
 using Serilog;
-using Eventix.Modules.Ticketing.Infrastructure;
-using Eventix.Modules.Attendance.Infrastructure;
+using AttendanceAssembly = Eventix.Modules.Attendance.Application.AssemblyReference;
+using EventsAssembly = Eventix.Modules.Events.Application.AssemblyReference;
+using TicketingAssembly = Eventix.Modules.Ticketing.Application.AssemblyReference;
+using UsersAssembly = Eventix.Modules.Users.Application.AssemblyReference;
 
 namespace Eventix.Api.Configurations
 {
