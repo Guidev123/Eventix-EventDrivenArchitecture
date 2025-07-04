@@ -1,4 +1,7 @@
-﻿using Eventix.Shared.Domain.Interfaces;
+﻿using Eventix.Modules.Attendance.Domain.Attendees.Entities;
+using Eventix.Modules.Attendance.Domain.Events.Entities;
+using Eventix.Modules.Attendance.Domain.Tickets.Entities;
+using Eventix.Shared.Domain.Interfaces;
 using Eventix.Shared.Infrastructure.Inbox.Mappings;
 using Eventix.Shared.Infrastructure.Outbox.Mappings;
 using Microsoft.EntityFrameworkCore;
@@ -7,6 +10,10 @@ namespace Eventix.Modules.Attendance.Infrastructure.Database
 {
     public sealed class AttendanceDbContext(DbContextOptions<AttendanceDbContext> options) : DbContext(options), IUnitOfWork
     {
+        internal DbSet<Attendee> Attendees { get; set; } = null!;
+        internal DbSet<Ticket> Tickets { get; set; } = null!;
+        internal DbSet<Event> Events { get; set; } = null!;
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasDefaultSchema(Schemas.Attendance);

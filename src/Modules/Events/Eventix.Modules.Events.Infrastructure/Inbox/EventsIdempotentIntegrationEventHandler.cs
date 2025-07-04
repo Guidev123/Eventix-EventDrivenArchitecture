@@ -7,7 +7,7 @@ using Eventix.Shared.Infrastructure.Inbox.Models;
 namespace Eventix.Modules.Events.Infrastructure.Inbox
 {
     internal sealed class EventsIdempotentIntegrationEventHandler<TIntegrationEvent>(
-        IntegrationEventHandler<TIntegrationEvent> innerHandler,
+        IIntegrationEventHandler<TIntegrationEvent> innerHandler,
         ISqlConnectionFactory sqlConnectionFactory) : IdempotentIntegrationEventHandler<TIntegrationEvent>
             where TIntegrationEvent : IIntegrationEvent
     {

@@ -10,6 +10,7 @@ using Eventix.Modules.Events.Infrastructure.TicketTypes.Repositories;
 using Eventix.Modules.Events.Presentation;
 using Eventix.Shared.Application.EventBus;
 using Eventix.Shared.Application.Messaging;
+using Eventix.Shared.Infrastructure.Inbox;
 using Eventix.Shared.Infrastructure.Outbox.Interceptors;
 using Eventix.Shared.Presentation.Extensions;
 using MassTransit;
@@ -61,7 +62,7 @@ namespace Eventix.Modules.Events.Infrastructure
             {
                 var insertOutboxMessagesInterceptor = sp.GetRequiredService<InsertOutboxMessagesInterceptors>();
 
-                options.UseSqlServer(connectionString).AddInterceptors(insertOutboxMessagesInterceptor).LogTo(Console.WriteLine);
+                options.UseSqlServer(connectionString).AddInterceptors(insertOutboxMessagesInterceptor);
             });
 
             return services;
@@ -111,10 +112,12 @@ namespace Eventix.Modules.Events.Infrastructure
 
         private static IServiceCollection AddIntegrationEventHandlers(this IServiceCollection services)
         {
-            var integrationEventHandlers = Application.AssemblyReference.Assembly
-                .GetTypes()
-                .Where(c => c.IsAssignableTo(typeof(IIntegrationEventHandler)))
-                .ToArray();
+            var integrationEventHandlers = typeof(EventsModule).Assembly.GetTypes()
+                 .Where(c => c.IsAssignableTo(typeof(IIntegrationEventHandler)) && !c.IsAbstract && !c.IsInterface)
+                 .Where(c => !c.Name.Contains(nameof(IdempotentIntegrationEventHandler<IntegrationEvent>)))
+                 .Where(c => !c.IsGenericTypeDefinition)
+                 .Where(c => c.IsClass && !c.IsAbstract)
+                 .ToArray();
 
             foreach (var integrationEventHandler in integrationEventHandlers)
             {
@@ -122,7 +125,7 @@ namespace Eventix.Modules.Events.Infrastructure
 
                 var integrationEvent = integrationEventHandler
                     .GetInterfaces()
-                    .Single(c => c.IsGenericType)
+                    .Single(c => c.IsGenericType && c.GetGenericTypeDefinition() == typeof(IIntegrationEventHandler<>))
                     .GetGenericArguments()
                     .Single();
 

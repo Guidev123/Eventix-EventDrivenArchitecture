@@ -43,7 +43,7 @@ namespace Eventix.Modules.Events.Infrastructure.Inbox
                     var integrationEventHandlers = IntegrationEventHandlersFactory.GetHandlers(
                         integrationEvent.GetType(),
                         scope.ServiceProvider,
-                        Application.AssemblyReference.Assembly);
+                        typeof(EventsModule).Assembly);
 
                     foreach (var handler in integrationEventHandlers)
                     {

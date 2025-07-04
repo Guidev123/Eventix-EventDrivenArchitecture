@@ -1,5 +1,5 @@
 ﻿using Dapper;
-using Eventix.Modules.Events.Application.TicketTypes.UseCases.GetById;
+using Eventix.Modules.Events.Application.TicketTypes.Dtos;
 using Eventix.Shared.Application.Factories;
 using Eventix.Shared.Application.Messaging;
 using Eventix.Shared.Domain.Responses;
@@ -25,7 +25,7 @@ namespace Eventix.Modules.Events.Application.TicketTypes.UseCases.GetAll
                 ORDER BY Name
                 OFFSET @Skip ROWS FETCH NEXT @Take ROWS ONLY;";
 
-            var ticketsType = await connection.QueryAsync<GetTicketTypeResponse>(sql, new
+            var ticketsType = await connection.QueryAsync<TicketTypeDto>(sql, new
             {
                 Skip = (request.Page - 1) * request.PageSize,
                 Take = request.PageSize

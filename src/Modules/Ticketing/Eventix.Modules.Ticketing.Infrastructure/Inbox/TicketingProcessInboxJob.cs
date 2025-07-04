@@ -43,7 +43,7 @@ namespace Eventix.Modules.Ticketing.Infrastructure.Inbox
                     var integrationEventHandlers = IntegrationEventHandlersFactory.GetHandlers(
                         integrationEvent.GetType(),
                         scope.ServiceProvider,
-                        Application.AssemblyReference.Assembly);
+                        typeof(TicketingModule).Assembly);
 
                     foreach (var handler in integrationEventHandlers)
                     {

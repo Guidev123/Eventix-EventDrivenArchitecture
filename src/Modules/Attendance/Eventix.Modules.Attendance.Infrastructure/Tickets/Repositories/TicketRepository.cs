@@ -2,6 +2,7 @@
 using Eventix.Modules.Attendance.Domain.Tickets.Interfaces;
 using Eventix.Modules.Attendance.Infrastructure.Database;
 using Eventix.Shared.Domain.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace Eventix.Modules.Attendance.Infrastructure.Tickets.Repositories
 {
@@ -10,14 +11,10 @@ namespace Eventix.Modules.Attendance.Infrastructure.Tickets.Repositories
         public IUnitOfWork UnitOfWork => context;
 
         public Task<Ticket?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
-        {
-            throw new NotImplementedException();
-        }
+            => context.Tickets.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
 
         public void Insert(Ticket ticket)
-        {
-            throw new NotImplementedException();
-        }
+            => context.Tickets.Add(ticket);
 
         public void Dispose() => context.Dispose();
     }

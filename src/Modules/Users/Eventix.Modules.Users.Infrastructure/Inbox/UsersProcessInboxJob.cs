@@ -1,5 +1,4 @@
 ﻿using Eventix.Modules.Users.Infrastructure.Database;
-using Eventix.Modules.Users.Infrastructure.Outbox;
 using Eventix.Shared.Application.Clock;
 using Eventix.Shared.Application.EventBus;
 using Eventix.Shared.Application.Factories;
@@ -44,7 +43,7 @@ namespace Eventix.Modules.Users.Infrastructure.Inbox
                     var integrationEventHandlers = IntegrationEventHandlersFactory.GetHandlers(
                         integrationEvent.GetType(),
                         scope.ServiceProvider,
-                        Application.AssemblyReference.Assembly);
+                        typeof(UsersModule).Assembly);
 
                     foreach (var handler in integrationEventHandlers)
                     {

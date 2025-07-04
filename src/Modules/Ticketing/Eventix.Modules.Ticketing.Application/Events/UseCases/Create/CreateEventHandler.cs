@@ -1,4 +1,5 @@
-﻿using Eventix.Modules.Ticketing.Domain.Events.Entities;
+﻿using Eventix.Modules.Ticketing.Application.Events.Mappers;
+using Eventix.Modules.Ticketing.Domain.Events.Entities;
 using Eventix.Modules.Ticketing.Domain.Events.Errors;
 using Eventix.Modules.Ticketing.Domain.Events.Interfaces;
 using Eventix.Shared.Application.Messaging;
@@ -14,8 +15,10 @@ namespace Eventix.Modules.Ticketing.Application.Events.UseCases.Create
         {
             var eventResult = Event.Create(
                 request.EventId,
-                request.Title, request.Description,
-                request.Location, request.StartsAtUtc,
+                request.Title,
+                request.Description,
+                request.StartsAtUtc,
+                request.Location.MapToLocation(),
                 request.EndsAtUtc);
 
             if (eventResult.Error is not null

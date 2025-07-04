@@ -1,5 +1,4 @@
 ﻿using Eventix.Shared.Application.Messaging;
-using Eventix.Shared.Domain.ValueObjects;
 using static Eventix.Modules.Ticketing.Application.Events.UseCases.Create.CreateEventCommand;
 
 namespace Eventix.Modules.Ticketing.Application.Events.UseCases.Create
@@ -8,7 +7,7 @@ namespace Eventix.Modules.Ticketing.Application.Events.UseCases.Create
         Guid EventId,
         string Title,
         string Description,
-        Location Location,
+        LocationRequest? Location,
         DateTime StartsAtUtc,
         DateTime? EndsAtUtc,
         List<TicketTypeRequest> TicketTypes) : ICommand<CreateEventResponse>
@@ -20,5 +19,15 @@ namespace Eventix.Modules.Ticketing.Application.Events.UseCases.Create
             decimal Price,
             string Currency,
             decimal Quantity);
+
+        public sealed record LocationRequest(
+            string Street,
+            string Number,
+            string AdditionalInfo,
+            string Neighborhood,
+            string ZipCode,
+            string City,
+            string State
+            );
     }
 }

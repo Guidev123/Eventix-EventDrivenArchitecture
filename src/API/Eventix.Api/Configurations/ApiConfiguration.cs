@@ -74,10 +74,6 @@ namespace Eventix.Api.Configurations
             )
         {
             builder.Services
-                .AddEventsModule(builder.Configuration)
-                .AddUsersModule(builder.Configuration)
-                .AddTicketingModule(builder.Configuration)
-                .AddAttendanceModule(builder.Configuration)
                 .AddApplication([
                     EventsAssembly.Assembly,
                     UsersAssembly.Assembly,
@@ -89,7 +85,11 @@ namespace Eventix.Api.Configurations
                     UsersModule.ConfigureConsumers,
                     EventsModule.ConfigureConsumers,
                     AttendanceModule.ConfigureConsumers
-                ], dbConnectionString, redisConnectionString);
+                ], dbConnectionString, redisConnectionString)
+                .AddTicketingModule(builder.Configuration)
+                .AddEventsModule(builder.Configuration)
+                .AddUsersModule(builder.Configuration)
+                .AddAttendanceModule(builder.Configuration);
 
             builder.Configuration.AddModuleConfiguration([
                 EVENTS_MODULE,

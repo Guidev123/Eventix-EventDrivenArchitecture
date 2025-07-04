@@ -6,7 +6,8 @@ using System.Data.Common;
 
 namespace Eventix.Shared.Infrastructure.Outbox
 {
-    public abstract class IdempotentDomainEventHandler<TDomainEvent> : DomainEventHandler<TDomainEvent> where TDomainEvent : IDomainEvent
+    public abstract class IdempotentDomainEventHandler<TDomainEvent> : DomainEventHandler<TDomainEvent>
+        where TDomainEvent : IDomainEvent
     {
         protected static async Task<bool> IsOutboxMessageProcessedAsync(
            OutboxMessageConsumer outboxMessageConsumer,
@@ -14,12 +15,15 @@ namespace Eventix.Shared.Infrastructure.Outbox
            string schema)
         {
             var sql = $@"
-                SELECT EXISTS(
-                    SELECT 1
-                    FROM {schema}.OutboxMessages
-                    WHERE OutboxMessageId = @OutboxMessageId
-                      AND Name = @Name
-                )";
+                SELECT CASE
+                    WHEN EXISTS(
+                        SELECT 1
+                        FROM {schema}.OutboxMessageConsumers
+                        WHERE OutboxMessageId = @OutboxMessageId
+                        AND Name = @Name)
+                   THEN 1
+                   ELSE 0
+                END";
 
             return await connection.ExecuteScalarAsync<bool>(sql, outboxMessageConsumer);
         }
@@ -30,7 +34,7 @@ namespace Eventix.Shared.Infrastructure.Outbox
             string schema)
         {
             var sql = $@"
-                INSERT INTO {schema}.OutboxMessages (OutboxMessageId, Name)
+                INSERT INTO {schema}.OutboxMessageConsumers (OutboxMessageId, Name)
                 VALUES (@OutboxMessageId, @Name)";
 
             await connection.ExecuteAsync(sql, outboxMessageConsumer);

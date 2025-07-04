@@ -7,7 +7,7 @@ using Eventix.Shared.Infrastructure.Outbox.Models;
 
 namespace Eventix.Modules.Users.Infrastructure.Outbox
 {
-    internal sealed class UsersIdempotentIntegrationEventHandler<TDomainEvent>(
+    internal sealed class UsersIdempotentDomainEventHandler<TDomainEvent>(
         IDomainEventHandler<TDomainEvent> innerHandler,
         ISqlConnectionFactory sqlConnectionFactory) : IdempotentDomainEventHandler<TDomainEvent>
             where TDomainEvent : IDomainEvent

@@ -9,7 +9,7 @@ namespace Eventix.Modules.Ticketing.Domain.Events.Entities
 {
     public sealed class Event : Entity, IAggregateRoot
     {
-        private Event(Guid eventId, string title, string description, Location location, DateTime startsAtUtc, DateTime? endsAtUtc)
+        private Event(Guid eventId, string title, string description, Location? location, DateTime startsAtUtc, DateTime? endsAtUtc)
         {
             Id = eventId;
             Specification = (title, description);
@@ -27,7 +27,7 @@ namespace Eventix.Modules.Ticketing.Domain.Events.Entities
         public DateRange DateRange { get; private set; } = default!;
         public bool IsCanceled { get; private set; }
 
-        public static Result<Event> Create(Guid eventId, string title, string description, Location location, DateTime startsAtUtc, DateTime? endsAtUtc)
+        public static Result<Event> Create(Guid eventId, string title, string description, DateTime startsAtUtc, Location? location = null, DateTime? endsAtUtc = null)
         {
             if (endsAtUtc.HasValue && endsAtUtc < startsAtUtc)
                 return Result.Failure<Event>(EventErrors.EndDatePrecedesStartDate);
@@ -41,8 +41,6 @@ namespace Eventix.Modules.Ticketing.Domain.Events.Entities
                 && DateRange.EndsAtUtc == endsAtUtc) return;
 
             DateRange = (startsAtUtc, endsAtUtc);
-
-            Raise(new EventRescheduledDomainEvent(Id, DateRange.StartsAtUtc, DateRange.EndsAtUtc));
         }
 
         public Result Cancel()
@@ -51,8 +49,6 @@ namespace Eventix.Modules.Ticketing.Domain.Events.Entities
                 return Result.Failure(EventErrors.AlreadyCanceled);
 
             IsCanceled = true;
-
-            Raise(new EventCancelledDomainEvent(Id));
 
             return Result.Success();
         }

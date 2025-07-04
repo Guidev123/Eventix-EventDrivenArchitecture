@@ -5,6 +5,7 @@ using Eventix.Modules.Ticketing.Domain.Events.Interfaces;
 using Eventix.Modules.Ticketing.Domain.Orders.Interfaces;
 using Eventix.Modules.Ticketing.Domain.Payments.Interfaces;
 using Eventix.Modules.Ticketing.Domain.Tickets.Interfaces;
+using Eventix.Modules.Ticketing.Infrastructure.Customers.IntegrationEventHandlers;
 using Eventix.Modules.Ticketing.Infrastructure.Customers.Repositories;
 using Eventix.Modules.Ticketing.Infrastructure.Database;
 using Eventix.Modules.Ticketing.Infrastructure.Events.Repositories;
@@ -18,6 +19,7 @@ using Eventix.Modules.Ticketing.Presentation;
 using Eventix.Modules.Users.IntegrationEvents.Users;
 using Eventix.Shared.Application.EventBus;
 using Eventix.Shared.Application.Messaging;
+using Eventix.Shared.Infrastructure.Inbox;
 using Eventix.Shared.Infrastructure.Outbox.Interceptors;
 using Eventix.Shared.Presentation.Extensions;
 using MassTransit;
@@ -130,12 +132,14 @@ namespace Eventix.Modules.Ticketing.Infrastructure
             return services;
         }
 
-        private static IServiceCollection AddIntegrationEventHandlers(this IServiceCollection services)
+        public static IServiceCollection AddIntegrationEventHandlers(this IServiceCollection services)
         {
-            var integrationEventHandlers = Application.AssemblyReference.Assembly
-                .GetTypes()
-                .Where(c => c.IsAssignableTo(typeof(IIntegrationEventHandler)))
-                .ToArray();
+            var integrationEventHandlers = typeof(TicketingModule).Assembly.GetTypes()
+             .Where(c => c.IsAssignableTo(typeof(IIntegrationEventHandler)) && !c.IsAbstract && !c.IsInterface)
+             .Where(c => !c.Name.Contains(nameof(IdempotentIntegrationEventHandler<IntegrationEvent>)))
+             .Where(c => !c.IsGenericTypeDefinition)
+             .Where(c => c.IsClass && !c.IsAbstract)
+             .ToArray();
 
             foreach (var integrationEventHandler in integrationEventHandlers)
             {
@@ -143,7 +147,7 @@ namespace Eventix.Modules.Ticketing.Infrastructure
 
                 var integrationEvent = integrationEventHandler
                     .GetInterfaces()
-                    .Single(c => c.IsGenericType)
+                    .Single(c => c.IsGenericType && c.GetGenericTypeDefinition() == typeof(IIntegrationEventHandler<>))
                     .GetGenericArguments()
                     .Single();
 

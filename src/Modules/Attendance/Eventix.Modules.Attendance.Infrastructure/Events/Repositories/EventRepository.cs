@@ -2,6 +2,7 @@
 using Eventix.Modules.Attendance.Domain.Events.Interfaces;
 using Eventix.Modules.Attendance.Infrastructure.Database;
 using Eventix.Shared.Domain.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace Eventix.Modules.Attendance.Infrastructure.Events.Repositories
 {
@@ -10,14 +11,10 @@ namespace Eventix.Modules.Attendance.Infrastructure.Events.Repositories
         public IUnitOfWork UnitOfWork => context;
 
         public Task<Event?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
-        {
-            throw new NotImplementedException();
-        }
+            => context.Events.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
 
         public void Insert(Event @event)
-        {
-            throw new NotImplementedException();
-        }
+            => context.Events.Add(@event);
 
         public void Dispose() => context.Dispose();
     }

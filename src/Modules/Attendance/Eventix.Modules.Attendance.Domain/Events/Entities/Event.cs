@@ -1,5 +1,4 @@
-﻿using Eventix.Modules.Attendance.Domain.Events.DomainEvents;
-using Eventix.Modules.Attendance.Domain.Events.Errors;
+﻿using Eventix.Modules.Attendance.Domain.Events.Errors;
 using Eventix.Modules.Attendance.Domain.Events.ValueObjects;
 using Eventix.Shared.Domain.DomainObjects;
 using Eventix.Shared.Domain.ValueObjects;
@@ -8,10 +7,11 @@ namespace Eventix.Modules.Attendance.Domain.Events.Entities
 {
     public sealed class Event : Entity, IAggregateRoot
     {
-        private Event(Guid id, string title, string description, DateTime startsAtUtc, DateTime? endsAtUtc = null)
+        private Event(Guid id, string title, string description, DateTime startsAtUtc, Location? location, DateTime? endsAtUtc = null)
         {
             Id = id;
             Specification = (title, description);
+            Location = location;
             DateRange = (startsAtUtc, endsAtUtc);
             Validate();
         }
@@ -30,16 +30,10 @@ namespace Eventix.Modules.Attendance.Domain.Events.Entities
             string title,
             string description,
             DateTime startsAtUtc,
-            DateTime? endsAtUtc)
+            Location? location = null,
+            DateTime? endsAtUtc = null)
         {
-            var @event = new Event(id, title, description, startsAtUtc, endsAtUtc);
-
-            @event.Raise(new EventCreatedDomainEvent(
-                @event.Id,
-                @event.Specification.Title,
-                @event.Specification.Description,
-                @event.DateRange.StartsAtUtc,
-                @event.DateRange.EndsAtUtc));
+            var @event = new Event(id, title, description, startsAtUtc, location, endsAtUtc);
 
             return @event;
         }

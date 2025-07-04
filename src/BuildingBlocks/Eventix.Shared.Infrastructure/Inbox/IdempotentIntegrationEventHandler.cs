@@ -14,12 +14,15 @@ namespace Eventix.Shared.Infrastructure.Inbox
            string schema)
         {
             var sql = $@"
-                SELECT EXISTS(
-                    SELECT 1
-                    FROM {schema}.InboxMessages
-                    WHERE OutboxMessageId = @InboxMessageId
-                      AND Name = @Name
-                )";
+                SELECT CASE
+                    WHEN EXISTS(
+                        SELECT 1
+                        FROM {schema}.InboxMessageConsumers
+                        WHERE InboxMessageId = @InboxMessageId
+                        AND Name = @Name)
+                   THEN 1
+                   ELSE 0
+                END";
 
             return await connection.ExecuteScalarAsync<bool>(sql, inboxMessageConsumer);
         }
@@ -30,7 +33,7 @@ namespace Eventix.Shared.Infrastructure.Inbox
             string schema)
         {
             var sql = $@"
-                INSERT INTO {schema}.InboxMessages (InboxMessageId, Name)
+                INSERT INTO {schema}.InboxMessageConsumers (InboxMessageId, Name)
                 VALUES (@InboxMessageId, @Name)";
 
             await connection.ExecuteAsync(sql, inboxMessageConsumer);

@@ -12,6 +12,7 @@ using Eventix.Shared.Application.Authorization;
 using Eventix.Shared.Application.EventBus;
 using Eventix.Shared.Application.Messaging;
 using Eventix.Shared.Infrastructure.Http;
+using Eventix.Shared.Infrastructure.Inbox;
 using Eventix.Shared.Infrastructure.Outbox.Interceptors;
 using Eventix.Shared.Presentation.Extensions;
 using MassTransit;
@@ -20,6 +21,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
+using System.Reflection;
 
 namespace Eventix.Modules.Users.Infrastructure
 {
@@ -92,7 +94,7 @@ namespace Eventix.Modules.Users.Infrastructure
             {
                 var insertOutboxMessagesInterceptor = sp.GetRequiredService<InsertOutboxMessagesInterceptors>();
 
-                options.UseSqlServer(connectionString).AddInterceptors(insertOutboxMessagesInterceptor).LogTo(Console.WriteLine);
+                options.UseSqlServer(connectionString).AddInterceptors(insertOutboxMessagesInterceptor);
             });
 
             return services;
@@ -131,7 +133,7 @@ namespace Eventix.Modules.Users.Infrastructure
                     .GetGenericArguments()
                     .Single();
 
-                var closedIdempotentHandler = typeof(Outbox.UsersIdempotentIntegrationEventHandler<>)
+                var closedIdempotentHandler = typeof(Outbox.UsersIdempotentDomainEventHandler<>)
                     .MakeGenericType(domainEvent);
 
                 services.Decorate(domainEventHandler, closedIdempotentHandler);
@@ -142,10 +144,12 @@ namespace Eventix.Modules.Users.Infrastructure
 
         private static IServiceCollection AddIntegrationEventHandlers(this IServiceCollection services)
         {
-            var integrationEventHandlers = Application.AssemblyReference.Assembly
-                .GetTypes()
-                .Where(c => c.IsAssignableTo(typeof(IIntegrationEventHandler)))
-                .ToArray();
+            var integrationEventHandlers = typeof(UsersModule).Assembly.GetTypes()
+              .Where(c => c.IsAssignableTo(typeof(IIntegrationEventHandler)) && !c.IsAbstract && !c.IsInterface)
+              .Where(c => !c.Name.Contains(nameof(IdempotentIntegrationEventHandler<IntegrationEvent>)))
+              .Where(c => !c.IsGenericTypeDefinition)
+              .Where(c => c.IsClass && !c.IsAbstract)
+              .ToArray();
 
             foreach (var integrationEventHandler in integrationEventHandlers)
             {
@@ -153,11 +157,11 @@ namespace Eventix.Modules.Users.Infrastructure
 
                 var integrationEvent = integrationEventHandler
                     .GetInterfaces()
-                    .Single(c => c.IsGenericType)
+                    .Single(c => c.IsGenericType && c.GetGenericTypeDefinition() == typeof(IIntegrationEventHandler<>))
                     .GetGenericArguments()
                     .Single();
 
-                var closedIdempotentHandler = typeof(Inbox.UsersIdempotentIntegrationEventHandler<>)
+                var closedIdempotentHandler = typeof(UsersIdempotentIntegrationEventHandler<>)
                     .MakeGenericType(integrationEvent);
 
                 services.Decorate(integrationEventHandler, closedIdempotentHandler);

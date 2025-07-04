@@ -1,5 +1,4 @@
 ﻿using Eventix.Shared.Application.EventBus;
-using Eventix.Shared.Application.Messaging;
 using Microsoft.Extensions.DependencyInjection;
 using System.Collections.Concurrent;
 using System.Reflection;
