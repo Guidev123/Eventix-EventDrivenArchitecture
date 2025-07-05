@@ -57,7 +57,7 @@ namespace Eventix.Modules.Ticketing.Infrastructure
             registrationConfigurator.AddConsumer<IntegrationEventConsumer<UserUpdatedIntegrationEvent>>();
 
             registrationConfigurator.AddConsumer<IntegrationEventConsumer<EventCancelledIntegrationEvent>>();
-            registrationConfigurator.AddConsumer<IntegrationEventConsumer<EventCreatedIntegrationEvent>>();
+            registrationConfigurator.AddConsumer<IntegrationEventConsumer<EventPublishedIntegrationEvent>>();
             registrationConfigurator.AddConsumer<IntegrationEventConsumer<EventRescheduledIntegrationEvent>>();
             registrationConfigurator.AddConsumer<IntegrationEventConsumer<TicketTypePriceChangedIntegrationEvent>>();
         }

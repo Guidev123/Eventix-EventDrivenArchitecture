@@ -2,9 +2,9 @@
 
 namespace Eventix.Modules.Events.IntegrationEvents.Events
 {
-    public sealed record EventCreatedIntegrationEvent : IntegrationEvent
+    public sealed record EventPublishedIntegrationEvent : IntegrationEvent
     {
-        public EventCreatedIntegrationEvent(
+        public EventPublishedIntegrationEvent(
             Guid id,
             DateTime occurredOnUtc,
             Guid eventId,

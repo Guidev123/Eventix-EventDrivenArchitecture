@@ -34,10 +34,9 @@ namespace Eventix.Modules.Ticketing.Application.Events.UseCases.Create
 
             ticketTypeRepository.InsertRange(ticketTypes);
 
-            var saveChangesTicketType = await ticketTypeRepository.UnitOfWork.CommitAsync(cancellationToken);
             var saveChangesEvents = await eventRepository.UnitOfWork.CommitAsync(cancellationToken);
 
-            return saveChangesTicketType && saveChangesEvents
+            return saveChangesEvents
                 ? Result.Success(new CreateEventResponse(@event.Id))
                 : Result.Failure<CreateEventResponse>(EventErrors.FailToCreateEvent);
         }

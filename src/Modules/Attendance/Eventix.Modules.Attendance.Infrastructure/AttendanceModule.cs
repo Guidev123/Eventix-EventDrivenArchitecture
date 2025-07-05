@@ -49,7 +49,7 @@ namespace Eventix.Modules.Attendance.Infrastructure
             registrationConfigurator.AddConsumer<IntegrationEventConsumer<UserUpdatedIntegrationEvent>>();
 
             registrationConfigurator.AddConsumer<IntegrationEventConsumer<EventRescheduledIntegrationEvent>>();
-            registrationConfigurator.AddConsumer<IntegrationEventConsumer<EventCreatedIntegrationEvent>>();
+            registrationConfigurator.AddConsumer<IntegrationEventConsumer<EventPublishedIntegrationEvent>>();
             registrationConfigurator.AddConsumer<IntegrationEventConsumer<EventCancelledIntegrationEvent>>();
 
             registrationConfigurator.AddConsumer<IntegrationEventConsumer<TicketCreatedIntegrationEvent>>();

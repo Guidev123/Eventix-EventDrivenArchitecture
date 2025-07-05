@@ -10,9 +10,9 @@ using MidR.Interfaces;
 
 namespace Eventix.Modules.Events.Application.Events.DomainEvents
 {
-    internal sealed class EventCreatedDomainEventHandler(IEventBus eventBus, IMediator mediator) : DomainEventHandler<EventCreatedDomainEvent>
+    internal sealed class EventPublishedDomainEventHandler(IEventBus eventBus, IMediator mediator) : DomainEventHandler<EventPublishedDomainEvent>
     {
-        public override async Task ExecuteAsync(EventCreatedDomainEvent notification, CancellationToken cancellationToken = default)
+        public override async Task ExecuteAsync(EventPublishedDomainEvent notification, CancellationToken cancellationToken = default)
         {
             var eventResult = await mediator.DispatchAsync(new GetEventByIdQuery(notification.EventId), cancellationToken);
             var ticketTypesResult = await mediator.DispatchAsync(new GetTicketTypeByEventIdQuery(notification.EventId), cancellationToken);
@@ -26,7 +26,7 @@ namespace Eventix.Modules.Events.Application.Events.DomainEvents
             var @event = eventResult.Value;
             var ticketTypes = ticketTypesResult.Value.TicketTypes;
 
-            await eventBus.PublishAsync(new EventCreatedIntegrationEvent(
+            await eventBus.PublishAsync(new EventPublishedIntegrationEvent(
                 notification.Id,
                 notification.OccurredOnUtc,
                 @event.Id,
@@ -39,9 +39,9 @@ namespace Eventix.Modules.Events.Application.Events.DomainEvents
                 MapToTicketTypeRequest(ticketTypes)), cancellationToken);
         }
 
-        private static List<EventCreatedIntegrationEvent.TicketTypeRequest> MapToTicketTypeRequest(IReadOnlyCollection<TicketTypeDto> response)
+        private static List<EventPublishedIntegrationEvent.TicketTypeRequest> MapToTicketTypeRequest(IReadOnlyCollection<TicketTypeDto> response)
         {
-            return response.Select(tt => new EventCreatedIntegrationEvent.TicketTypeRequest(
+            return response.Select(tt => new EventPublishedIntegrationEvent.TicketTypeRequest(
                     tt.Id,
                     tt.EventId,
                     tt.Name,
@@ -51,9 +51,9 @@ namespace Eventix.Modules.Events.Application.Events.DomainEvents
                 )).ToList();
         }
 
-        private static EventCreatedIntegrationEvent.LocationRequest? MapToLocationRequest(GetEventResponse eventResponse)
+        private static EventPublishedIntegrationEvent.LocationRequest? MapToLocationRequest(GetEventResponse eventResponse)
         {
-            return LocationIsNull(eventResponse) ? null : new EventCreatedIntegrationEvent.LocationRequest(
+            return LocationIsNull(eventResponse) ? null : new EventPublishedIntegrationEvent.LocationRequest(
                 eventResponse.Street!,
                 eventResponse.Number!,
                 eventResponse.AdditionalInfo!,

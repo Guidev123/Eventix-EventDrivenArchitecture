@@ -6,9 +6,9 @@ using MidR.Interfaces;
 
 namespace Eventix.Modules.Ticketing.Infrastructure.Events.IntegrationEvents
 {
-    internal sealed class EventCreatedIntegrationEventHandler(IMediator mediator) : IntegrationEventHandler<EventCreatedIntegrationEvent>
+    internal sealed class EventPublishedIntegrationEventHandler(IMediator mediator) : IntegrationEventHandler<EventPublishedIntegrationEvent>
     {
-        public override async Task ExecuteAsync(EventCreatedIntegrationEvent integrationEvent, CancellationToken cancellationToken = default)
+        public override async Task ExecuteAsync(EventPublishedIntegrationEvent integrationEvent, CancellationToken cancellationToken = default)
         {
             var command = new CreateEventCommand(
                 integrationEvent.EventId,
@@ -26,7 +26,7 @@ namespace Eventix.Modules.Ticketing.Infrastructure.Events.IntegrationEvents
                 throw new EventixException(nameof(CreateEventCommand), result.Error);
         }
 
-        private static List<CreateEventCommand.TicketTypeRequest> MapToTicketTypeRequest(IReadOnlyCollection<EventCreatedIntegrationEvent.TicketTypeRequest> ticketTypes)
+        private static List<CreateEventCommand.TicketTypeRequest> MapToTicketTypeRequest(IReadOnlyCollection<EventPublishedIntegrationEvent.TicketTypeRequest> ticketTypes)
         {
             return ticketTypes.Select(tt => new CreateEventCommand.TicketTypeRequest(
                     tt.TicketTypeId,
@@ -38,7 +38,7 @@ namespace Eventix.Modules.Ticketing.Infrastructure.Events.IntegrationEvents
                 )).ToList();
         }
 
-        private static CreateEventCommand.LocationRequest? MapToLocationRequest(EventCreatedIntegrationEvent.LocationRequest? location)
+        private static CreateEventCommand.LocationRequest? MapToLocationRequest(EventPublishedIntegrationEvent.LocationRequest? location)
         {
             return location is null ? null : new CreateEventCommand.LocationRequest(
                 location.Street,
