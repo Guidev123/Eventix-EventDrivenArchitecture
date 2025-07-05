@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using Eventix.Shared.Application.Clock;
+using Eventix.Shared.Application.Exceptions;
 using Eventix.Shared.Infrastructure.Outbox.Models;
 using System.Data;
 
@@ -45,8 +46,18 @@ namespace Eventix.Shared.Infrastructure.Outbox
             {
                 outboxMessage.Id,
                 ProcessedOnUtc = dateTimeProvider.UtcNow,
-                Error = exception?.InnerException is not null ? exception?.InnerException.Message : exception?.Message
+                Error = GetExceptionMessage(exception)
             }, transaction: transaction);
+        }
+
+        private static string GetExceptionMessage(Exception? exception)
+        {
+            return exception switch
+            {
+                EventixException eventixException when eventixException.Error?.Description is not null => eventixException.Error.Description,
+                _ when exception?.InnerException?.Message is not null => exception.InnerException.Message,
+                _ => exception?.Message ?? "Unknown error"
+            };
         }
     }
 }

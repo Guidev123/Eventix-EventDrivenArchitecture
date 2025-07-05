@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Diagnostics;
+﻿using Eventix.Shared.Application.Exceptions;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Eventix.Api.Middlewares
@@ -18,7 +19,7 @@ namespace Eventix.Api.Middlewares
                 Status = StatusCodes.Status500InternalServerError,
                 Type = "https://datatracker.ietf.org/doc/html/rfc7231#section-6.6.1",
                 Title = "Server failure",
-                Detail = exception.InnerException is not null ? exception.InnerException.Message : exception.Message,
+                Detail = GetExceptionMessage(exception)
             };
 
             httpContext.Response.StatusCode = problemDetails.Status.Value;
@@ -26,6 +27,16 @@ namespace Eventix.Api.Middlewares
             await httpContext.Response.WriteAsJsonAsync(problemDetails, cancellationToken);
 
             return true;
+        }
+
+        private static string GetExceptionMessage(Exception? exception)
+        {
+            return exception switch
+            {
+                EventixException eventixException when eventixException.Error?.Description is not null => eventixException.Error.Description,
+                _ when exception?.InnerException?.Message is not null => exception.InnerException.Message,
+                _ => exception?.Message ?? "Unknown error"
+            };
         }
     }
 }
