@@ -10,12 +10,15 @@ namespace Eventix.Modules.Attendance.Infrastructure.Attendees.Repositories
     {
         public IUnitOfWork UnitOfWork => context;
 
-        public void Dispose() => context.Dispose();
-
         public async Task<Attendee?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
             => await context.Attendees.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id, cancellationToken).ConfigureAwait(false);
 
         public void Insert(Attendee attendee)
             => context.Attendees.Add(attendee);
+
+        public void Update(Attendee attendee)
+            => context.Attendees.Update(attendee);
+
+        public void Dispose() => context.Dispose();
     }
 }

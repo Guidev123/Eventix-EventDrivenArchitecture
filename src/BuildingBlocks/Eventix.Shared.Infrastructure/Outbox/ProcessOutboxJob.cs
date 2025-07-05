@@ -45,7 +45,7 @@ namespace Eventix.Shared.Infrastructure.Outbox
             {
                 outboxMessage.Id,
                 ProcessedOnUtc = dateTimeProvider.UtcNow,
-                Error = exception?.Message?.ToString()
+                Error = exception?.InnerException is not null ? exception?.InnerException.Message : exception?.Message
             }, transaction: transaction);
         }
     }

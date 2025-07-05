@@ -21,31 +21,21 @@ namespace Eventix.Modules.Ticketing.Application.Events.UseCases.Create
                 .NotEmpty()
                 .WithMessage(EventErrors.DescriptionIsRequired.Description);
 
-            RuleFor(x => x.Location)
-                .NotNull()
-                .WithMessage(EventErrors.LocationIsRequired.Description);
-
-            RuleFor(x => x.StartsAtUtc)
-                .NotEqual(default(DateTime))
-                .WithMessage(EventErrors.InvalidStartDate.Description);
+            RuleFor(c => c.StartsAtUtc)
+                .NotEmpty().WithMessage(EventErrors.InvalidStartDate.Description);
 
             When(x => x.EndsAtUtc.HasValue, () =>
             {
                 RuleFor(x => x.EndsAtUtc!.Value)
-                    .NotEqual(default(DateTime))
-                    .WithMessage(EventErrors.InvalidEndDate.Description)
                     .GreaterThanOrEqualTo(x => x.StartsAtUtc)
                     .WithMessage(EventErrors.EndDateMustBeAfterStartDate.Description);
             });
 
-            RuleFor(x => x.TicketTypes)
-                .NotNull()
-                .WithMessage(EventErrors.TicketTypesIsRequired.Description)
-                .NotEmpty()
-                .WithMessage(EventErrors.TicketTypesCannotBeEmpty.Description);
-
-            RuleForEach(x => x.TicketTypes)
-                .SetValidator(new TicketTypeRequestValidator());
+            When(x => x.TicketTypes.Count > 0, () =>
+            {
+                RuleForEach(x => x.TicketTypes)
+                    .SetValidator(new TicketTypeRequestValidator());
+            });
         }
 
         internal sealed class TicketTypeRequestValidator : AbstractValidator<CreateEventCommand.TicketTypeRequest>
@@ -65,19 +55,15 @@ namespace Eventix.Modules.Ticketing.Application.Events.UseCases.Create
                     .WithMessage(TicketTypeErrors.NameIsRequired.Description);
 
                 RuleFor(x => x.Price)
-                    .GreaterThan(0)
+                    .GreaterThan(decimal.Zero)
                     .WithMessage(TicketTypeErrors.PriceMustBeGreaterThanZero.Description);
 
                 RuleFor(x => x.Currency)
                     .NotEmpty()
-                    .WithMessage(TicketTypeErrors.CurrencyIsRequired.Description)
-                    .Length(Money.MIN_CURRENCY_LENGTH)
-                    .WithMessage(ValueObjectErrors.InvalidCurrencyLength.Description)
-                    .Matches(Money.CURRENCY_CODE_PATTERN)
-                    .WithMessage(ValueObjectErrors.InvalidCurrencyFormat.Description);
+                    .WithMessage(TicketTypeErrors.CurrencyIsRequired.Description);
 
                 RuleFor(x => x.Quantity)
-                    .GreaterThan(0)
+                    .GreaterThan(decimal.Zero)
                     .WithMessage(TicketTypeErrors.QuantityMustBeGreaterThanZero.Description);
             }
         }

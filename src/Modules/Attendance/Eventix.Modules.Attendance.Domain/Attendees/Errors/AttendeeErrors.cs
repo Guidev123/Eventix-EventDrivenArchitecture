@@ -16,19 +16,19 @@ namespace Eventix.Modules.Attendance.Domain.Attendees.Errors
             "Name can not be empty");
 
         public static readonly Error AttendeeIdIsRequired = Error.Problem(
-           "Customers.CustomerIdIsRequired",
+           "Attendees.AttendeeIdIsRequired",
            "Customer ID must not be empty");
 
         public static readonly Error InvalidEmailFormat = Error.Problem(
-            "Customers.InvalidEmailFormat",
+            "Attendees.InvalidEmailFormat",
             "Invalid e-mail format");
 
         public static readonly Error FirstNameLengthInvalid = Error.Problem(
-            "Customers.FirstNameLengthInvalid",
+            "Attendees.FirstNameLengthInvalid",
             "First Name must be between 2 and 50 characters");
 
         public static readonly Error LastNameLengthInvalid = Error.Problem(
-            "Customers.LastNameLengthInvalid",
+            "Attendees.LastNameLengthInvalid",
             "Last Name must be between 2 and 50 characters");
 
         public static readonly Error SomethingHasFailedDuringPersistence = Error.Problem(

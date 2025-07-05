@@ -7,6 +7,8 @@ namespace Eventix.Modules.Ticketing.Domain.Events.Interfaces
     {
         void Insert(Event entity);
 
+        void Update(Event entity);
+
         Task<Event?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
     }
 }

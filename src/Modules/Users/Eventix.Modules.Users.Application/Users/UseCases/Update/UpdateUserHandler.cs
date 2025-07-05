@@ -14,41 +14,16 @@ namespace Eventix.Modules.Users.Application.Users.UseCases.Update
             if (user is null)
                 return Result.Failure(UserErrors.NotFound(request.UserId));
 
-            UpdateProperties(user, request);
+            UpdateUserName(user, request);
 
             var saveChanges = await userRepository.UnitOfWork.CommitAsync(cancellationToken).ConfigureAwait(false);
             return saveChanges ? Result.Success() : Result.Failure(UserErrors.FailToUpdate);
         }
 
-        private void UpdateProperties(User user, UpdateUserCommand command)
-        {
-            if (IsNameChange(command))
-                UpdateUserName(user, command);
-
-            if (IsEmailChange(command))
-                UpdateUserEmail(user, command);
-        }
-
         private void UpdateUserName(User user, UpdateUserCommand command)
         {
-            if (!IsNameChange(command)) return;
-
             user.UpdateName(command.FirstName!, command.LastName!);
             userRepository.Update(user);
         }
-
-        private void UpdateUserEmail(User user, UpdateUserCommand command)
-        {
-            if (!IsEmailChange(command)) return;
-
-            user.UpdateEmail(command.Email!);
-            userRepository.Update(user);
-        }
-
-        private static bool IsNameChange(UpdateUserCommand command)
-            => !string.IsNullOrEmpty(command.FirstName) || !string.IsNullOrEmpty(command.LastName);
-
-        private static bool IsEmailChange(UpdateUserCommand command)
-            => command.Email is not null && !string.IsNullOrEmpty(command.Email.Trim());
     }
 }

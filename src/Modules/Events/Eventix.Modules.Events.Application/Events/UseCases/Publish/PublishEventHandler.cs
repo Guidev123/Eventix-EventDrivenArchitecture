@@ -7,7 +7,7 @@ using Eventix.Shared.Domain.Responses;
 namespace Eventix.Modules.Events.Application.Events.UseCases.Publish
 {
     internal sealed class PublishEventHandler(IEventRepository eventRepository,
-                                            ITicketTypeRepository tickeTypeRepository) : ICommandHandler<PublishEventCommand, PublishEventResponse>
+                                              ITicketTypeRepository tickeTypeRepository) : ICommandHandler<PublishEventCommand, PublishEventResponse>
     {
         public async Task<Result<PublishEventResponse>> ExecuteAsync(PublishEventCommand request, CancellationToken cancellationToken = default)
         {
@@ -21,7 +21,7 @@ namespace Eventix.Modules.Events.Application.Events.UseCases.Publish
             @event.Publish();
             eventRepository.Update(@event);
 
-            var saveChanges = await tickeTypeRepository.UnitOfWork.CommitAsync(cancellationToken).ConfigureAwait(false);
+            var saveChanges = await eventRepository.UnitOfWork.CommitAsync(cancellationToken).ConfigureAwait(false);
             return saveChanges ? Result.Success(new PublishEventResponse(@event.Id)) : Result.Failure<PublishEventResponse>(EventErrors.EventCanNotBePublished);
         }
     }

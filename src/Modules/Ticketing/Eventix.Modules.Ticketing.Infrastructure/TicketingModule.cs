@@ -1,11 +1,12 @@
-﻿using Eventix.Modules.Ticketing.Application.Abstractions.Services;
+﻿using Eventix.Modules.Events.IntegrationEvents.Events;
+using Eventix.Modules.Events.IntegrationEvents.TicketTypes;
+using Eventix.Modules.Ticketing.Application.Abstractions.Services;
 using Eventix.Modules.Ticketing.Application.Carts.Services;
 using Eventix.Modules.Ticketing.Domain.Customers.Interfaces;
 using Eventix.Modules.Ticketing.Domain.Events.Interfaces;
 using Eventix.Modules.Ticketing.Domain.Orders.Interfaces;
 using Eventix.Modules.Ticketing.Domain.Payments.Interfaces;
 using Eventix.Modules.Ticketing.Domain.Tickets.Interfaces;
-using Eventix.Modules.Ticketing.Infrastructure.Customers.IntegrationEventHandlers;
 using Eventix.Modules.Ticketing.Infrastructure.Customers.Repositories;
 using Eventix.Modules.Ticketing.Infrastructure.Database;
 using Eventix.Modules.Ticketing.Infrastructure.Events.Repositories;
@@ -53,6 +54,12 @@ namespace Eventix.Modules.Ticketing.Infrastructure
         public static void ConfigureConsumers(IRegistrationConfigurator registrationConfigurator)
         {
             registrationConfigurator.AddConsumer<IntegrationEventConsumer<UserRegisteredIntegrationEvent>>();
+            registrationConfigurator.AddConsumer<IntegrationEventConsumer<UserUpdatedIntegrationEvent>>();
+
+            registrationConfigurator.AddConsumer<IntegrationEventConsumer<EventCancelledIntegrationEvent>>();
+            registrationConfigurator.AddConsumer<IntegrationEventConsumer<EventCreatedIntegrationEvent>>();
+            registrationConfigurator.AddConsumer<IntegrationEventConsumer<EventRescheduledIntegrationEvent>>();
+            registrationConfigurator.AddConsumer<IntegrationEventConsumer<TicketTypePriceChangedIntegrationEvent>>();
         }
 
         private static IServiceCollection AddServices(this IServiceCollection services)

@@ -1,13 +1,12 @@
 ﻿using Eventix.Modules.Events.Domain.Events.Errors;
 using Eventix.Modules.Events.Domain.Events.ValueObjects;
+using Eventix.Shared.Domain.ValueObjects;
 using FluentValidation;
 
 namespace Eventix.Modules.Events.Application.Events.UseCases.Create
 {
     internal sealed class CreateEventValidator : AbstractValidator<CreateEventCommand>
     {
-        private const int MINIMUM_START_TIME = 1;
-
         public CreateEventValidator()
         {
             RuleFor(c => c.Title)
@@ -26,13 +25,17 @@ namespace Eventix.Modules.Events.Application.Events.UseCases.Create
 
             RuleFor(c => c.StartsAtUtc)
                 .NotEmpty().WithMessage(EventErrors.StartDateIsRequired.Description)
-                .Must(c => c > DateTime.UtcNow.AddHours(MINIMUM_START_TIME))
-                    .WithMessage(EventErrors.StartDateTooSoon(MINIMUM_START_TIME).Description);
+                .Must(c => c > DateTime.UtcNow.AddHours(DateRange.MINIMUM_START_TIME_IN_HOURS))
+                    .WithMessage(EventErrors.StartDateTooSoon(DateRange.MINIMUM_START_TIME_IN_HOURS).Description);
 
-            RuleFor(c => c.EndsAtUtc)
-                .Must((cmd, endsAt) => endsAt > cmd.StartsAtUtc)
-                .When(c => c.EndsAtUtc.HasValue)
-                .WithMessage(EventErrors.EndDateBeforeStartDate.Description);
+            When(x => x.EndsAtUtc.HasValue, () =>
+            {
+                RuleFor(x => x.EndsAtUtc!.Value)
+                    .NotEqual(default(DateTime))
+                    .WithMessage(EventErrors.InvalidEndDate.Description)
+                    .GreaterThanOrEqualTo(x => x.StartsAtUtc)
+                    .WithMessage(EventErrors.EndDateMustBeAfterStartDate.Description);
+            });
         }
     }
 }

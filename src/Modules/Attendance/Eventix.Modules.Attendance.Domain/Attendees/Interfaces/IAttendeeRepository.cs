@@ -8,5 +8,7 @@ namespace Eventix.Modules.Attendance.Domain.Attendees.Interfaces
         Task<Attendee?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
 
         void Insert(Attendee attendee);
+
+        void Update(Attendee attendee);
     }
 }

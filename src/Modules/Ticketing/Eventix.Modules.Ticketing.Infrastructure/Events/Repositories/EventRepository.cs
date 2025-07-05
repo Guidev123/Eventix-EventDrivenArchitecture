@@ -16,6 +16,9 @@ namespace Eventix.Modules.Ticketing.Infrastructure.Events.Repositories
         public void Insert(Event entity)
             => context.Events.Add(entity);
 
+        public void Update(Event entity)
+            => context.Events.Update(entity);
+
         public void Dispose()
             => context.Dispose();
     }

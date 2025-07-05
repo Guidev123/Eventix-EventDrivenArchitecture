@@ -8,6 +8,8 @@ using Eventix.Modules.Attendance.Infrastructure.Inbox;
 using Eventix.Modules.Attendance.Infrastructure.Outbox;
 using Eventix.Modules.Attendance.Infrastructure.Tickets.Repositories;
 using Eventix.Modules.Attendance.Presentation;
+using Eventix.Modules.Events.IntegrationEvents.Events;
+using Eventix.Modules.Ticketing.IntegrationEvents.Tickets;
 using Eventix.Modules.Users.IntegrationEvents.Users;
 using Eventix.Shared.Application.EventBus;
 using Eventix.Shared.Application.Messaging;
@@ -44,6 +46,13 @@ namespace Eventix.Modules.Attendance.Infrastructure
         public static void ConfigureConsumers(IRegistrationConfigurator registrationConfigurator)
         {
             registrationConfigurator.AddConsumer<IntegrationEventConsumer<UserRegisteredIntegrationEvent>>();
+            registrationConfigurator.AddConsumer<IntegrationEventConsumer<UserUpdatedIntegrationEvent>>();
+
+            registrationConfigurator.AddConsumer<IntegrationEventConsumer<EventRescheduledIntegrationEvent>>();
+            registrationConfigurator.AddConsumer<IntegrationEventConsumer<EventCreatedIntegrationEvent>>();
+            registrationConfigurator.AddConsumer<IntegrationEventConsumer<EventCancelledIntegrationEvent>>();
+
+            registrationConfigurator.AddConsumer<IntegrationEventConsumer<TicketCreatedIntegrationEvent>>();
         }
 
         private static IServiceCollection AddRepositories(this IServiceCollection services)

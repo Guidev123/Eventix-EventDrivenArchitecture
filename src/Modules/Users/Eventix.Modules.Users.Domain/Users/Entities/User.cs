@@ -51,16 +51,6 @@ namespace Eventix.Modules.Users.Domain.Users.Entities
             Raise(new UserNameUpdatedDomainEvent(Id, Name.FirstName, Name.LastName));
         }
 
-        public void UpdateEmail(string email)
-        {
-            if (Email.Address.Equals(email,
-                StringComparison.OrdinalIgnoreCase)) return;
-
-            Email = email;
-
-            Raise(new UserEmailUpdatedDomainEvent(Id, Email.Address));
-        }
-
         public void Delete()
         {
             if (AuditInfo.IsDeleted) return;

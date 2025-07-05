@@ -15,22 +15,26 @@ namespace Eventix.Modules.Events.Application.TicketTypes.UseCases.Create
                 .WithMessage(EventErrors.EventIdIsRequired.Description);
 
             RuleFor(c => c.Name)
-                .NotEmpty().WithMessage(TicketTypeErrors.NameIsRequired.Description)
-                .MaximumLength(100).WithMessage(TicketTypeErrors.NameTooLong.Description);
+                .NotEmpty()
+                .WithMessage(TicketTypeErrors.NameIsRequired.Description)
+                .MaximumLength(Name.NAME_MAX_LENGTH)
+                .WithMessage(TicketTypeErrors.NameTooLong.Description);
 
             RuleFor(c => c.Price)
-                .GreaterThan(0).WithMessage(ValueObjectErrors.PriceMustBeGreaterThanZero.Description);
+                .GreaterThan(decimal.Zero)
+                .WithMessage(ValueObjectErrors.PriceMustBeGreaterThanZero.Description);
 
             RuleFor(x => x.Currency)
                 .NotEmpty()
                 .WithMessage(ValueObjectErrors.CurrencyIsRequired.Description)
-                .Length(Money.MIN_CURRENCY_LENGTH)
+                .Length(Money.CURRENCY_CODE_LEN)
                 .WithMessage(ValueObjectErrors.InvalidCurrencyLength.Description)
                 .Matches(Money.CURRENCY_CODE_PATTERN)
                 .WithMessage(ValueObjectErrors.InvalidCurrencyFormat.Description);
 
             RuleFor(c => c.Quantity)
-                .GreaterThan(0).WithMessage(TicketTypeErrors.QuantityMustBeGreaterThanZero.Description);
+                .GreaterThan(decimal.Zero)
+                .WithMessage(TicketTypeErrors.QuantityMustBeGreaterThanZero.Description);
         }
     }
 }

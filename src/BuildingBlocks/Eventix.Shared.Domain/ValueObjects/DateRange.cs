@@ -5,6 +5,8 @@ namespace Eventix.Shared.Domain.ValueObjects
 {
     public sealed record DateRange : ValueObject
     {
+        public const int MINIMUM_START_TIME_IN_HOURS = 1;
+
         public DateRange(DateTime startsAtUtc, DateTime? endsAtUtc)
         {
             StartsAtUtc = startsAtUtc;

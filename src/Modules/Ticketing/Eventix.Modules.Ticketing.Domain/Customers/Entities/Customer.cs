@@ -36,14 +36,6 @@ namespace Eventix.Modules.Ticketing.Domain.Customers.Entities
             Name = name;
         }
 
-        public void UpdateEmail(string email)
-        {
-            if (Email.Address.Equals(email,
-                StringComparison.OrdinalIgnoreCase)) return;
-
-            Email = email;
-        }
-
         protected override void Validate()
         {
             AssertionConcern.EnsureNotNull(Email, CustomerErrors.EmailMustBeNotEmpty.Description);

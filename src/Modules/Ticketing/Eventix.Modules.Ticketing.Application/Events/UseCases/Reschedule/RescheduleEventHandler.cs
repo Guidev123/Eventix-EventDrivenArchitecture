@@ -20,6 +20,7 @@ namespace Eventix.Modules.Ticketing.Application.Events.UseCases.Reschedule
                 return Result.Failure(EventErrors.StartDateInPast);
 
             @event.Reschedule(request.StartsAtUtc, request.EndsAtUtc);
+            eventRepository.Update(@event);
 
             var saveChanges = await eventRepository.UnitOfWork.CommitAsync(cancellationToken);
             return saveChanges

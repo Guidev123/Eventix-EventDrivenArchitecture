@@ -45,7 +45,7 @@ namespace Eventix.Shared.Infrastructure.Inbox
             {
                 inboxMessage.Id,
                 ProcessedOnUtc = dateTimeProvider.UtcNow,
-                Error = exception?.Message?.ToString()
+                Error = exception?.InnerException is not null ? exception.InnerException.Message : exception?.Message
             }, transaction: transaction);
         }
     }

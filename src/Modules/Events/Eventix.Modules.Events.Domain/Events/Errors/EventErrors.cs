@@ -11,6 +11,10 @@ namespace Eventix.Modules.Events.Domain.Events.Errors
             "Money.PriceMustBeGreaterThanZero",
             "The ticket price must be greater than zero.");
 
+        public static readonly Error InvalidEndDate = Error.Problem(
+            "Event.InvalidEndDate",
+            "Event end date cannot be default value");
+
         public static Error UnableToCancelEvent(Guid eventId) =>
             Error.Problem("Events.UnableToCancelEvent", $"Unable to cancel the event with identifier {eventId}");
 

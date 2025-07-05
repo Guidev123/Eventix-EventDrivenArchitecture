@@ -13,17 +13,14 @@ namespace Eventix.Modules.Ticketing.Application.Customers.UseCases.Update
                 .WithMessage(CustomerErrors.CustomerIdCannotBeEmpty.Description);
 
             RuleFor(x => x.FirstName)
+                .NotEmpty()
                 .MaximumLength(Name.NAME_MAX_LENGTH)
                 .WithMessage(CustomerErrors.FirstNameMaxLengthExceeded.Description);
 
             RuleFor(x => x.LastName)
+                .NotEmpty()
                 .MaximumLength(Name.NAME_MAX_LENGTH)
                 .WithMessage(CustomerErrors.LastNameMaxLengthExceeded.Description);
-
-            RuleFor(x => x.Email)
-                .EmailAddress()
-                .When(x => !string.IsNullOrEmpty(x.Email))
-                .WithMessage(CustomerErrors.InvalidEmailFormat.Description);
         }
     }
 }

@@ -47,5 +47,13 @@ namespace Eventix.Modules.Attendance.Domain.Tickets.Errors
         public static readonly Error DuplicateCheckIn = Error.Problem(
             "Tickets.DuplicateCheckIn",
             "The ticket was already checked in");
+
+        public static readonly Error TicketIdMustBeNotEmpty = Error.Problem(
+            "Tickets.TicketIdMustBeNotEmpty",
+            "Ticket ID must not be empty");
+
+        public static readonly Error SomethingHasFailedDuringPersistence = Error.Problem(
+            "Tickets.SomethingHasFailedDuringPersistence",
+            "Something has failed during persistence of the ticket");
     }
 }

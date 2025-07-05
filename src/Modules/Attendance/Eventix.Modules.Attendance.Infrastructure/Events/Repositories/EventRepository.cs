@@ -16,6 +16,12 @@ namespace Eventix.Modules.Attendance.Infrastructure.Events.Repositories
         public void Insert(Event @event)
             => context.Events.Add(@event);
 
+        public void Update(Event @event)
+            => context.Events.Update(@event);
+
+        public void Delete(Event @event)
+            => context.Events.Remove(@event);
+
         public void Dispose() => context.Dispose();
     }
 }

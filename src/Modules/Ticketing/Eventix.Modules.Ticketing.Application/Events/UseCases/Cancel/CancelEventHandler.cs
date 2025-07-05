@@ -15,6 +15,7 @@ namespace Eventix.Modules.Ticketing.Application.Events.UseCases.Cancel
                 return Result.Failure(EventErrors.NotFound(request.EventId));
 
             @event.Cancel();
+            eventRepository.Update(@event);
 
             var saveChanges = await eventRepository.UnitOfWork.CommitAsync(cancellationToken);
             return saveChanges
