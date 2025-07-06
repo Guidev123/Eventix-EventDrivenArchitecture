@@ -7,6 +7,9 @@ namespace Eventix.Modules.Ticketing.Domain.Payments.Errors
         public static Error NotFound(Guid paymentId) =>
             Error.NotFound("Payments.NotFound", $"The payment with the identifier {paymentId} was not found");
 
+        public static Error FailToPayOrder(Guid orderId) =>
+            Error.Problem("Payments.FailToPayOrder", $"Something has failed to pay the order with ID {orderId}");
+
         public static readonly Error AlreadyRefunded =
             Error.Problem("Payments.AlreadyRefunded", "The payment was already refunded");
 

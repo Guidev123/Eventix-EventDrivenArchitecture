@@ -16,6 +16,7 @@ using Eventix.Modules.Ticketing.Infrastructure.Outbox;
 using Eventix.Modules.Ticketing.Infrastructure.Payments.Repositories;
 using Eventix.Modules.Ticketing.Infrastructure.Payments.Services;
 using Eventix.Modules.Ticketing.Infrastructure.Tickets.Repositories;
+using Eventix.Modules.Ticketing.IntegrationEvents.Payments;
 using Eventix.Modules.Ticketing.Presentation;
 using Eventix.Modules.Users.IntegrationEvents.Users;
 using Eventix.Shared.Application.EventBus;
@@ -60,6 +61,8 @@ namespace Eventix.Modules.Ticketing.Infrastructure
             registrationConfigurator.AddConsumer<IntegrationEventConsumer<EventPublishedIntegrationEvent>>();
             registrationConfigurator.AddConsumer<IntegrationEventConsumer<EventRescheduledIntegrationEvent>>();
             registrationConfigurator.AddConsumer<IntegrationEventConsumer<TicketTypePriceChangedIntegrationEvent>>();
+
+            registrationConfigurator.AddConsumer<IntegrationEventConsumer<OrderPlacedIntegrationEvent>>();
         }
 
         private static IServiceCollection AddServices(this IServiceCollection services)
