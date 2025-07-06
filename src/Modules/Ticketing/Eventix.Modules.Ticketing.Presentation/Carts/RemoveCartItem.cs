@@ -14,9 +14,9 @@ namespace Eventix.Modules.Ticketing.Presentation.Carts
     {
         public void MapEndpoint(IEndpointRouteBuilder app)
         {
-            app.MapDelete("api/v1/carts/{ticketTypeId:guid}", async (Guid ticketTypeId, ClaimsPrincipal claimsPrincipal, IMediator mediator) =>
+            app.MapDelete("api/v1/carts/ticket-types/{id:guid}", async (Guid id, ClaimsPrincipal claimsPrincipal, IMediator mediator) =>
             {
-                var command = new RemoveItemCommand(ticketTypeId);
+                var command = new RemoveItemCommand(id);
                 command.SetCustomerId(claimsPrincipal.GetUserId());
 
                 var result = await mediator.DispatchAsync(command).ConfigureAwait(false);
