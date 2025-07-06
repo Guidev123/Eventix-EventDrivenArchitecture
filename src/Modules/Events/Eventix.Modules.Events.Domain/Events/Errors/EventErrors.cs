@@ -15,6 +15,10 @@ namespace Eventix.Modules.Events.Domain.Events.Errors
             "Event.InvalidEndDate",
             "Event end date cannot be default value");
 
+        public static readonly Error LocationNotSet = Error.Problem(
+            "Events.LocationNotSet",
+            "The event location must be set before publishing the event.");
+
         public static Error UnableToCancelEvent(Guid eventId) =>
             Error.Problem("Events.UnableToCancelEvent", $"Unable to cancel the event with identifier {eventId}");
 
@@ -47,6 +51,10 @@ namespace Eventix.Modules.Events.Domain.Events.Errors
         public static readonly Error UnableToCreateEvent = Error.Problem(
             "Events.UnableToCreateEvent",
             "Unable to create the event. Please try again later.");
+
+        public static readonly Error UnableToAttachLocation = Error.Problem(
+            "Events.UnableToAttachLocation",
+            "Unable to attach the location to the event. Please try again later.");
 
         public static readonly Error SpecificationIsRequired = Error.Problem(
             "Events.SpecificationIsRequired",

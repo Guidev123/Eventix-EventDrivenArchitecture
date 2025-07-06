@@ -80,6 +80,13 @@ namespace Eventix.Modules.Events.Domain.Events.Entities
             return Result.Success();
         }
 
+        public void AttachLocation(Location location)
+        {
+            AssertionConcern.EnsureNotNull(location, EventErrors.LocationNotSet.Description);
+
+            Location = location;
+        }
+
         protected override void Validate()
         {
             AssertionConcern.EnsureNotNull(Specification, EventErrors.SpecificationIsRequired.Description);

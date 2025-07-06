@@ -5,6 +5,15 @@ namespace Eventix.Shared.Domain.ValueObjects
 {
     public sealed record Location : ValueObject
     {
+        public const int STREET_MIN_LENGTH = 2;
+        public const int STREET_MAX_LENGTH = 100;
+        public const int NUMBER_MAX_LENGTH = 20;
+        public const int NEIGHBORHOOD_MAX_LENGTH = 50;
+        public const int ZIPCODE_MAX_LENGTH = 10;
+        public const int CITY_MAX_LENGTH = 50;
+        public const int STATE_LENGTH = 2;
+        public const int STATE_MAX_LENGTH = 2;
+
         public Location(string street, string number, string additionalInfo, string neighborhood, string zipCode, string city, string state)
         {
             Street = street;

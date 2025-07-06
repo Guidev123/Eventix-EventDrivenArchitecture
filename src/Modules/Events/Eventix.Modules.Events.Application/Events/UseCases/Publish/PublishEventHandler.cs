@@ -15,6 +15,9 @@ namespace Eventix.Modules.Events.Application.Events.UseCases.Publish
             if (@event is null)
                 return Result.Failure<PublishEventResponse>(EventErrors.NotFound(request.EventId));
 
+            if (@event.Location is null)
+                return Result.Failure<PublishEventResponse>(EventErrors.LocationNotSet);
+
             if (!await tickeTypeRepository.ExistsAsync(request.EventId, cancellationToken))
                 return Result.Failure<PublishEventResponse>(EventErrors.NoTicketsFound);
 

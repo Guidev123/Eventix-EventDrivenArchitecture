@@ -79,5 +79,33 @@ namespace Eventix.Shared.Domain.ValueObjects.Errors
         public static readonly Error StateIsRequired = Error.Problem(
             "Location.StateIsRequired",
             "The state is required.");
+
+        public static Error StreetTooShort(int min) => Error.Problem(
+            "Location.StreetTooShort",
+            $"The street must be at least {min} characters.");
+
+        public static Error StreetTooLong(int max) => Error.Problem(
+            "Location.StreetTooLong",
+            $"The street must not exceed {max} characters.");
+
+        public static Error NumberTooLong(int max) => Error.Problem(
+            "Location.NumberTooLong",
+            $"The number must not exceed {max} characters.");
+
+        public static Error NeighborhoodTooLong(int max) => Error.Problem(
+            "Location.NeighborhoodTooLong",
+            $"The neighborhood must not exceed {max} characters.");
+
+        public static Error ZipCodeTooLong(int max) => Error.Problem(
+            "Location.ZipCodeTooLong",
+            $"The zip code must not exceed {max} characters.");
+
+        public static Error CityTooLong(int max) => Error.Problem(
+            "Location.CityTooLong",
+            $"The city must not exceed {max} characters.");
+
+        public static Error StateInvalidLength(int exact) => Error.Problem(
+            "Location.StateInvalidLength",
+            $"The state must be exactly {exact} characters.");
     }
 }
