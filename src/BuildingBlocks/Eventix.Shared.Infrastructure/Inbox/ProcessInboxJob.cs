@@ -50,13 +50,16 @@ namespace Eventix.Shared.Infrastructure.Inbox
             }, transaction: transaction);
         }
 
-        private static string GetExceptionMessage(Exception? exception)
+        private static string? GetExceptionMessage(Exception? exception)
         {
+            if (exception is null)
+                return null;
+
             return exception switch
             {
-                EventixException eventixException when eventixException.Error?.Description is not null => eventixException.Error.Description,
-                _ when exception?.InnerException?.Message is not null => exception.InnerException.Message,
-                _ => exception?.Message ?? "Unknown error"
+                EventixException evEx when evEx.Error?.Description is not null => evEx.Error.Description,
+                _ when exception.InnerException?.Message is not null => exception.InnerException.Message,
+                _ => exception.Message
             };
         }
     }
