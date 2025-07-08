@@ -1,4 +1,4 @@
-﻿using Eventix.Modules.Events.Application.TicketTypes.Dtos;
+﻿using Eventix.Modules.Events.Application.TicketTypes.DTOs;
 
 namespace Eventix.Modules.Events.Application.TicketTypes.UseCases.GetAll
 {
@@ -6,6 +6,6 @@ namespace Eventix.Modules.Events.Application.TicketTypes.UseCases.GetAll
         int Page,
         int PageSize,
         int TotalCount,
-        IReadOnlyCollection<TicketTypeDto> TicketTypes
+        IReadOnlyCollection<TicketTypeResponse> TicketTypes
         );
 }

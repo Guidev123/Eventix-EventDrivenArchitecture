@@ -1,5 +1,5 @@
 ﻿using Dapper;
-using Eventix.Modules.Events.Application.TicketTypes.Dtos;
+using Eventix.Modules.Events.Application.TicketTypes.DTOs;
 using Eventix.Shared.Application.Factories;
 using Eventix.Shared.Application.Messaging;
 using Eventix.Shared.Domain.Responses;
@@ -22,7 +22,7 @@ namespace Eventix.Modules.Events.Application.TicketTypes.UseCases.GetByEventId
                 FROM events.TicketTypes
                 WHERE EventId = @EventId;";
 
-            var ticketTypes = (await connection.QueryAsync<TicketTypeDto>(sql, new { request.EventId })).ToList();
+            var ticketTypes = (await connection.QueryAsync<TicketTypeResponse>(sql, new { request.EventId })).ToList();
 
             return Result.Success(new GetTicketTypeByEventIdResponse(ticketTypes));
         }

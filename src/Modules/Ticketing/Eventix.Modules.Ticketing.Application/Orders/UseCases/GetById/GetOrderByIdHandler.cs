@@ -11,10 +11,9 @@ namespace Eventix.Modules.Ticketing.Application.Orders.UseCases.GetById
         public async Task<Result<GetOrderByIdResponse>> ExecuteAsync(GetOrderByIdQuery request, CancellationToken cancellationToken = default)
         {
             var order = await orderRepository.GetByIdAsync(request.OrderId, cancellationToken);
-            if (order is null)
-                return Result.Failure<GetOrderByIdResponse>(OrderErrors.NotFound(request.OrderId));
-
-            return Result.Success(order.MapToGetOrderByIdResponse());
+            return order is null
+                ? Result.Failure<GetOrderByIdResponse>(OrderErrors.NotFound(request.OrderId))
+                : Result.Success(order.MapToGetOrderByIdResponse());
         }
     }
 }

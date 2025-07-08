@@ -5,7 +5,7 @@ namespace Eventix.Modules.Ticketing.Application.Abstractions.Services
 {
     public interface IPaymentService
     {
-        Task<Result<PaymentDto>> ChargeAsync(decimal amount, string currency);
+        Task<Result<PaymentResponse>> ChargeAsync(decimal amount, string currency);
 
         Task RefundAsync(Guid transactionId, decimal amount);
     }

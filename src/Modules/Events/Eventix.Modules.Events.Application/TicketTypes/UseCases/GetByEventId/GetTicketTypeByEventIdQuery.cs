@@ -1,4 +1,4 @@
-﻿using Eventix.Modules.Events.Application.TicketTypes.Dtos;
+﻿using Eventix.Modules.Events.Application.TicketTypes.DTOs;
 using Eventix.Shared.Application.Messaging;
 
 namespace Eventix.Modules.Events.Application.TicketTypes.UseCases.GetByEventId

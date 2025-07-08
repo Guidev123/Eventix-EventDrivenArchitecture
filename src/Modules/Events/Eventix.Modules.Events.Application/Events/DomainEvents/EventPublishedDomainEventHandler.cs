@@ -1,5 +1,5 @@
 ﻿using Eventix.Modules.Events.Application.Events.UseCases.GetById;
-using Eventix.Modules.Events.Application.TicketTypes.Dtos;
+using Eventix.Modules.Events.Application.TicketTypes.DTOs;
 using Eventix.Modules.Events.Application.TicketTypes.UseCases.GetByEventId;
 using Eventix.Modules.Events.Domain.Events.DomainEvents;
 using Eventix.Modules.Events.IntegrationEvents.Events;
@@ -39,7 +39,7 @@ namespace Eventix.Modules.Events.Application.Events.DomainEvents
                 MapToTicketTypeRequest(ticketTypes)), cancellationToken);
         }
 
-        private static List<EventPublishedIntegrationEvent.TicketTypeRequest> MapToTicketTypeRequest(IReadOnlyCollection<TicketTypeDto> response)
+        private static List<EventPublishedIntegrationEvent.TicketTypeRequest> MapToTicketTypeRequest(IReadOnlyCollection<TicketTypeResponse> response)
         {
             return response.Select(tt => new EventPublishedIntegrationEvent.TicketTypeRequest(
                     tt.Id,

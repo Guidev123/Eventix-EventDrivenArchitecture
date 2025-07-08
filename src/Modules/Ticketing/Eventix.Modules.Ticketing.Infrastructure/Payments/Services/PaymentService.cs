@@ -6,11 +6,11 @@ namespace Eventix.Modules.Ticketing.Infrastructure.Payments.Services
 {
     internal sealed class PaymentService : IPaymentService
     {
-        public async Task<Result<PaymentDto>> ChargeAsync(decimal amount, string currency)
+        public async Task<Result<PaymentResponse>> ChargeAsync(decimal amount, string currency)
         {
             // TODO: Integration with stripe
             await Task.Delay(500);
-            return Result.Success(new PaymentDto(Guid.NewGuid(), decimal.Zero, string.Empty));
+            return Result.Success(new PaymentResponse(Guid.NewGuid(), decimal.Zero, string.Empty));
         }
 
         public async Task RefundAsync(Guid transactionId, decimal amount)
