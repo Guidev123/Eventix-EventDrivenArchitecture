@@ -4,20 +4,26 @@ using Eventix.Shared.Application.EventBus;
 using Eventix.Shared.Application.Factories;
 using Eventix.Shared.Infrastructure.Inbox.Models;
 using Eventix.Shared.Infrastructure.Serialization;
-using MassTransit;
+using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
 
 namespace Eventix.Modules.Events.Infrastructure.Inbox
 {
-    internal sealed class IntegrationEventConsumer<TIntegrationEvent>(ISqlConnectionFactory sqlConnectionFactory)
-            : IConsumer<TIntegrationEvent>
-            where TIntegrationEvent : IntegrationEvent
+    internal sealed class IntegrationEventConsumer(
+        IEventBus eventBus,
+        ISqlConnectionFactory sqlConnectionFactory
+        ) : BackgroundService
     {
-        public async Task Consume(ConsumeContext<TIntegrationEvent> context)
+        protected override Task ExecuteAsync(CancellationToken stoppingToken)
+        {
+            SetSubscribers(stoppingToken);
+
+            return Task.CompletedTask;
+        }
+
+        private async Task ConsumeAsync(IIntegrationEvent integrationEvent)
         {
             using var connection = sqlConnectionFactory.Create();
-
-            var integrationEvent = context.Message;
 
             var inboxMessage = new InboxMessage
             {
@@ -32,6 +38,10 @@ namespace Eventix.Modules.Events.Infrastructure.Inbox
                 VALUES (@Id, @Type, @Content, @OccurredOnUtc)";
 
             await connection.ExecuteAsync(sql, inboxMessage);
+        }
+
+        private void SetSubscribers(CancellationToken cancellationToken = default)
+        {
         }
     }
 }

@@ -8,15 +8,11 @@ using Eventix.Modules.Attendance.Infrastructure.Inbox;
 using Eventix.Modules.Attendance.Infrastructure.Outbox;
 using Eventix.Modules.Attendance.Infrastructure.Tickets.Repositories;
 using Eventix.Modules.Attendance.Presentation;
-using Eventix.Modules.Events.IntegrationEvents.Events;
-using Eventix.Modules.Ticketing.IntegrationEvents.Tickets;
-using Eventix.Modules.Users.IntegrationEvents.Users;
 using Eventix.Shared.Application.EventBus;
 using Eventix.Shared.Application.Messaging;
 using Eventix.Shared.Infrastructure.Inbox;
 using Eventix.Shared.Infrastructure.Outbox.Interceptors;
 using Eventix.Shared.Presentation.Extensions;
-using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -34,6 +30,7 @@ namespace Eventix.Modules.Attendance.Infrastructure
             services
                 .AddEndpoints(typeof(PresentationModule).Assembly)
                 .AddRepositories()
+                .AddServices()
                 .AddDomainEventHandlers()
                 .AddIntegrationEventHandlers()
                 .AddOutbox(configuration)
@@ -43,16 +40,11 @@ namespace Eventix.Modules.Attendance.Infrastructure
             return services;
         }
 
-        public static void ConfigureConsumers(IRegistrationConfigurator registrationConfigurator)
+        private static IServiceCollection AddServices(this IServiceCollection services)
         {
-            registrationConfigurator.AddConsumer<IntegrationEventConsumer<UserRegisteredIntegrationEvent>>();
-            registrationConfigurator.AddConsumer<IntegrationEventConsumer<UserUpdatedIntegrationEvent>>();
+            services.AddHostedService<IntegrationEventConsumer>();
 
-            registrationConfigurator.AddConsumer<IntegrationEventConsumer<EventRescheduledIntegrationEvent>>();
-            registrationConfigurator.AddConsumer<IntegrationEventConsumer<EventPublishedIntegrationEvent>>();
-            registrationConfigurator.AddConsumer<IntegrationEventConsumer<EventCancelledIntegrationEvent>>();
-
-            registrationConfigurator.AddConsumer<IntegrationEventConsumer<TicketCreatedIntegrationEvent>>();
+            return services;
         }
 
         private static IServiceCollection AddRepositories(this IServiceCollection services)

@@ -1,5 +1,4 @@
 ﻿using Eventix.Modules.Users.Application.Abstractions.Identity.Dtos;
-using MassTransit.Configuration;
 using Microsoft.Extensions.Options;
 using System.Net.Http.Json;
 

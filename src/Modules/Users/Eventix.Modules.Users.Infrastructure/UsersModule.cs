@@ -6,7 +6,6 @@ using Eventix.Modules.Users.Infrastructure.Identity;
 using Eventix.Modules.Users.Infrastructure.Inbox;
 using Eventix.Modules.Users.Infrastructure.Outbox;
 using Eventix.Modules.Users.Infrastructure.Users.Repositories;
-using Eventix.Modules.Users.IntegrationEvents.Users;
 using Eventix.Modules.Users.Presentation;
 using Eventix.Shared.Application.Authorization;
 using Eventix.Shared.Application.EventBus;
@@ -15,13 +14,11 @@ using Eventix.Shared.Infrastructure.Http;
 using Eventix.Shared.Infrastructure.Inbox;
 using Eventix.Shared.Infrastructure.Outbox.Interceptors;
 using Eventix.Shared.Presentation.Extensions;
-using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
-using System.Reflection;
 
 namespace Eventix.Modules.Users.Infrastructure
 {
@@ -46,13 +43,10 @@ namespace Eventix.Modules.Users.Infrastructure
             return services;
         }
 
-        public static void ConfigureConsumers(IRegistrationConfigurator registrationConfigurator)
-        {
-        }
-
         private static IServiceCollection AddServices(this IServiceCollection services)
         {
             services.TryAddScoped<IPermissionService, PermissionService>();
+            services.AddHostedService<IntegrationEventConsumer>();
 
             return services;
         }
