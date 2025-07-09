@@ -5,6 +5,8 @@ using Eventix.Modules.Events.Infrastructure;
 using Eventix.Modules.Ticketing.Infrastructure;
 using Eventix.Modules.Users.Infrastructure;
 using Eventix.Shared.Infrastructure;
+using HealthChecks.RabbitMQ;
+using Microsoft.Extensions.DependencyInjection;
 using RabbitMQ.Client;
 using Serilog;
 using AttendanceAssembly = Eventix.Modules.Attendance.Application.AssemblyReference;
@@ -62,9 +64,20 @@ namespace Eventix.Api.Configurations
             var appSettings = appSettingsSection.Get<KeyCloakExtensions>()
                 ?? throw new InvalidOperationException("Keycloak settings not found.");
 
-            builder.Services.AddHealthChecks()
+            builder.Services
+                .AddHealthChecks()
                 .AddSqlServer(dbConnectionString)
                 .AddRedis(redisConnectionString)
+                .AddRabbitMQ(sp =>
+                {
+                    var factory = new ConnectionFactory
+                    {
+                        Uri = new Uri(messageBusConnectionString),
+                        AutomaticRecoveryEnabled = true
+                    };
+
+                    return factory.CreateConnectionAsync();
+                })
                 .AddUrlGroup(new Uri(appSettings.HealthUrl), HttpMethod.Get, "keycloak");
 
             return builder;
