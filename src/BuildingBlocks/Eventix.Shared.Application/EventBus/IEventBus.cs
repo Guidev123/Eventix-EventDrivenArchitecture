@@ -1,7 +1,7 @@
 ﻿namespace Eventix.Shared.Application.EventBus;
 
 /// <summary>
-/// Represents a generic messaging service interface for publishing, subscribing, requesting, and responding to integration events.
+/// Represents a generic messaging service interface for publishing and subscribing integration events.
 /// </summary>
 public interface IEventBus : IDisposable
 {

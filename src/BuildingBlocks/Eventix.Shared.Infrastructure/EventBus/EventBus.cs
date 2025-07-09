@@ -38,7 +38,8 @@ namespace Eventix.Shared.Infrastructure.EventBus
         {
             await EnsureConnectedAsync();
 
-            var exchangeName = typeof(T).FullName ?? string.Empty;
+            var exchangeName = string.Empty.GetExchangeName<T>();
+            var routingKey = string.Empty.GetRoutingKey<T>();
 
             await _channel.ExchangeDeclareAsync(exchangeName, ExchangeType.Topic, true, cancellationToken: cancellationToken);
 
@@ -50,7 +51,7 @@ namespace Eventix.Shared.Infrastructure.EventBus
                 Timestamp = new AmqpTimestamp(DateTimeOffset.UtcNow.ToUnixTimeSeconds())
             };
 
-            await _channel.BasicPublishAsync(exchangeName, string.Empty, false, properties, body, cancellationToken);
+            await _channel.BasicPublishAsync(exchangeName, routingKey, false, properties, body, cancellationToken);
 
             _logger.LogInformation("Published integration event {EventName} with ID {EventId} to exchange {ExchangeName}.",
                 typeof(T).Name, integrationEvent.Id, exchangeName);
@@ -64,12 +65,13 @@ namespace Eventix.Shared.Infrastructure.EventBus
         {
             await EnsureConnectedAsync();
 
-            var exchangeName = typeof(T).FullName ?? string.Empty;
+            var exchangeName = string.Empty.GetExchangeName<T>();
+            var routingKey = string.Empty.GetRoutingKey<T>();
 
             await Task.WhenAll(
                 _channel.ExchangeDeclareAsync(exchangeName, ExchangeType.Topic, true, cancellationToken: cancellationToken),
                 _channel.QueueDeclareAsync(queueName, true, false, false, cancellationToken: cancellationToken),
-                _channel.QueueBindAsync(queueName, exchangeName, string.Empty, cancellationToken: cancellationToken)
+                _channel.QueueBindAsync(queueName, exchangeName, routingKey, cancellationToken: cancellationToken)
             );
 
             var consumer = new AsyncEventingBasicConsumer(_channel);
