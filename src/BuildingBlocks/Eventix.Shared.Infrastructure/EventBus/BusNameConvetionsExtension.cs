@@ -6,7 +6,7 @@ namespace Eventix.Shared.Infrastructure.EventBus
     {
         public static string GetExchangeName<T>(this string @string) where T : IntegrationEvent
         {
-            var eventName = typeof(T).Name.Replace("IntegrationEvent", "").ToLowerInvariant();
+            var eventName = typeof(T).Name.Replace(nameof(IntegrationEvent), "").ToLowerInvariant();
 
             var @namespace = typeof(T).Namespace ?? string.Empty;
 
