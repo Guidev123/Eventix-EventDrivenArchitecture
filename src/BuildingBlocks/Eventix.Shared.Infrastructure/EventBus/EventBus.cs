@@ -1,8 +1,10 @@
 ﻿using Eventix.Shared.Application.EventBus;
+using Microsoft.Extensions.Logging;
 using Polly;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using RabbitMQ.Client.Exceptions;
+using System.Net.Sockets;
 using System.Text.Json;
 using ExchangeType = RabbitMQ.Client.ExchangeType;
 
@@ -10,15 +12,17 @@ namespace Eventix.Shared.Infrastructure.EventBus
 {
     internal sealed class EventBus : IEventBus
     {
+        private readonly ILogger<EventBus> _logger;
         private const int RETRY_COUNT = 5;
         private readonly ConnectionFactory _connectionFactory;
         private IConnection _connection = default!;
         private IChannel _channel = default!;
         private readonly string _brokerUrl;
 
-        public EventBus(string brokerUrl)
+        public EventBus(string brokerUrl, ILogger<EventBus> logger)
         {
             _brokerUrl = brokerUrl;
+            _logger = logger;
             _connectionFactory = new ConnectionFactory()
             {
                 Uri = new Uri(_brokerUrl),
@@ -34,15 +38,22 @@ namespace Eventix.Shared.Infrastructure.EventBus
         {
             await EnsureConnectedAsync();
 
-            var exchangeName = typeof(T).FullName;
-            if (string.IsNullOrEmpty(exchangeName))
-                throw new ArgumentException("Integration event type name cannot be null or empty.", nameof(T));
+            var exchangeName = typeof(T).FullName ?? string.Empty;
 
             await _channel.ExchangeDeclareAsync(exchangeName, ExchangeType.Topic, true, cancellationToken: cancellationToken);
 
             var body = JsonSerializer.SerializeToUtf8Bytes(integrationEvent);
+            var properties = new BasicProperties
+            {
+                MessageId = integrationEvent.Id.ToString(),
+                Persistent = true,
+                Timestamp = new AmqpTimestamp(DateTimeOffset.UtcNow.ToUnixTimeSeconds())
+            };
 
-            await _channel.BasicPublishAsync(exchangeName, string.Empty, body, cancellationToken);
+            await _channel.BasicPublishAsync(exchangeName, string.Empty, false, properties, body, cancellationToken);
+
+            _logger.LogInformation("Published integration event {EventName} with ID {EventId} to exchange {ExchangeName}.",
+                typeof(T).Name, integrationEvent.Id, exchangeName);
         }
 
         public async Task SubscribeAsync<T>(
@@ -53,9 +64,7 @@ namespace Eventix.Shared.Infrastructure.EventBus
         {
             await EnsureConnectedAsync();
 
-            var exchangeName = typeof(T).FullName;
-            if (string.IsNullOrEmpty(exchangeName))
-                throw new ArgumentException("Integration event type name cannot be null or empty.", nameof(T));
+            var exchangeName = typeof(T).FullName ?? string.Empty;
 
             await Task.WhenAll(
                 _channel.ExchangeDeclareAsync(exchangeName, ExchangeType.Topic, true, cancellationToken: cancellationToken),
@@ -69,8 +78,14 @@ namespace Eventix.Shared.Infrastructure.EventBus
                 var body = @event.Body.ToArray();
                 var message = JsonSerializer.Deserialize<T>(body);
 
+                _logger.LogInformation("Received integration event {EventName} with ID {EventId} from queue {QueueName}.",
+                    typeof(T).Name, message?.Id, queueName);
+
                 if (message is not null)
                     await onMessage(message);
+
+                _logger.LogInformation("Processed integration event {EventName} with ID {EventId} from queue {QueueName}.",
+                    typeof(T).Name, message?.Id, queueName);
             };
 
             await _channel.BasicConsumeAsync(queueName, true, consumer, cancellationToken: cancellationToken);
@@ -81,15 +96,18 @@ namespace Eventix.Shared.Infrastructure.EventBus
             var policy = Policy
                 .Handle<BrokerUnreachableException>()
                 .Or<IOException>()
-                .Or<Exception>()
+                .Or<SocketException>()
                 .WaitAndRetryAsync(RETRY_COUNT, retry =>
-                    TimeSpan.FromSeconds(Math.Pow(2, retry))
-                );
+                {
+                    _logger.LogWarning("Attempting to connect to RabbitMQ. Retry {RetryCount}/{MaxRetries}.", retry + 1, RETRY_COUNT);
+                    return TimeSpan.FromSeconds(Math.Pow(2, retry));
+                });
 
             await policy.ExecuteAsync(async () =>
             {
                 _connection = await _connectionFactory.CreateConnectionAsync();
                 _channel = await _connection.CreateChannelAsync();
+                _logger.LogInformation("Successfully connected to RabbitMQ.");
             });
         }
 

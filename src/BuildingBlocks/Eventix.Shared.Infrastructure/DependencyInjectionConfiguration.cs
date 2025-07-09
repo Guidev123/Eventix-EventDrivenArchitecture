@@ -13,6 +13,7 @@ using FluentValidation;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Logging;
 using MidR.DependencyInjection;
 using MidR.Interfaces;
 using Quartz;
@@ -112,7 +113,11 @@ namespace Eventix.Shared.Infrastructure
 
         private static IServiceCollection AddBus(this IServiceCollection services, string messageBusConnectionString)
         {
-            services.TryAddSingleton<IEventBus>(new EventBus.EventBus(messageBusConnectionString));
+            services.TryAddSingleton<IEventBus>(serviceProvider =>
+            {
+                var logger = serviceProvider.GetRequiredService<ILogger<EventBus.EventBus>>();
+                return new EventBus.EventBus(messageBusConnectionString, logger);
+            });
 
             return services;
         }
