@@ -10,9 +10,10 @@ using Eventix.Shared.Infrastructure.Clock;
 using Eventix.Shared.Infrastructure.Factories;
 using Eventix.Shared.Infrastructure.Outbox.Interceptors;
 using FluentValidation;
-using MassTransit;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Logging;
 using MidR.DependencyInjection;
 using MidR.Interfaces;
 using Quartz;
@@ -25,7 +26,7 @@ namespace Eventix.Shared.Infrastructure
     {
         public static IServiceCollection AddInfrastructure(
             this IServiceCollection services,
-            Action<IRegistrationConfigurator>[] moduleConfigureConsumers,
+            string messageBusConnectionString,
             string databaseConnectionString,
             string redisConnectionString)
         {
@@ -34,7 +35,7 @@ namespace Eventix.Shared.Infrastructure
                 .AddAuthorizationInternal()
                 .AddData(databaseConnectionString)
                 .AddCacheService(redisConnectionString)
-                .AddBus(moduleConfigureConsumers)
+                .AddBus(messageBusConnectionString)
                 .AddBackgroundJobs();
 
             return services;
@@ -110,22 +111,12 @@ namespace Eventix.Shared.Infrastructure
             return services;
         }
 
-        private static IServiceCollection AddBus(this IServiceCollection services, Action<IRegistrationConfigurator>[] moduleConfigureConsumers)
+        private static IServiceCollection AddBus(this IServiceCollection services, string messageBusConnectionString)
         {
-            services.TryAddSingleton<IEventBus, EventBus.EventBus>();
-            services.AddMassTransit(opt =>
+            services.TryAddSingleton<IEventBus>(serviceProvider =>
             {
-                foreach (var configureConsumer in moduleConfigureConsumers)
-                {
-                    configureConsumer(opt);
-                }
-
-                opt.SetKebabCaseEndpointNameFormatter();
-
-                opt.UsingInMemory((context, cfg) =>
-                {
-                    cfg.ConfigureEndpoints(context);
-                });
+                var logger = serviceProvider.GetRequiredService<ILogger<EventBus.EventBus>>();
+                return new EventBus.EventBus(messageBusConnectionString, logger);
             });
 
             return services;

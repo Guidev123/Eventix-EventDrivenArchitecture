@@ -13,7 +13,6 @@ using Eventix.Shared.Application.Messaging;
 using Eventix.Shared.Infrastructure.Inbox;
 using Eventix.Shared.Infrastructure.Outbox.Interceptors;
 using Eventix.Shared.Presentation.Extensions;
-using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -38,10 +37,6 @@ namespace Eventix.Modules.Events.Infrastructure
                 .AddEntityFrameworkDbContext(configuration);
 
             return services;
-        }
-
-        public static void ConfigureConsumers(IRegistrationConfigurator registrationConfigurator)
-        {
         }
 
         private static IServiceCollection AddRepositories(this IServiceCollection services)

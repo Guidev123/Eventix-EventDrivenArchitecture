@@ -5,10 +5,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="MassTransit.Abstractions" Version="8.4.1" />
-	</ItemGroup>
-	
-	<ItemGroup>
 	  <ProjectReference Include="..\Eventix.Shared.Domain\Eventix.Shared.Domain.csproj" />
 	</ItemGroup>
 

@@ -1,6 +1,4 @@
-﻿using Eventix.Modules.Events.IntegrationEvents.Events;
-using Eventix.Modules.Events.IntegrationEvents.TicketTypes;
-using Eventix.Modules.Ticketing.Application.Abstractions.Services;
+﻿using Eventix.Modules.Ticketing.Application.Abstractions.Services;
 using Eventix.Modules.Ticketing.Application.Carts.Services;
 using Eventix.Modules.Ticketing.Domain.Customers.Interfaces;
 using Eventix.Modules.Ticketing.Domain.Events.Interfaces;
@@ -16,15 +14,12 @@ using Eventix.Modules.Ticketing.Infrastructure.Outbox;
 using Eventix.Modules.Ticketing.Infrastructure.Payments.Repositories;
 using Eventix.Modules.Ticketing.Infrastructure.Payments.Services;
 using Eventix.Modules.Ticketing.Infrastructure.Tickets.Repositories;
-using Eventix.Modules.Ticketing.IntegrationEvents.Payments;
 using Eventix.Modules.Ticketing.Presentation;
-using Eventix.Modules.Users.IntegrationEvents.Users;
 using Eventix.Shared.Application.EventBus;
 using Eventix.Shared.Application.Messaging;
 using Eventix.Shared.Infrastructure.Inbox;
 using Eventix.Shared.Infrastructure.Outbox.Interceptors;
 using Eventix.Shared.Presentation.Extensions;
-using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -52,23 +47,11 @@ namespace Eventix.Modules.Ticketing.Infrastructure
             return services;
         }
 
-        public static void ConfigureConsumers(IRegistrationConfigurator registrationConfigurator)
-        {
-            registrationConfigurator.AddConsumer<IntegrationEventConsumer<UserRegisteredIntegrationEvent>>();
-            registrationConfigurator.AddConsumer<IntegrationEventConsumer<UserUpdatedIntegrationEvent>>();
-
-            registrationConfigurator.AddConsumer<IntegrationEventConsumer<EventCancelledIntegrationEvent>>();
-            registrationConfigurator.AddConsumer<IntegrationEventConsumer<EventPublishedIntegrationEvent>>();
-            registrationConfigurator.AddConsumer<IntegrationEventConsumer<EventRescheduledIntegrationEvent>>();
-            registrationConfigurator.AddConsumer<IntegrationEventConsumer<TicketTypePriceChangedIntegrationEvent>>();
-
-            registrationConfigurator.AddConsumer<IntegrationEventConsumer<OrderPlacedIntegrationEvent>>();
-        }
-
         private static IServiceCollection AddServices(this IServiceCollection services)
         {
             services.AddSingleton<ICartService, CartService>();
             services.AddTransient<IPaymentService, PaymentService>();
+            services.AddHostedService<IntegrationEventConsumer>();
 
             return services;
         }

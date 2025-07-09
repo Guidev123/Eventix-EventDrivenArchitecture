@@ -5,6 +5,7 @@ using Eventix.Modules.Events.Infrastructure;
 using Eventix.Modules.Ticketing.Infrastructure;
 using Eventix.Modules.Users.Infrastructure;
 using Eventix.Shared.Infrastructure;
+using RabbitMQ.Client;
 using Serilog;
 using AttendanceAssembly = Eventix.Modules.Attendance.Application.AssemblyReference;
 using EventsAssembly = Eventix.Modules.Events.Application.AssemblyReference;
@@ -24,6 +25,7 @@ namespace Eventix.Api.Configurations
         {
             var dbConnectionString = builder.Configuration.GetConnectionString("Database") ?? string.Empty;
             var redisConnectionString = builder.Configuration.GetConnectionString("Cache") ?? string.Empty;
+            var messageBusConnectionString = builder.Configuration.GetConnectionString("MessageBus") ?? string.Empty;
 
             builder.Services.AddOpenApi();
 
@@ -34,9 +36,9 @@ namespace Eventix.Api.Configurations
 
             builder.AddExceptionHandler();
 
-            builder.AddCustomHealthChecks(dbConnectionString, redisConnectionString);
+            builder.AddCustomHealthChecks(dbConnectionString, messageBusConnectionString, redisConnectionString);
 
-            builder.AddAllModules(dbConnectionString, redisConnectionString);
+            builder.AddAllModules(dbConnectionString, messageBusConnectionString, redisConnectionString);
 
             return builder;
         }
@@ -52,8 +54,9 @@ namespace Eventix.Api.Configurations
         private static WebApplicationBuilder AddCustomHealthChecks(
             this WebApplicationBuilder builder,
             string dbConnectionString,
+            string messageBusConnectionString,
             string redisConnectionString
-            )
+        )
         {
             var appSettingsSection = builder.Configuration.GetSection(nameof(KeyCloakExtensions));
             var appSettings = appSettingsSection.Get<KeyCloakExtensions>()
@@ -70,6 +73,7 @@ namespace Eventix.Api.Configurations
         private static WebApplicationBuilder AddAllModules(
             this WebApplicationBuilder builder,
             string dbConnectionString,
+            string messageBusConnectionString,
             string redisConnectionString
             )
         {
@@ -80,12 +84,7 @@ namespace Eventix.Api.Configurations
                     TicketingAssembly.Assembly,
                     AttendanceAssembly.Assembly
                 ])
-                .AddInfrastructure([
-                    TicketingModule.ConfigureConsumers,
-                    UsersModule.ConfigureConsumers,
-                    EventsModule.ConfigureConsumers,
-                    AttendanceModule.ConfigureConsumers
-                ], dbConnectionString, redisConnectionString)
+                .AddInfrastructure(messageBusConnectionString, dbConnectionString, redisConnectionString)
                 .AddTicketingModule(builder.Configuration)
                 .AddEventsModule(builder.Configuration)
                 .AddUsersModule(builder.Configuration)
