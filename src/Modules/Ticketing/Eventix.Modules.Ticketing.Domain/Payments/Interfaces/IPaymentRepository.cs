@@ -8,9 +8,7 @@ namespace Eventix.Modules.Ticketing.Domain.Payments.Interfaces
     {
         Task<Payment?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
 
-        Task<IEnumerable<Payment>> GetForEventAsync(Event @event, CancellationToken cancellationToken = default);
-
-        void UpdateRange(IEnumerable<Payment> payments);
+        void Update(Payment payment);
 
         void Insert(Payment payment);
     }

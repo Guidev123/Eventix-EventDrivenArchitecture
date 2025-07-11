@@ -30,8 +30,8 @@ namespace Eventix.Modules.Ticketing.Application.Payments.UseCases.PayOrder
             var payment = Payment.Create(
                 order,
                 paymentResponse.Value.TransactionId,
-                paymentResponse.Value.Amount,
-                paymentResponse.Value.Currency);
+                order.TotalPrice.Amount,
+                order.TotalPrice.Currency);
 
             paymentRepository.Insert(payment);
 

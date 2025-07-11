@@ -19,7 +19,9 @@ namespace Eventix.Modules.Ticketing.Application.Payments.UseCases.Refund
                 && paymentResult.Error is not null)
                 return Result.Failure(paymentResult.Error);
 
+            paymentRepository.Update(payment);
             var saveChanges = await paymentRepository.UnitOfWork.CommitAsync(cancellationToken);
+
             return saveChanges
                 ? Result.Success()
                 : Result.Failure(PaymentErrors.FailToPersistRefundInformation);

@@ -12,6 +12,7 @@ using Eventix.Modules.Ticketing.Domain.Orders.Interfaces;
 using Eventix.Shared.Application.Factories;
 using Eventix.Shared.Application.Messaging;
 using Eventix.Shared.Domain.Responses;
+using System.Data.Common;
 
 namespace Eventix.Modules.Ticketing.Application.Orders.UseCases.Create
 {
@@ -30,62 +31,102 @@ namespace Eventix.Modules.Ticketing.Application.Orders.UseCases.Create
 
             try
             {
-                var customer = await customerRepository.GetByIdAsync(request.CustomerId, cancellationToken);
-                if (customer is null)
-                    return Result.Failure(CustomerErrors.NotFound(request.CustomerId));
+                var orderResultTask = CreateOrderAsync(request, cancellationToken);
+                var cartResultTask = GetCartAsync(request.CustomerId, cancellationToken);
 
-                var order = Order.Create(customer);
+                await Task.WhenAll(orderResultTask, cartResultTask);
 
-                var cart = await cartService.GetAsync(customer.Id, cancellationToken);
-                if (cart.IsFailure)
-                    return Result.Failure(CartErrors.NotFound(request.CustomerId));
+                var orderResult = orderResultTask.Result;
+                var cartResult = cartResultTask.Result;
 
-                if (cart.Value.Items.Count == 0)
-                    return Result.Failure(CartErrors.Empty);
+                if (orderResult.IsFailure)
+                    return orderResult;
 
-                foreach (CartItem cartItem in cart.Value.Items)
-                {
-                    var ticketType = await ticketTypeRepository.GetWithLockAsync(
-                        cartItem.TicketTypeId,
-                        cancellationToken);
+                if (cartResult.IsFailure)
+                    return cartResult;
 
-                    if (ticketType is null)
-                        return Result.Failure(TicketTypeErrors.NotFound(cartItem.TicketTypeId));
+                var order = orderResult.Value;
 
-                    var result = ticketType.UpdateQuantity(cartItem.Quantity);
+                var getCartItemsResult = await GetCartItemsAsync(cartResult.Value, order, cancellationToken);
+                if (getCartItemsResult.IsFailure)
+                    return getCartItemsResult;
 
-                    if (result.IsFailure)
-                        return Result.Failure(result.Error!);
-
-                    order.AddItem(ticketType, cartItem.Quantity, cartItem.Amount, ticketType.Price.Currency);
-                }
-
-                orderRepository.Insert(order);
-
-                if (order.TotalPrice is null)
-                    return Result.Failure(OrderErrors.TotalPriceMustBeNotNull);
-
-                order.Raise(new OrderPlacedDomainEvent(order.Id, order.TotalPrice.Amount, order.TotalPrice.Currency));
-
-                var saveChangesOrder = await orderRepository.UnitOfWork.CommitAsync(cancellationToken);
-
-                if (!saveChangesOrder)
-                {
-                    await transaction.RollbackAsync(cancellationToken);
-                    return Result.Failure(OrderErrors.FailToCreateOrder);
-                }
-
-                await transaction.CommitAsync(cancellationToken);
-
-                await cartService.ClearAsync(customer.Id, cancellationToken);
-
-                return Result.Success();
+                return await PersistDataAsync(order, transaction, cancellationToken);
             }
             catch
             {
                 await transaction.RollbackAsync(cancellationToken);
                 return Result.Failure(OrderErrors.UnableToPersistOrder);
             }
+        }
+
+        private async Task<Result> PersistDataAsync(Order order, DbTransaction transaction, CancellationToken cancellationToken)
+        {
+            if (order.TotalPrice is null)
+                return Result.Failure(OrderErrors.TotalPriceMustBeNotNull);
+
+            orderRepository.Insert(order);
+
+            order.Raise(new OrderPlacedDomainEvent(order.Id, order.TotalPrice.Amount, order.TotalPrice.Currency));
+
+            var saveChangesOrder = await orderRepository.UnitOfWork.CommitAsync(cancellationToken);
+
+            if (!saveChangesOrder)
+            {
+                await transaction.RollbackAsync(cancellationToken);
+                return Result.Failure(OrderErrors.FailToCreateOrder);
+            }
+
+            await transaction.CommitAsync(cancellationToken);
+
+            await cartService.ClearAsync(order.CustomerId, cancellationToken);
+
+            return Result.Success();
+        }
+
+        private async Task<Result<Order>> CreateOrderAsync(CreateOrderCommand request, CancellationToken cancellationToken)
+        {
+            var customer = await customerRepository.GetByIdAsync(request.CustomerId, cancellationToken);
+            if (customer is null)
+                return Result.Failure<Order>(CustomerErrors.NotFound(request.CustomerId));
+
+            var order = Order.Create(customer);
+
+            return Result.Success(order);
+        }
+
+        private async Task<Result<Cart>> GetCartAsync(Guid customerId, CancellationToken cancellationToken)
+        {
+            var cart = await cartService.GetAsync(customerId, cancellationToken);
+            if (cart.IsFailure)
+                return Result.Failure<Cart>(CartErrors.NotFound(customerId));
+
+            if (cart.Value.Items.Count == 0)
+                return Result.Failure<Cart>(CartErrors.Empty);
+
+            return Result.Success(cart.Value);
+        }
+
+        private async Task<Result> GetCartItemsAsync(Cart cart, Order order, CancellationToken cancellationToken)
+        {
+            foreach (CartItem cartItem in cart.Items)
+            {
+                var ticketType = await ticketTypeRepository.GetWithLockAsync(
+                    cartItem.TicketTypeId,
+                    cancellationToken);
+
+                if (ticketType is null)
+                    return Result.Failure(TicketTypeErrors.NotFound(cartItem.TicketTypeId));
+
+                var result = ticketType.UpdateQuantity(cartItem.Quantity);
+
+                if (result.IsFailure)
+                    return Result.Failure(result.Error!);
+
+                order.AddItem(ticketType, cartItem.Quantity, cartItem.Amount, ticketType.Price.Currency);
+            }
+
+            return Result.Success();
         }
     }
 }

@@ -17,7 +17,7 @@ namespace Eventix.Modules.Ticketing.Domain.Tickets.Entities
             OrderId = orderId;
             EventId = eventId;
             TicketTypeId = ticketTypeId;
-            Code = $"tc_{Guid.CreateVersion7():N}";
+            Code = $"tc_{Guid.NewGuid().ToString("N")[..27]}";
             CreatedAtUtc = DateTime.UtcNow;
             IsArchived = false;
             Validate();

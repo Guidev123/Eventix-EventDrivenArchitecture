@@ -12,7 +12,7 @@ namespace Eventix.Modules.Ticketing.Application.Orders.DomainEvents
     {
         public override async Task ExecuteAsync(OrderCreatedDomainEvent domainEvent, CancellationToken cancellationToken = default)
         {
-            var result = await mediator.DispatchAsync(new GetOrderByIdQuery(domainEvent.Id), cancellationToken);
+            var result = await mediator.DispatchAsync(new GetOrderByIdQuery(domainEvent.OrderId), cancellationToken);
             if (result.IsFailure)
                 throw new EventixException(nameof(GetOrderByIdQuery), result.Error);
 
