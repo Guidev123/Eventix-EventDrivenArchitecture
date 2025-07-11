@@ -11,7 +11,7 @@ namespace Eventix.Modules.Attendance.Infrastructure.Attendees.Repositories
         public IUnitOfWork UnitOfWork => context;
 
         public async Task<Attendee?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
-            => await context.Attendees.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id, cancellationToken).ConfigureAwait(false);
+            => await context.Attendees.FirstOrDefaultAsync(x => x.Id == id, cancellationToken).ConfigureAwait(false);
 
         public void Insert(Attendee attendee)
             => context.Attendees.Add(attendee);

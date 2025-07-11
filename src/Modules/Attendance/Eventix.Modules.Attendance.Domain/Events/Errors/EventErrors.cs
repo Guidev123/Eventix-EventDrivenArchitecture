@@ -7,6 +7,9 @@ namespace Eventix.Modules.Attendance.Domain.Events.Errors
         public static Error NotFound(Guid eventId) =>
             Error.NotFound("Events.NotFound", $"The event with the identifier {eventId} was not found");
 
+        public static Error StatisticsNotFound(Guid eventId) =>
+            Error.NotFound("Events.StatisticsNotFound", $"Statistics for event with the identifier {eventId} was not found");
+
         public static Error FailToCancelEvent(Guid eventId) => Error.Problem(
             "Events.FailToCancelEvent",
             $"Something has failed to cancel the event with identifier {eventId}");
@@ -14,6 +17,10 @@ namespace Eventix.Modules.Attendance.Domain.Events.Errors
         public static readonly Error FailToCreateEvent = Error.Problem(
             "Events.FailToCreateEvent",
             "Something has failed to create event");
+
+        public static readonly Error FailToCreateEventStatistics = Error.Problem(
+            "Events.FailToCreateEventStatistics",
+            "Something has failed to create event statistics");
 
         public static readonly Error SpecificationIsRequired = Error.Problem(
            "Events.SpecificationIsRequired",

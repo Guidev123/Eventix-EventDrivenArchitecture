@@ -16,6 +16,9 @@ namespace Eventix.Modules.Attendance.Infrastructure.Tickets.Repositories
         public void Insert(Ticket ticket)
             => context.Tickets.Add(ticket);
 
+        public void Update(Ticket ticket)
+            => context.Tickets.Update(ticket);
+
         public void Dispose() => context.Dispose();
     }
 }

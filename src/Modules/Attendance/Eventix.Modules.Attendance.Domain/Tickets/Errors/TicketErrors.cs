@@ -5,6 +5,9 @@ namespace Eventix.Modules.Attendance.Domain.Tickets.Errors
 {
     public static class TicketErrors
     {
+        public static Error NotFound(Guid id) =>
+             Error.NotFound("Tickets.NotFound", $"The ticket with ID {id} was not found");
+
         public static Error NotFound(string code) =>
             Error.NotFound("Tickets.NotFound", $"The ticket with the code {code} was not found");
 

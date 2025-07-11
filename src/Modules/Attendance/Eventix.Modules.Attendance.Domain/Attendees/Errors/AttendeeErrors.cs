@@ -34,5 +34,13 @@ namespace Eventix.Modules.Attendance.Domain.Attendees.Errors
         public static readonly Error SomethingHasFailedDuringPersistence = Error.Problem(
             "Attendees.SomethingHasFailedDuringPersistence",
             "Something has failed during persistence of the attendee");
+
+        public static readonly Error SomethingHasFailedDuringCheckIn = Error.Problem(
+            "Attendees.SomethingHasFailedDuringCheckIn",
+            "Something has failed during check in");
+
+        public static readonly Error TicketIdMustBeNotEmpty = Error.Problem(
+            "Attendees.TicketIdMustBeNotEmpty",
+            "Ticket ID must be not empty");
     }
 }

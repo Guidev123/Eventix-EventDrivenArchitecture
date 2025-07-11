@@ -1,4 +1,5 @@
-﻿using Eventix.Modules.Attendance.Domain.Events.Errors;
+﻿using Eventix.Modules.Attendance.Domain.Events.DomainEvents;
+using Eventix.Modules.Attendance.Domain.Events.Errors;
 using Eventix.Modules.Attendance.Domain.Events.ValueObjects;
 using Eventix.Shared.Domain.DomainObjects;
 using Eventix.Shared.Domain.ValueObjects;
@@ -34,6 +35,8 @@ namespace Eventix.Modules.Attendance.Domain.Events.Entities
             DateTime? endsAtUtc = null)
         {
             var @event = new Event(id, title, description, startsAtUtc, location, endsAtUtc);
+
+            @event.Raise(new EventCreatedDomainEvent(id));
 
             return @event;
         }

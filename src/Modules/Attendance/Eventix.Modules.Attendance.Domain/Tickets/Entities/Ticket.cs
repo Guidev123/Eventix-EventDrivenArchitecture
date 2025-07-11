@@ -35,6 +35,8 @@ namespace Eventix.Modules.Attendance.Domain.Tickets.Entities
         {
             var ticket = new Ticket(id, attendeeId, eventId, code, usedAtUtc);
 
+            ticket.Raise(new TicketCreatedDomainEvent(ticket.Id, ticket.EventId));
+
             return ticket;
         }
 

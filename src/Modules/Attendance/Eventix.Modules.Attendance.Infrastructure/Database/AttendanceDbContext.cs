@@ -1,5 +1,6 @@
 ﻿using Eventix.Modules.Attendance.Domain.Attendees.Entities;
 using Eventix.Modules.Attendance.Domain.Events.Entities;
+using Eventix.Modules.Attendance.Domain.Events.Models;
 using Eventix.Modules.Attendance.Domain.Tickets.Entities;
 using Eventix.Shared.Domain.Interfaces;
 using Eventix.Shared.Infrastructure.Inbox.Mappings;
@@ -13,6 +14,9 @@ namespace Eventix.Modules.Attendance.Infrastructure.Database
         internal DbSet<Attendee> Attendees { get; set; } = null!;
         internal DbSet<Ticket> Tickets { get; set; } = null!;
         internal DbSet<Event> Events { get; set; } = null!;
+        internal DbSet<EventStatistic> EventStatistics { get; set; } = null!;
+        internal DbSet<InvalidCheckInTicket> InvalidCheckInTickets { get; set; } = null!;
+        internal DbSet<DuplicateCheckInTicket> DuplicateCheckInTickets { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

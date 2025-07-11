@@ -1,7 +1,5 @@
 ﻿using Eventix.Modules.Ticketing.ArchitectureTests.Abstractions;
 using Eventix.Shared.Application.EventBus;
-using Eventix.Shared.Infrastructure.Inbox;
-using MassTransit;
 using NetArchTest.Rules;
 
 namespace Eventix.Modules.Ticketing.ArchitectureTests.Infrastructure;

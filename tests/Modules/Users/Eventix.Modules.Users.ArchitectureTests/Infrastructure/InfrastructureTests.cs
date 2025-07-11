@@ -1,6 +1,5 @@
 ﻿using Eventix.Modules.Users.ArchitectureTests.Abstractions;
 using Eventix.Shared.Application.EventBus;
-using MassTransit;
 using NetArchTest.Rules;
 
 namespace Eventix.Modules.Users.ArchitectureTests.Infrastructure;

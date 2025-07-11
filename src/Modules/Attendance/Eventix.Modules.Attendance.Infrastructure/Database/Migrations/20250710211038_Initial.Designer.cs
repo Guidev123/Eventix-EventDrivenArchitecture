@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Eventix.Modules.Attendance.Infrastructure.Database.Migrations
 {
     [DbContext(typeof(AttendanceDbContext))]
-    [Migration("20250703005652_Initial")]
+    [Migration("20250710211038_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -46,6 +46,73 @@ namespace Eventix.Modules.Attendance.Infrastructure.Database.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Events", "attendance");
+                });
+
+            modelBuilder.Entity("Eventix.Modules.Attendance.Domain.Events.Models.DuplicateCheckInTicket", b =>
+                {
+                    b.Property<Guid>("EventId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Code")
+                        .HasColumnType("VARCHAR(256)");
+
+                    b.Property<int>("Count")
+                        .HasColumnType("int");
+
+                    b.HasKey("EventId", "Code");
+
+                    b.HasIndex("Code");
+
+                    b.ToTable("DuplicateCheckInTickets", "attendance");
+                });
+
+            modelBuilder.Entity("Eventix.Modules.Attendance.Domain.Events.Models.EventStatistic", b =>
+                {
+                    b.Property<Guid>("EventId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("AttendeesCheckedIn")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("VARCHAR(256)");
+
+                    b.Property<DateTime?>("EndsAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("StartsAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("TicketsSold")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("VARCHAR(80)");
+
+                    b.HasKey("EventId");
+
+                    b.ToTable("EventStatistics", "attendance");
+                });
+
+            modelBuilder.Entity("Eventix.Modules.Attendance.Domain.Events.Models.InvalidCheckInTicket", b =>
+                {
+                    b.Property<Guid>("EventId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Code")
+                        .HasColumnType("VARCHAR(256)");
+
+                    b.Property<int>("Count")
+                        .HasColumnType("int");
+
+                    b.HasKey("EventId", "Code");
+
+                    b.HasIndex("Code");
+
+                    b.ToTable("InvalidCheckInTickets", "attendance");
                 });
 
             modelBuilder.Entity("Eventix.Modules.Attendance.Domain.Tickets.Entities.Ticket", b =>
@@ -216,50 +283,6 @@ namespace Eventix.Modules.Attendance.Infrastructure.Database.Migrations
 
             modelBuilder.Entity("Eventix.Modules.Attendance.Domain.Events.Entities.Event", b =>
                 {
-                    b.OwnsOne("Eventix.Modules.Attendance.Domain.Events.ValueObjects.EventSpecification", "Specification", b1 =>
-                        {
-                            b1.Property<Guid>("EventId")
-                                .HasColumnType("uniqueidentifier");
-
-                            b1.Property<string>("Description")
-                                .IsRequired()
-                                .HasColumnType("VARCHAR(256)")
-                                .HasColumnName("Description");
-
-                            b1.Property<string>("Title")
-                                .IsRequired()
-                                .HasColumnType("VARCHAR(80)")
-                                .HasColumnName("Title");
-
-                            b1.HasKey("EventId");
-
-                            b1.ToTable("Events", "attendance");
-
-                            b1.WithOwner()
-                                .HasForeignKey("EventId");
-                        });
-
-                    b.OwnsOne("Eventix.Shared.Domain.ValueObjects.DateRange", "DateRange", b1 =>
-                        {
-                            b1.Property<Guid>("EventId")
-                                .HasColumnType("uniqueidentifier");
-
-                            b1.Property<DateTime?>("EndsAtUtc")
-                                .HasColumnType("datetime2")
-                                .HasColumnName("EndsAtUtc");
-
-                            b1.Property<DateTime>("StartsAtUtc")
-                                .HasColumnType("datetime2")
-                                .HasColumnName("StartsAtUtc");
-
-                            b1.HasKey("EventId");
-
-                            b1.ToTable("Events", "attendance");
-
-                            b1.WithOwner()
-                                .HasForeignKey("EventId");
-                        });
-
                     b.OwnsOne("Eventix.Shared.Domain.ValueObjects.Location", "Location", b1 =>
                         {
                             b1.Property<Guid>("EventId")
@@ -308,12 +331,127 @@ namespace Eventix.Modules.Attendance.Infrastructure.Database.Migrations
                                 .HasForeignKey("EventId");
                         });
 
+                    b.OwnsOne("Eventix.Modules.Attendance.Domain.Events.ValueObjects.EventSpecification", "Specification", b1 =>
+                        {
+                            b1.Property<Guid>("EventId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<string>("Description")
+                                .IsRequired()
+                                .HasColumnType("VARCHAR(256)")
+                                .HasColumnName("Description");
+
+                            b1.Property<string>("Title")
+                                .IsRequired()
+                                .HasColumnType("VARCHAR(80)")
+                                .HasColumnName("Title");
+
+                            b1.HasKey("EventId");
+
+                            b1.ToTable("Events", "attendance");
+
+                            b1.WithOwner()
+                                .HasForeignKey("EventId");
+                        });
+
+                    b.OwnsOne("Eventix.Shared.Domain.ValueObjects.DateRange", "DateRange", b1 =>
+                        {
+                            b1.Property<Guid>("EventId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<DateTime?>("EndsAtUtc")
+                                .HasColumnType("datetime2")
+                                .HasColumnName("EndsAtUtc");
+
+                            b1.Property<DateTime>("StartsAtUtc")
+                                .HasColumnType("datetime2")
+                                .HasColumnName("StartsAtUtc");
+
+                            b1.HasKey("EventId");
+
+                            b1.ToTable("Events", "attendance");
+
+                            b1.WithOwner()
+                                .HasForeignKey("EventId");
+                        });
+
                     b.Navigation("DateRange")
                         .IsRequired();
 
                     b.Navigation("Location");
 
                     b.Navigation("Specification")
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Eventix.Modules.Attendance.Domain.Events.Models.DuplicateCheckInTicket", b =>
+                {
+                    b.HasOne("Eventix.Modules.Attendance.Domain.Events.Models.EventStatistic", null)
+                        .WithMany("DuplicateCheckInTickets")
+                        .HasForeignKey("EventId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Eventix.Modules.Attendance.Domain.Events.Models.EventStatistic", b =>
+                {
+                    b.OwnsOne("Eventix.Shared.Domain.ValueObjects.Location", "Location", b1 =>
+                        {
+                            b1.Property<Guid>("EventStatisticEventId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<string>("AdditionalInfo")
+                                .IsRequired()
+                                .HasColumnType("VARCHAR(250)")
+                                .HasColumnName("AdditionalInfo");
+
+                            b1.Property<string>("City")
+                                .IsRequired()
+                                .HasColumnType("VARCHAR(100)")
+                                .HasColumnName("City");
+
+                            b1.Property<string>("Neighborhood")
+                                .IsRequired()
+                                .HasColumnType("VARCHAR(100)")
+                                .HasColumnName("Neighborhood");
+
+                            b1.Property<string>("Number")
+                                .IsRequired()
+                                .HasColumnType("VARCHAR(50)")
+                                .HasColumnName("Number");
+
+                            b1.Property<string>("State")
+                                .IsRequired()
+                                .HasColumnType("VARCHAR(50)")
+                                .HasColumnName("State");
+
+                            b1.Property<string>("Street")
+                                .IsRequired()
+                                .HasColumnType("VARCHAR(200)")
+                                .HasColumnName("Street");
+
+                            b1.Property<string>("ZipCode")
+                                .IsRequired()
+                                .HasColumnType("VARCHAR(20)")
+                                .HasColumnName("ZipCode");
+
+                            b1.HasKey("EventStatisticEventId");
+
+                            b1.ToTable("EventStatistics", "attendance");
+
+                            b1.WithOwner()
+                                .HasForeignKey("EventStatisticEventId");
+                        });
+
+                    b.Navigation("Location");
+                });
+
+            modelBuilder.Entity("Eventix.Modules.Attendance.Domain.Events.Models.InvalidCheckInTicket", b =>
+                {
+                    b.HasOne("Eventix.Modules.Attendance.Domain.Events.Models.EventStatistic", null)
+                        .WithMany("InvalidCheckInTickets")
+                        .HasForeignKey("EventId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
@@ -330,6 +468,13 @@ namespace Eventix.Modules.Attendance.Infrastructure.Database.Migrations
                         .HasForeignKey("EventId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Eventix.Modules.Attendance.Domain.Events.Models.EventStatistic", b =>
+                {
+                    b.Navigation("DuplicateCheckInTickets");
+
+                    b.Navigation("InvalidCheckInTickets");
                 });
 #pragma warning restore 612, 618
         }
