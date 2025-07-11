@@ -8,8 +8,7 @@ namespace Eventix.Modules.Ticketing.Domain.Tickets.Entities
 {
     public sealed class Ticket : Entity, IAggregateRoot
     {
-        public const string TICKET_CODE_PATTERN = @"^tc_[0-9a-f]{32}$";
-        public const int TICKET_CODE_LEN = 34;
+        public const int TICKET_CODE_LEN = 30;
         public const string TICKET_CODE_PREFIX = "tc_";
 
         private Ticket(Guid customerId, Guid orderId, Guid eventId, Guid ticketTypeId)
@@ -95,11 +94,6 @@ namespace Eventix.Modules.Ticketing.Domain.Tickets.Entities
                 TICKET_CODE_LEN,
                 TICKET_CODE_LEN,
                 TicketErrors.InvalidCodeLength.Description);
-
-            AssertionConcern.EnsureMatchesPattern(
-                TICKET_CODE_PATTERN,
-                Code,
-                TicketErrors.InvalidCodeFormat.Description);
 
             AssertionConcern.EnsureTrue(
                 Code.StartsWith(TICKET_CODE_PREFIX),
