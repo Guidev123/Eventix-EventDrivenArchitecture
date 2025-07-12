@@ -1,6 +1,6 @@
 ﻿using Eventix.Shared.Application.EventBus;
 
-namespace Eventix.Shared.Infrastructure.EventBus
+namespace Eventix.Shared.Infrastructure.Extensions
 {
     public static class BusNameConvetionsExtension
     {

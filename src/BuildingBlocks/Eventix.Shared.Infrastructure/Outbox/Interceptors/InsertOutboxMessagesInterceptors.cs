@@ -1,7 +1,7 @@
 ﻿using Eventix.Shared.Domain.DomainEvents;
 using Eventix.Shared.Domain.DomainObjects;
+using Eventix.Shared.Infrastructure.Extensions;
 using Eventix.Shared.Infrastructure.Outbox.Models;
-using Eventix.Shared.Infrastructure.Serialization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Newtonsoft.Json;
@@ -37,7 +37,7 @@ namespace Eventix.Shared.Infrastructure.Outbox.Interceptors
                          Id = domainEvent.Id,
                          OccurredOnUtc = domainEvent.OccurredOnUtc,
                          Type = domainEvent.GetType().Name,
-                         Content = JsonConvert.SerializeObject(domainEvent, SerializerSettings.Instance)
+                         Content = JsonConvert.SerializeObject(domainEvent, SerializerExtension.Instance)
                      })
                      .ToList();
 

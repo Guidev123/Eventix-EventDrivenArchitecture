@@ -5,8 +5,8 @@ using Eventix.Modules.Ticketing.IntegrationEvents.Tickets;
 using Eventix.Modules.Users.IntegrationEvents.Users;
 using Eventix.Shared.Application.EventBus;
 using Eventix.Shared.Application.Factories;
+using Eventix.Shared.Infrastructure.Extensions;
 using Eventix.Shared.Infrastructure.Inbox.Models;
-using Eventix.Shared.Infrastructure.Serialization;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
 
@@ -31,7 +31,7 @@ namespace Eventix.Modules.Attendance.Infrastructure.Inbox
             var inboxMessage = new InboxMessage
             {
                 Id = integrationEvent.Id,
-                Content = JsonConvert.SerializeObject(integrationEvent, SerializerSettings.Instance),
+                Content = JsonConvert.SerializeObject(integrationEvent, SerializerExtension.Instance),
                 Type = integrationEvent.GetType().Name,
                 OccurredOnUtc = integrationEvent.OccurredOnUtc
             };

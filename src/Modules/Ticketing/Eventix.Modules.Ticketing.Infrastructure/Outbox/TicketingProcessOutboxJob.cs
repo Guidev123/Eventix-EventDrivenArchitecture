@@ -2,9 +2,9 @@
 using Eventix.Shared.Application.Clock;
 using Eventix.Shared.Application.Factories;
 using Eventix.Shared.Domain.DomainEvents;
+using Eventix.Shared.Infrastructure.Extensions;
 using Eventix.Shared.Infrastructure.Outbox;
 using Eventix.Shared.Infrastructure.Outbox.Factories;
-using Eventix.Shared.Infrastructure.Serialization;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -36,7 +36,7 @@ namespace Eventix.Modules.Ticketing.Infrastructure.Outbox
                 Exception? exception = null;
                 try
                 {
-                    var domainEvent = JsonConvert.DeserializeObject<IDomainEvent>(outboxMessage.Content, SerializerSettings.Instance)!;
+                    var domainEvent = JsonConvert.DeserializeObject<IDomainEvent>(outboxMessage.Content, SerializerExtension.Instance)!;
 
                     using var scope = serviceScopeFactory.CreateScope();
 

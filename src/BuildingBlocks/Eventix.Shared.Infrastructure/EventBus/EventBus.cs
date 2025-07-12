@@ -1,4 +1,5 @@
 ﻿using Eventix.Shared.Application.EventBus;
+using Eventix.Shared.Infrastructure.Extensions;
 using Microsoft.Extensions.Logging;
 using Polly;
 using RabbitMQ.Client;
