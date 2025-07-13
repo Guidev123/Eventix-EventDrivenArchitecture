@@ -6,6 +6,6 @@ namespace Eventix.Modules.Events.Domain.Events.DomainEvents
     {
         public Guid EventId { get; }
 
-        public EventPublishedDomainEvent(Guid eventId) => EventId = eventId;
+        public EventPublishedDomainEvent(Guid eventId) : base(eventId) => EventId = eventId;
     }
 }

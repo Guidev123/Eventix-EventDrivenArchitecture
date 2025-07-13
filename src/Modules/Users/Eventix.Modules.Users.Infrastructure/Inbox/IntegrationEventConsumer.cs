@@ -27,7 +27,7 @@ namespace Eventix.Modules.Users.Infrastructure.Inbox
 
             var inboxMessage = new InboxMessage
             {
-                Id = integrationEvent.Id,
+                Id = integrationEvent.CorrelationId,
                 Content = JsonConvert.SerializeObject(integrationEvent, SerializerExtension.Instance),
                 Type = integrationEvent.GetType().Name,
                 OccurredOnUtc = integrationEvent.OccurredOnUtc

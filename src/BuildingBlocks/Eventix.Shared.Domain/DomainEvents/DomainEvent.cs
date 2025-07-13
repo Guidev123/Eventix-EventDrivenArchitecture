@@ -2,19 +2,24 @@
 {
     public abstract record DomainEvent : IDomainEvent
     {
-        public DomainEvent()
+        public DomainEvent(Guid aggregateId)
         {
-            Id = Guid.NewGuid();
+            AggregateId = aggregateId;
+            CorrelationId = Guid.NewGuid();
             OccurredOnUtc = DateTime.UtcNow;
         }
 
-        public DomainEvent(Guid id, DateTime occurredOnUtc)
+        public DomainEvent(Guid correlationId, Guid aggregateId, DateTime occurredOnUtc)
         {
-            Id = id;
+            CorrelationId = correlationId;
             OccurredOnUtc = occurredOnUtc;
+            AggregateId = aggregateId;
         }
 
-        public Guid Id { get; }
+        public Guid CorrelationId { get; }
+
         public DateTime OccurredOnUtc { get; }
+
+        public Guid AggregateId { get; }
     }
 }

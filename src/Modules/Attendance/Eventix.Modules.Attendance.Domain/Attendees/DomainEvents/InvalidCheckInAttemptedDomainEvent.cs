@@ -7,5 +7,5 @@ namespace Eventix.Modules.Attendance.Domain.Attendees.DomainEvents
         Guid EventId,
         Guid TicketId,
         string TicketCode
-        ) : DomainEvent;
+        ) : DomainEvent(EventId);
 }

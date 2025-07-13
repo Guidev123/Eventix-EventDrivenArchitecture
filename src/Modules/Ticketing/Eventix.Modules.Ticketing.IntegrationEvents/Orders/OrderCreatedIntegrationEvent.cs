@@ -5,13 +5,13 @@ namespace Eventix.Modules.Ticketing.IntegrationEvents.Orders
     public sealed record OrderCreatedIntegrationEvent : IntegrationEvent
     {
         public OrderCreatedIntegrationEvent(
-            Guid id,
+            Guid correlationId,
             DateTime occurredOnUtc,
             Guid orderId,
             decimal totalPrice,
             Guid customerId,
             DateTime createdAtUtc,
-            List<OrderItemDto> orderItems) : base(id, occurredOnUtc)
+            List<OrderItemDto> orderItems) : base(correlationId, occurredOnUtc)
         {
             OrderId = orderId;
             TotalPrice = totalPrice;

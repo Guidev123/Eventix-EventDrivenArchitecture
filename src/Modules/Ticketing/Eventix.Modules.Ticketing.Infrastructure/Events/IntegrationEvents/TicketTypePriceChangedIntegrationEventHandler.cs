@@ -1,12 +1,12 @@
 ﻿using Eventix.Modules.Events.IntegrationEvents.TicketTypes;
 using Eventix.Modules.Ticketing.Application.TicketTypes.UseCases.UpdatePrice;
+using Eventix.Shared.Application.Abstractions;
 using Eventix.Shared.Application.EventBus;
 using Eventix.Shared.Application.Exceptions;
-using MidR.Interfaces;
 
 namespace Eventix.Modules.Ticketing.Infrastructure.Events.IntegrationEvents
 {
-    internal sealed class TicketTypePriceChangedIntegrationEventHandler(IMediator mediator) : IntegrationEventHandler<TicketTypePriceChangedIntegrationEvent>
+    internal sealed class TicketTypePriceChangedIntegrationEventHandler(IMediatorHandler mediator) : IntegrationEventHandler<TicketTypePriceChangedIntegrationEvent>
     {
         public override async Task ExecuteAsync(TicketTypePriceChangedIntegrationEvent integrationEvent, CancellationToken cancellationToken = default)
         {

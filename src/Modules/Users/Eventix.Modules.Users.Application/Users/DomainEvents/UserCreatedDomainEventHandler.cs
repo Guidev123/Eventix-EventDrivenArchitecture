@@ -1,14 +1,14 @@
 ﻿using Eventix.Modules.Users.Application.Users.UseCases.GetById;
 using Eventix.Modules.Users.Domain.Users.DomainEvents;
 using Eventix.Modules.Users.IntegrationEvents.Users;
+using Eventix.Shared.Application.Abstractions;
 using Eventix.Shared.Application.EventBus;
 using Eventix.Shared.Application.Exceptions;
 using Eventix.Shared.Application.Messaging;
-using MidR.Interfaces;
 
 namespace Eventix.Modules.Users.Application.Users.DomainEvents
 {
-    internal sealed class UserCreatedDomainEventHandler(IEventBus eventBus, IMediator mediator) : DomainEventHandler<UserCreatedDomainEvent>
+    internal sealed class UserCreatedDomainEventHandler(IEventBus eventBus, IMediatorHandler mediator) : DomainEventHandler<UserCreatedDomainEvent>
     {
         public override async Task ExecuteAsync(UserCreatedDomainEvent notification, CancellationToken cancellationToken = default)
         {
@@ -18,7 +18,7 @@ namespace Eventix.Modules.Users.Application.Users.DomainEvents
                 throw new EventixException(nameof(GetUserByIdQuery), userResult.Error);
 
             await eventBus.PublishAsync(new UserRegisteredIntegrationEvent(
-                notification.Id,
+                notification.CorrelationId,
                 notification.OccurredOnUtc,
                 userResult.Value.Id,
                 userResult.Value.Email,

@@ -5,13 +5,13 @@ namespace Eventix.Modules.Ticketing.IntegrationEvents.Tickets
     public sealed record TicketCreatedIntegrationEvent : IntegrationEvent
     {
         public TicketCreatedIntegrationEvent(
-            Guid id,
+            Guid correlationId,
             DateTime occurredOnUtc,
             Guid ticketId,
             Guid attendeeId,
             Guid eventId,
             string code
-            ) : base(id, occurredOnUtc)
+            ) : base(correlationId, occurredOnUtc)
         {
             TicketId = ticketId;
             AttendeeId = attendeeId;

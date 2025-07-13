@@ -10,7 +10,7 @@ namespace Eventix.Modules.Events.Application.Events.DomainEvents
         public override async Task ExecuteAsync(EventRescheduledDomainEvent domainEvent, CancellationToken cancellationToken = default)
         {
             await eventBus.PublishAsync(new EventRescheduledIntegrationEvent(
-                domainEvent.Id,
+                domainEvent.CorrelationId,
                 domainEvent.OccurredOnUtc,
                 domainEvent.EventId,
                 domainEvent.StartsAtUtc,

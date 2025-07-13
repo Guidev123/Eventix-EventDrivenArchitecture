@@ -5,7 +5,7 @@ namespace Eventix.Modules.Events.IntegrationEvents.Events
     public sealed record EventPublishedIntegrationEvent : IntegrationEvent
     {
         public EventPublishedIntegrationEvent(
-            Guid id,
+            Guid correlationId,
             DateTime occurredOnUtc,
             Guid eventId,
             string title,
@@ -15,7 +15,7 @@ namespace Eventix.Modules.Events.IntegrationEvents.Events
             DateTime? endsAtUtc,
             LocationRequest? location,
             List<TicketTypeRequest> ticketTypes
-            ) : base(id, occurredOnUtc)
+            ) : base(correlationId, occurredOnUtc)
         {
             EventId = eventId;
             Title = title;

@@ -1,12 +1,12 @@
 ﻿using Eventix.Modules.Events.IntegrationEvents.Events;
 using Eventix.Modules.Ticketing.Application.Events.UseCases.Cancel;
+using Eventix.Shared.Application.Abstractions;
 using Eventix.Shared.Application.EventBus;
 using Eventix.Shared.Application.Exceptions;
-using MidR.Interfaces;
 
 namespace Eventix.Modules.Ticketing.Infrastructure.Events.IntegrationEvents
 {
-    internal sealed class EventCancelledIntegrationEventHandler(IMediator mediator) : IntegrationEventHandler<EventCancelledIntegrationEvent>
+    internal sealed class EventCancelledIntegrationEventHandler(IMediatorHandler mediator) : IntegrationEventHandler<EventCancelledIntegrationEvent>
     {
         public override async Task ExecuteAsync(EventCancelledIntegrationEvent integrationEvent, CancellationToken cancellationToken = default)
         {

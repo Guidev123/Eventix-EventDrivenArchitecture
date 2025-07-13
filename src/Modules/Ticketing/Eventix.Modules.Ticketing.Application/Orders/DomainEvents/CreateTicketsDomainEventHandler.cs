@@ -1,12 +1,12 @@
 ﻿using Eventix.Modules.Ticketing.Application.Tickets.UseCases.CrateTicketBatch;
 using Eventix.Modules.Ticketing.Domain.Orders.DomainEvents;
+using Eventix.Shared.Application.Abstractions;
 using Eventix.Shared.Application.Exceptions;
 using Eventix.Shared.Application.Messaging;
-using MidR.Interfaces;
 
 namespace Eventix.Modules.Ticketing.Application.Orders.DomainEvents
 {
-    internal sealed class CreateTicketsDomainEventHandler(IMediator mediator) : DomainEventHandler<OrderCreatedDomainEvent>
+    internal sealed class CreateTicketsDomainEventHandler(IMediatorHandler mediator) : DomainEventHandler<OrderCreatedDomainEvent>
     {
         public override async Task ExecuteAsync(OrderCreatedDomainEvent domainEvent, CancellationToken cancellationToken = default)
         {

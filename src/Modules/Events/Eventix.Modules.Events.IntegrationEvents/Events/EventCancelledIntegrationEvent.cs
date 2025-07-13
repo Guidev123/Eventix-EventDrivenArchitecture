@@ -4,7 +4,7 @@ namespace Eventix.Modules.Events.IntegrationEvents.Events
 {
     public sealed record EventCancelledIntegrationEvent : IntegrationEvent
     {
-        public EventCancelledIntegrationEvent(Guid id, DateTime occurredOnUtc, Guid eventId) : base(id, occurredOnUtc)
+        public EventCancelledIntegrationEvent(Guid correlationId, DateTime occurredOnUtc, Guid eventId) : base(correlationId, occurredOnUtc)
         {
             EventId = eventId;
         }

@@ -5,12 +5,12 @@ namespace Eventix.Modules.Users.IntegrationEvents.Users
     public sealed record UserUpdatedIntegrationEvent : IntegrationEvent
     {
         public UserUpdatedIntegrationEvent(
-            Guid id,
+            Guid correlationId,
             DateTime occurredOnUtc,
             Guid userId,
             string firstName,
             string lastName
-            ) : base(id, occurredOnUtc)
+            ) : base(correlationId, occurredOnUtc)
         {
             UserId = userId;
             FirstName = firstName;

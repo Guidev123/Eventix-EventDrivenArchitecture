@@ -1,12 +1,12 @@
 ﻿using Eventix.Modules.Attendance.Application.Events.UseCases.Create;
 using Eventix.Modules.Events.IntegrationEvents.Events;
+using Eventix.Shared.Application.Abstractions;
 using Eventix.Shared.Application.EventBus;
 using Eventix.Shared.Application.Exceptions;
-using MidR.Interfaces;
 
 namespace Eventix.Modules.Attendance.Infrastructure.Events.IntegrationEvents
 {
-    internal sealed class EventPublishedIntegrationEventHandler(IMediator mediator) : IntegrationEventHandler<EventPublishedIntegrationEvent>
+    internal sealed class EventPublishedIntegrationEventHandler(IMediatorHandler mediator) : IntegrationEventHandler<EventPublishedIntegrationEvent>
     {
         public override async Task ExecuteAsync(EventPublishedIntegrationEvent integrationEvent, CancellationToken cancellationToken = default)
         {

@@ -2,13 +2,13 @@
 {
     public abstract record IntegrationEvent : IIntegrationEvent
     {
-        protected IntegrationEvent(Guid id, DateTime occurredOnUtc)
+        protected IntegrationEvent(Guid correlationId, DateTime occurredOnUtc)
         {
-            Id = id;
+            CorrelationId = correlationId;
             OccurredOnUtc = occurredOnUtc;
         }
 
-        public Guid Id { get; }
+        public Guid CorrelationId { get; }
         public DateTime OccurredOnUtc { get; }
     }
 }

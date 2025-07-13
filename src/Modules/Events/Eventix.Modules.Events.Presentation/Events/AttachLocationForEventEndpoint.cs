@@ -1,10 +1,10 @@
 ﻿using Eventix.Modules.Events.Application.Events.UseCases.AttachLocation;
+using Eventix.Shared.Application.Abstractions;
 using Eventix.Shared.Presentation.Endpoints;
 using Eventix.Shared.Presentation.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
-using MidR.Interfaces;
 
 namespace Eventix.Modules.Events.Presentation.Events
 {
@@ -14,7 +14,7 @@ namespace Eventix.Modules.Events.Presentation.Events
         {
             app.MapPut("api/v1/events/{id:guid}/location", async (Guid id,
                 AttachEventLocationCommand command,
-                IMediator mediator) =>
+                IMediatorHandler mediator) =>
             {
                 command.SetEventId(id);
                 var result = await mediator.DispatchAsync(command).ConfigureAwait(false);

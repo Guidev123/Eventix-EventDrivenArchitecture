@@ -5,12 +5,12 @@ namespace Eventix.Modules.Ticketing.IntegrationEvents.Payments
     public sealed record OrderPlacedIntegrationEvent : IntegrationEvent
     {
         public OrderPlacedIntegrationEvent(
-            Guid id,
+            Guid correlationId,
             DateTime occurredOnUtc,
             Guid orderId,
             decimal totalPrice,
             string currency
-            ) : base(id, occurredOnUtc)
+            ) : base(correlationId, occurredOnUtc)
         {
             OrderId = orderId;
             TotalPrice = totalPrice;

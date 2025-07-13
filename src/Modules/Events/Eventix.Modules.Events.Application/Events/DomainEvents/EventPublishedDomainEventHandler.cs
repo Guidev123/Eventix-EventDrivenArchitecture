@@ -3,14 +3,14 @@ using Eventix.Modules.Events.Application.TicketTypes.DTOs;
 using Eventix.Modules.Events.Application.TicketTypes.UseCases.GetByEventId;
 using Eventix.Modules.Events.Domain.Events.DomainEvents;
 using Eventix.Modules.Events.IntegrationEvents.Events;
+using Eventix.Shared.Application.Abstractions;
 using Eventix.Shared.Application.EventBus;
 using Eventix.Shared.Application.Exceptions;
 using Eventix.Shared.Application.Messaging;
-using MidR.Interfaces;
 
 namespace Eventix.Modules.Events.Application.Events.DomainEvents
 {
-    internal sealed class EventPublishedDomainEventHandler(IEventBus eventBus, IMediator mediator) : DomainEventHandler<EventPublishedDomainEvent>
+    internal sealed class EventPublishedDomainEventHandler(IEventBus eventBus, IMediatorHandler mediator) : DomainEventHandler<EventPublishedDomainEvent>
     {
         public override async Task ExecuteAsync(EventPublishedDomainEvent notification, CancellationToken cancellationToken = default)
         {
@@ -27,7 +27,7 @@ namespace Eventix.Modules.Events.Application.Events.DomainEvents
             var ticketTypes = ticketTypesResult.Value.TicketTypes;
 
             await eventBus.PublishAsync(new EventPublishedIntegrationEvent(
-                notification.Id,
+                notification.CorrelationId,
                 notification.OccurredOnUtc,
                 @event.Id,
                 @event.Title,

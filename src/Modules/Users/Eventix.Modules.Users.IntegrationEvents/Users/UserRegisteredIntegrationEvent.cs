@@ -4,7 +4,7 @@ namespace Eventix.Modules.Users.IntegrationEvents.Users
 {
     public record UserRegisteredIntegrationEvent : IntegrationEvent
     {
-        public UserRegisteredIntegrationEvent(Guid id, DateTime occurredOnUtc, Guid userId, string email, string firstName, string lastName) : base(id, occurredOnUtc)
+        public UserRegisteredIntegrationEvent(Guid correlationId, DateTime occurredOnUtc, Guid userId, string email, string firstName, string lastName) : base(correlationId, occurredOnUtc)
         {
             UserId = userId;
             Email = email;

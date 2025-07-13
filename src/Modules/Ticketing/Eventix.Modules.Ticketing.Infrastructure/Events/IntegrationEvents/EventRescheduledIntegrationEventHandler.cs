@@ -1,12 +1,12 @@
 ﻿using Eventix.Modules.Events.IntegrationEvents.Events;
 using Eventix.Modules.Ticketing.Application.Events.UseCases.Reschedule;
+using Eventix.Shared.Application.Abstractions;
 using Eventix.Shared.Application.EventBus;
 using Eventix.Shared.Application.Exceptions;
-using MidR.Interfaces;
 
 namespace Eventix.Modules.Ticketing.Infrastructure.Events.IntegrationEvents
 {
-    internal sealed class EventRescheduledIntegrationEventHandler(IMediator mediator) : IntegrationEventHandler<EventRescheduledIntegrationEvent>
+    internal sealed class EventRescheduledIntegrationEventHandler(IMediatorHandler mediator) : IntegrationEventHandler<EventRescheduledIntegrationEvent>
     {
         public override async Task ExecuteAsync(EventRescheduledIntegrationEvent integrationEvent, CancellationToken cancellationToken = default)
         {

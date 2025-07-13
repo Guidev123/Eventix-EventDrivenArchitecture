@@ -6,5 +6,5 @@ namespace Eventix.Modules.Users.Domain.Users.DomainEvents
         Guid UserId,
         string FirstName,
         string LastName
-        ) : DomainEvent;
+        ) : DomainEvent(UserId);
 }
