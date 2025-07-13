@@ -1,5 +1,4 @@
 using Eventix.Api.Configurations;
-using Eventix.Shared.Application.EventSourcing;
 
 WebApplicationBuilder builder = WebApplication
     .CreateBuilder(args)
