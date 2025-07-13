@@ -10,7 +10,7 @@ namespace Eventix.Modules.Users.Application.Users.DomainEvents
         public override async Task ExecuteAsync(UserNameUpdatedDomainEvent domainEvent, CancellationToken cancellationToken = default)
         {
             await eventBus.PublishAsync(new UserUpdatedIntegrationEvent(
-                domainEvent.Id,
+                domainEvent.CorrelationId,
                 domainEvent.OccurredOnUtc,
                 domainEvent.UserId,
                 domainEvent.FirstName,

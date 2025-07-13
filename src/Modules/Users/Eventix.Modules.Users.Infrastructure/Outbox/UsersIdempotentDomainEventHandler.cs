@@ -16,7 +16,7 @@ namespace Eventix.Modules.Users.Infrastructure.Outbox
         {
             using var connection = sqlConnectionFactory.Create();
 
-            var outboxMessageConsumer = new OutboxMessageConsumer(domainEvent.Id, innerHandler.GetType().Name);
+            var outboxMessageConsumer = new OutboxMessageConsumer(domainEvent.CorrelationId, innerHandler.GetType().Name);
 
             if (await IsOutboxMessageProcessedAsync(outboxMessageConsumer, connection, Schemas.Users)) return;
 

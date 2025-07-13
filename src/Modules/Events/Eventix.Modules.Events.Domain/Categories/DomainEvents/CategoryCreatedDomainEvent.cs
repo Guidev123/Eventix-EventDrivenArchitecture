@@ -4,7 +4,7 @@ namespace Eventix.Modules.Events.Domain.Categories.DomainEvents
 {
     public record CategoryCreatedDomainEvent : DomainEvent
     {
-        public CategoryCreatedDomainEvent(Guid categoryId, string name)
+        public CategoryCreatedDomainEvent(Guid categoryId, string name) : base(categoryId)
         {
             CategoryId = categoryId;
             Name = name;

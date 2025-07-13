@@ -4,7 +4,7 @@ namespace Eventix.Modules.Events.Domain.Events.DomainEvents
 {
     public record EventRescheduledDomainEvent : DomainEvent
     {
-        public EventRescheduledDomainEvent(Guid eventId, DateTime startsAtUtc, DateTime? endsAtUtc)
+        public EventRescheduledDomainEvent(Guid eventId, DateTime startsAtUtc, DateTime? endsAtUtc) : base(eventId)
         {
             EventId = eventId;
             StartsAtUtc = startsAtUtc;

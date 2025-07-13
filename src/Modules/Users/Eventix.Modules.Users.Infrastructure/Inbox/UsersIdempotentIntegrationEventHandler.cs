@@ -15,7 +15,7 @@ namespace Eventix.Modules.Users.Infrastructure.Inbox
         {
             using var connection = sqlConnectionFactory.Create();
 
-            var inboxMessageConsumer = new InboxMessageConsumer(integrationEvent.Id, innerHandler.GetType().Name);
+            var inboxMessageConsumer = new InboxMessageConsumer(integrationEvent.CorrelationId, innerHandler.GetType().Name);
 
             if (await IsInboxMessageProcessedAsync(inboxMessageConsumer, connection, Schemas.Users)) return;
 

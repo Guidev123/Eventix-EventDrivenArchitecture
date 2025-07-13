@@ -6,7 +6,7 @@ namespace Eventix.Modules.Events.Domain.Events.DomainEvents
     {
         public Guid EventId { get; }
 
-        public EventCancelledDomainEvent(Guid eventId)
+        public EventCancelledDomainEvent(Guid eventId) : base(eventId)
         {
             EventId = eventId;
         }

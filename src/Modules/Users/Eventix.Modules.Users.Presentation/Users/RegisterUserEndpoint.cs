@@ -1,10 +1,10 @@
 ﻿using Eventix.Modules.Users.Application.Users.UseCases.Register;
+using Eventix.Shared.Application.Abstractions;
 using Eventix.Shared.Presentation.Endpoints;
 using Eventix.Shared.Presentation.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
-using MidR.Interfaces;
 
 namespace Eventix.Modules.Users.Presentation.Users
 {
@@ -12,7 +12,7 @@ namespace Eventix.Modules.Users.Presentation.Users
     {
         public void MapEndpoint(IEndpointRouteBuilder app)
         {
-            app.MapPost("api/v1/users", async (RegisterUserCommand command, IMediator mediator) =>
+            app.MapPost("api/v1/users", async (RegisterUserCommand command, IMediatorHandler mediator) =>
             {
                 var result = await mediator.DispatchAsync(command).ConfigureAwait(false);
 

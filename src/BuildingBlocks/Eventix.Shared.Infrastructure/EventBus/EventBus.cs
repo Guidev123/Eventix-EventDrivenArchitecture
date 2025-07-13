@@ -30,8 +30,6 @@ namespace Eventix.Shared.Infrastructure.EventBus
                 AutomaticRecoveryEnabled = true,
                 NetworkRecoveryInterval = TimeSpan.FromSeconds(10)
             };
-
-            TryConnect().GetAwaiter().GetResult();
         }
 
         public async Task PublishAsync<T>(T integrationEvent, CancellationToken cancellationToken = default)
@@ -47,15 +45,15 @@ namespace Eventix.Shared.Infrastructure.EventBus
             var body = JsonSerializer.SerializeToUtf8Bytes(integrationEvent);
             var properties = new BasicProperties
             {
-                MessageId = integrationEvent.Id.ToString(),
+                MessageId = integrationEvent.CorrelationId.ToString(),
                 Persistent = true,
                 Timestamp = new AmqpTimestamp(DateTimeOffset.UtcNow.ToUnixTimeSeconds())
             };
 
             await _channel.BasicPublishAsync(exchangeName, routingKey, false, properties, body, cancellationToken);
 
-            _logger.LogInformation("Published integration event {EventName} with ID {EventId} to exchange {ExchangeName}.",
-                typeof(T).Name, integrationEvent.Id, exchangeName);
+            _logger.LogInformation("Published integration event {EventName} with ID {CorrelationId} to exchange {ExchangeName}.",
+                typeof(T).Name, integrationEvent.CorrelationId, exchangeName);
         }
 
         public async Task SubscribeAsync<T>(
@@ -81,14 +79,14 @@ namespace Eventix.Shared.Infrastructure.EventBus
                 var body = @event.Body.ToArray();
                 var message = JsonSerializer.Deserialize<T>(body);
 
-                _logger.LogInformation("Received integration event {EventName} with ID {EventId} from queue {QueueName}.",
-                    typeof(T).Name, message?.Id, queueName);
+                _logger.LogInformation("Received integration event {EventName} with ID {CorrelationId} from queue {QueueName}.",
+                    typeof(T).Name, message?.CorrelationId, queueName);
 
                 if (message is not null)
                     await onMessage(message);
 
-                _logger.LogInformation("Processed integration event {EventName} with ID {EventId} from queue {QueueName}.",
-                    typeof(T).Name, message?.Id, queueName);
+                _logger.LogInformation("Processed integration event {EventName} with ID {CorrelationId} from queue {QueueName}.",
+                    typeof(T).Name, message?.CorrelationId, queueName);
             };
 
             await _channel.BasicConsumeAsync(queueName, true, consumer, cancellationToken: cancellationToken);

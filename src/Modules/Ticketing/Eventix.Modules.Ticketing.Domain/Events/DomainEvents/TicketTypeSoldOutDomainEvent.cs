@@ -2,5 +2,5 @@
 
 namespace Eventix.Modules.Ticketing.Domain.Events.DomainEvents
 {
-    public sealed record TicketTypeSoldOutDomainEvent(Guid TicketTypeId) : DomainEvent;
+    public sealed record TicketTypeSoldOutDomainEvent(Guid TicketTypeId) : DomainEvent(TicketTypeId);
 }

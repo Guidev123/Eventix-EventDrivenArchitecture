@@ -6,5 +6,5 @@ namespace Eventix.Modules.Ticketing.Domain.Orders.DomainEvents
         Guid OrderId,
         decimal TotalPrice,
         string Currency
-        ) : DomainEvent;
+        ) : DomainEvent(OrderId);
 }

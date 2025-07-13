@@ -34,7 +34,7 @@ namespace Eventix.Shared.Infrastructure.Outbox.Interceptors
                      })
                      .Select(domainEvent => new OutboxMessage
                      {
-                         Id = domainEvent.Id,
+                         Id = domainEvent.CorrelationId,
                          OccurredOnUtc = domainEvent.OccurredOnUtc,
                          Type = domainEvent.GetType().Name,
                          Content = JsonConvert.SerializeObject(domainEvent, SerializerExtension.Instance)

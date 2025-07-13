@@ -1,12 +1,12 @@
 ﻿using Eventix.Modules.Ticketing.Application.Payments.UseCases.PayOrder;
 using Eventix.Modules.Ticketing.IntegrationEvents.Payments;
+using Eventix.Shared.Application.Abstractions;
 using Eventix.Shared.Application.EventBus;
 using Eventix.Shared.Application.Exceptions;
-using MidR.Interfaces;
 
 namespace Eventix.Modules.Ticketing.Infrastructure.Payments.IntegrationEvents
 {
-    internal sealed class OrderPlacedIntegrationEventHandler(IMediator mediator) : IntegrationEventHandler<OrderPlacedIntegrationEvent>
+    internal sealed class OrderPlacedIntegrationEventHandler(IMediatorHandler mediator) : IntegrationEventHandler<OrderPlacedIntegrationEvent>
     {
         public override async Task ExecuteAsync(OrderPlacedIntegrationEvent integrationEvent, CancellationToken cancellationToken = default)
         {

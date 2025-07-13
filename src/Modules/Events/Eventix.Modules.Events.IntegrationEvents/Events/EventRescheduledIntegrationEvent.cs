@@ -5,12 +5,12 @@ namespace Eventix.Modules.Events.IntegrationEvents.Events
     public sealed record EventRescheduledIntegrationEvent : IntegrationEvent
     {
         public EventRescheduledIntegrationEvent(
-            Guid id,
+            Guid correlationId,
             DateTime occurredOnUtc,
             Guid eventId,
             DateTime startsAtUtc,
             DateTime? endsAtUtc
-            ) : base(id, occurredOnUtc)
+            ) : base(correlationId, occurredOnUtc)
         {
             EventId = eventId;
             StartsAtUtc = startsAtUtc;

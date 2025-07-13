@@ -1,16 +1,18 @@
-﻿using Eventix.Shared.Application.Cache;
+﻿using Eventix.Shared.Application.Abstractions;
+using Eventix.Shared.Application.Cache;
 using Eventix.Shared.Application.Clock;
 using Eventix.Shared.Application.Decorators;
 using Eventix.Shared.Application.EventBus;
+using Eventix.Shared.Application.EventSourcing;
 using Eventix.Shared.Application.Factories;
 using Eventix.Shared.Infrastructure.Authentication;
 using Eventix.Shared.Infrastructure.Authorization;
 using Eventix.Shared.Infrastructure.Cache;
 using Eventix.Shared.Infrastructure.Clock;
+using Eventix.Shared.Infrastructure.EventSourcing;
 using Eventix.Shared.Infrastructure.Factories;
 using Eventix.Shared.Infrastructure.Outbox.Interceptors;
 using FluentValidation;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
@@ -33,6 +35,7 @@ namespace Eventix.Shared.Infrastructure
             services
                 .AddAuthenticationInternal()
                 .AddAuthorizationInternal()
+                .AddEventSourcing()
                 .AddData(databaseConnectionString)
                 .AddCacheService(redisConnectionString)
                 .AddBus(messageBusConnectionString)
@@ -77,6 +80,8 @@ namespace Eventix.Shared.Infrastructure
                 .AddMidR(modulesAssemblies)
                 .AddRequestHandlerDecorators();
 
+            services.TryAddScoped<IMediatorHandler, MediatorHandler>();
+
             return services;
         }
 
@@ -118,6 +123,14 @@ namespace Eventix.Shared.Infrastructure
                 var logger = serviceProvider.GetRequiredService<ILogger<EventBus.EventBus>>();
                 return new EventBus.EventBus(messageBusConnectionString, logger);
             });
+
+            return services;
+        }
+
+        private static IServiceCollection AddEventSourcing(this IServiceCollection services)
+        {
+            services.AddSingleton<IEventStoreService, EventStoreService>();
+            services.AddSingleton<IEventSourcingRepository, EventSourcingRepository>();
 
             return services;
         }

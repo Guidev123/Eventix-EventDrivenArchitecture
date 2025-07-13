@@ -11,7 +11,7 @@ namespace Eventix.Modules.Ticketing.Application.Orders.DomainEvents
         {
             await eventBus.PublishAsync(
                 new OrderPlacedIntegrationEvent(
-                    domainEvent.Id,
+                    domainEvent.CorrelationId,
                     domainEvent.OccurredOnUtc,
                     domainEvent.OrderId,
                     domainEvent.TotalPrice,

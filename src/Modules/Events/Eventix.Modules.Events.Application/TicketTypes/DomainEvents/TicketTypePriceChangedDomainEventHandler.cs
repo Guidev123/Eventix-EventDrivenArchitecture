@@ -10,7 +10,7 @@ namespace Eventix.Modules.Events.Application.TicketTypes.DomainEvents
         public override async Task ExecuteAsync(TicketTypePriceChangedDomainEvent domainEvent, CancellationToken cancellationToken = default)
         {
             await eventBus.PublishAsync(new TicketTypePriceChangedIntegrationEvent(
-                domainEvent.Id,
+                domainEvent.CorrelationId,
                 domainEvent.OccurredOnUtc,
                 domainEvent.TicketId,
                 domainEvent.Price

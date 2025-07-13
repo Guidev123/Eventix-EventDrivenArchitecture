@@ -1,10 +1,10 @@
 ﻿using Eventix.Modules.Events.Application.Categories.UseCases.Archive;
+using Eventix.Shared.Application.Abstractions;
 using Eventix.Shared.Presentation.Endpoints;
 using Eventix.Shared.Presentation.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
-using MidR.Interfaces;
 
 namespace Eventix.Modules.Events.Presentation.Categories
 {
@@ -12,7 +12,7 @@ namespace Eventix.Modules.Events.Presentation.Categories
     {
         public void MapEndpoint(IEndpointRouteBuilder app)
         {
-            app.MapPut("api/v1/categories/{id:guid}/archive", async (Guid id, IMediator mediator) =>
+            app.MapPut("api/v1/categories/{id:guid}/archive", async (Guid id, IMediatorHandler mediator) =>
             {
                 var result = await mediator.DispatchAsync(new ArchiveCategoryCommand(id)).ConfigureAwait(false);
 

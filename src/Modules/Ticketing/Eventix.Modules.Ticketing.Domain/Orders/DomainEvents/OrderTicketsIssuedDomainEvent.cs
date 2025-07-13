@@ -2,5 +2,5 @@
 
 namespace Eventix.Modules.Ticketing.Domain.Orders.DomainEvents
 {
-    public sealed record OrderTicketsIssuedDomainEvent(Guid OrderId) : DomainEvent;
+    public sealed record OrderTicketsIssuedDomainEvent(Guid OrderId) : DomainEvent(OrderId);
 }

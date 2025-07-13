@@ -1,12 +1,12 @@
 ﻿using Eventix.Modules.Ticketing.Application.Customers.UseCases.Update;
 using Eventix.Modules.Users.IntegrationEvents.Users;
+using Eventix.Shared.Application.Abstractions;
 using Eventix.Shared.Application.EventBus;
 using Eventix.Shared.Application.Exceptions;
-using MidR.Interfaces;
 
 namespace Eventix.Modules.Ticketing.Infrastructure.Customers.IntegrationEvents
 {
-    internal sealed class UserUpdatedIntegrationEventHandler(IMediator mediator) : IntegrationEventHandler<UserUpdatedIntegrationEvent>
+    internal sealed class UserUpdatedIntegrationEventHandler(IMediatorHandler mediator) : IntegrationEventHandler<UserUpdatedIntegrationEvent>
     {
         public override async Task ExecuteAsync(UserUpdatedIntegrationEvent integrationEvent, CancellationToken cancellationToken = default)
         {

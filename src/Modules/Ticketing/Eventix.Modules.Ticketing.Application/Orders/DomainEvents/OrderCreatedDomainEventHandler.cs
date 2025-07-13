@@ -1,14 +1,14 @@
 ﻿using Eventix.Modules.Ticketing.Application.Orders.UseCases.GetById;
 using Eventix.Modules.Ticketing.Domain.Orders.DomainEvents;
 using Eventix.Modules.Ticketing.IntegrationEvents.Orders;
+using Eventix.Shared.Application.Abstractions;
 using Eventix.Shared.Application.EventBus;
 using Eventix.Shared.Application.Exceptions;
 using Eventix.Shared.Application.Messaging;
-using MidR.Interfaces;
 
 namespace Eventix.Modules.Ticketing.Application.Orders.DomainEvents
 {
-    internal sealed class OrderCreatedDomainEventHandler(IEventBus eventBus, IMediator mediator) : DomainEventHandler<OrderCreatedDomainEvent>
+    internal sealed class OrderCreatedDomainEventHandler(IEventBus eventBus, IMediatorHandler mediator) : DomainEventHandler<OrderCreatedDomainEvent>
     {
         public override async Task ExecuteAsync(OrderCreatedDomainEvent domainEvent, CancellationToken cancellationToken = default)
         {
@@ -19,7 +19,7 @@ namespace Eventix.Modules.Ticketing.Application.Orders.DomainEvents
             var order = result.Value;
 
             await eventBus.PublishAsync(new OrderCreatedIntegrationEvent(
-                domainEvent.Id,
+                domainEvent.CorrelationId,
                 domainEvent.OccurredOnUtc,
                 order.OrderId,
                 order.TotalPrice!.Value,

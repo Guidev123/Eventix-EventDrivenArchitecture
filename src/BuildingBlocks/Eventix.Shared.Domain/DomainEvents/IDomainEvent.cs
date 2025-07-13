@@ -1,10 +1,9 @@
-﻿using MidR.Interfaces;
+﻿using Eventix.Shared.Domain.DomainObjects;
 
 namespace Eventix.Shared.Domain.DomainEvents
 {
-    public interface IDomainEvent : INotification
+    public interface IDomainEvent : IEvent
     {
-        Guid Id { get; }
-        DateTime OccurredOnUtc { get; }
+        Guid AggregateId { get; }
     }
 }

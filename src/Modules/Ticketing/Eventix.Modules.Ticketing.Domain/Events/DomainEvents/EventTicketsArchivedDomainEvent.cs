@@ -2,5 +2,5 @@
 
 namespace Eventix.Modules.Ticketing.Domain.Events.DomainEvents
 {
-    public sealed record EventTicketsArchivedDomainEvent(Guid EventId) : DomainEvent;
+    public sealed record EventTicketsArchivedDomainEvent(Guid EventId) : DomainEvent(EventId);
 }

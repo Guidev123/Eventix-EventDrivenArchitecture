@@ -1,5 +1,6 @@
 ﻿using Eventix.Modules.Attendance.Infrastructure.Database;
 using Eventix.Shared.Application.Clock;
+using Eventix.Shared.Application.EventSourcing;
 using Eventix.Shared.Application.Factories;
 using Eventix.Shared.Domain.DomainEvents;
 using Eventix.Shared.Infrastructure.Extensions;
@@ -19,6 +20,7 @@ namespace Eventix.Modules.Attendance.Infrastructure.Outbox
         IServiceScopeFactory serviceScopeFactory,
         IDateTimeProvider dateTimeProvider,
         IOptions<OutboxOptions> options,
+        IEventSourcingRepository eventSourcingRepository,
         ILogger<AttendanceProcessOutboxJob> logger) : ProcessOutboxJob(dateTimeProvider), IJob
     {
         public async Task Execute(IJobExecutionContext context)
@@ -45,10 +47,11 @@ namespace Eventix.Modules.Attendance.Infrastructure.Outbox
                         scope.ServiceProvider,
                         Application.AssemblyReference.Assembly);
 
-                    foreach (var handler in domainEventHandlers)
-                    {
-                        await handler.ExecuteAsync(domainEvent);
-                    }
+                    var handlerTasks = domainEventHandlers.Select(handler => handler.ExecuteAsync(domainEvent));
+                    await Task.WhenAll(handlerTasks);
+
+                    if (domainEvent.AggregateId != Guid.Empty)
+                        await eventSourcingRepository.SaveAsync(domainEvent);
                 }
                 catch (Exception ex)
                 {

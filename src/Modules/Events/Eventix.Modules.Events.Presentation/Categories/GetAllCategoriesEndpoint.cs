@@ -1,11 +1,11 @@
 ﻿using Eventix.Modules.Events.Application.Categories.UseCases.GetAll;
+using Eventix.Shared.Application.Abstractions;
 using Eventix.Shared.Presentation.Endpoints;
 using Eventix.Shared.Presentation.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
-using MidR.Interfaces;
 
 namespace Eventix.Modules.Events.Presentation.Categories
 {
@@ -13,7 +13,7 @@ namespace Eventix.Modules.Events.Presentation.Categories
     {
         public void MapEndpoint(IEndpointRouteBuilder app)
         {
-            app.MapGet("api/v1/categories", async (IMediator mediator,
+            app.MapGet("api/v1/categories", async (IMediatorHandler mediator,
                                                   [FromQuery] int page = PresentationModule.DEFAULT_PAGE,
                                                   [FromQuery] int pageSize = PresentationModule.DEFAULT_PAGE_SIZE) =>
             {

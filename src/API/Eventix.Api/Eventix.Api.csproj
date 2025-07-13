@@ -11,6 +11,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<PackageReference Include="AspNetCore.HealthChecks.EventStore.gRPC" Version="9.0.0" />
 		<PackageReference Include="AspNetCore.HealthChecks.Rabbitmq" Version="9.0.0" />
 		<PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="9.0.0" />
 		<PackageReference Include="AspNetCore.HealthChecks.Uris" Version="9.0.0" />

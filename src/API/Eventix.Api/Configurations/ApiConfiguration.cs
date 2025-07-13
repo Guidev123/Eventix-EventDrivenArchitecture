@@ -28,6 +28,7 @@ namespace Eventix.Api.Configurations
             var dbConnectionString = builder.Configuration.GetConnectionString("Database") ?? string.Empty;
             var redisConnectionString = builder.Configuration.GetConnectionString("Cache") ?? string.Empty;
             var messageBusConnectionString = builder.Configuration.GetConnectionString("MessageBus") ?? string.Empty;
+            var eventStoreString = builder.Configuration.GetConnectionString("EventStore") ?? string.Empty;
 
             builder.Services.AddOpenApi();
 
@@ -38,7 +39,7 @@ namespace Eventix.Api.Configurations
 
             builder.AddExceptionHandler();
 
-            builder.AddCustomHealthChecks(dbConnectionString, messageBusConnectionString, redisConnectionString);
+            builder.AddCustomHealthChecks(dbConnectionString, messageBusConnectionString, redisConnectionString, eventStoreString);
 
             builder.AddAllModules(dbConnectionString, messageBusConnectionString, redisConnectionString);
 
@@ -57,7 +58,8 @@ namespace Eventix.Api.Configurations
             this WebApplicationBuilder builder,
             string dbConnectionString,
             string messageBusConnectionString,
-            string redisConnectionString
+            string redisConnectionString,
+            string eventStoreString
         )
         {
             var appSettingsSection = builder.Configuration.GetSection(nameof(KeyCloakExtensions));
@@ -67,6 +69,7 @@ namespace Eventix.Api.Configurations
             builder.Services
                 .AddHealthChecks()
                 .AddSqlServer(dbConnectionString)
+                .AddEventStore(eventStoreString)
                 .AddRedis(redisConnectionString)
                 .AddRabbitMQ(sp =>
                 {
