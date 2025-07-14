@@ -6,7 +6,8 @@
       "BaseUrl": "",
       "ConfidentialClientId": "",
       "ConfidentialClientSecret": "",
-      "PublicClientId": ""
+      "PublicClientId": "",
+      "PublicClientSecret": ""
     },
     "Outbox": {
       "IntervalInSeconds": 5,

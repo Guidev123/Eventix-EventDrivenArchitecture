@@ -8,5 +8,6 @@
         public string ConfidentialClientId { get; set; } = string.Empty;
         public string ConfidentialClientSecret { get; set; } = string.Empty;
         public string PublicClientId { get; set; } = string.Empty;
+        public string PublicClientSecret { get; set; } = string.Empty;
     }
 }

@@ -55,7 +55,12 @@ namespace Eventix.Shared.Infrastructure
 
         private static IServiceCollection AddBackgroundJobs(this IServiceCollection services)
         {
-            services.AddQuartz();
+            services.AddQuartz(c =>
+            {
+                var schedulerId = Guid.NewGuid();
+                c.SchedulerId = $"default-id-{schedulerId}";
+                c.SchedulerName = $"dafault-name-{schedulerId}";
+            });
 
             services.AddQuartzHostedService(options => options.WaitForJobsToComplete = true);
 
