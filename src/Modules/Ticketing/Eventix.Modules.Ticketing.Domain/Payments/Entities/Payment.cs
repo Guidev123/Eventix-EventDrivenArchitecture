@@ -51,12 +51,11 @@ namespace Eventix.Modules.Ticketing.Domain.Payments.Entities
                 && AmountRefunded.Amount + refundAmount > Amount.Amount)
                 return Result.Failure(PaymentErrors.NotEnoughFunds);
 
-            if (AmountRefunded is not null)
-            {
-                var amountRefunded = AmountRefunded.Amount;
-                var currentAmountRefunded = amountRefunded += refundAmount;
-                AmountRefunded = (currentAmountRefunded, AmountRefunded.Currency);
-            }
+            var amountRefunded = AmountRefunded is null ? decimal.Zero : AmountRefunded.Amount;
+            var currencyAmountRefunded = AmountRefunded is null ? Amount.Currency : AmountRefunded.Currency;
+
+            var currentAmountRefunded = amountRefunded += refundAmount;
+            AmountRefunded = (currentAmountRefunded, currencyAmountRefunded);
 
             if (Amount.Amount == AmountRefunded?.Amount)
             {

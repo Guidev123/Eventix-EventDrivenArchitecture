@@ -54,11 +54,11 @@ namespace Eventix.Modules.Ticketing.Domain.Events.Errors
 
         public static readonly Error CurrencyTooShort = Error.Problem(
             "Tickets.CurrencyTooShort",
-            $"Currency length must be greater than {Money.MIN_CURRENCY_LENGTH} characters.");
+            $"Currency length must be greater than {Money.CURRENCY_CODE_LEN} characters.");
 
         public static readonly Error CurrencyTooLong = Error.Problem(
             "Tickets.CurrencyTooLong",
-            $"Currency length must be less than {Money.MAX_CURRENCY_LENGTH} characters.");
+            $"Currency length must be less than {Money.CURRENCY_CODE_LEN} characters.");
 
         public static readonly Error InvalidTicketTypeId = Error.Problem(
            "TicketType.InvalidTicketTypeId",

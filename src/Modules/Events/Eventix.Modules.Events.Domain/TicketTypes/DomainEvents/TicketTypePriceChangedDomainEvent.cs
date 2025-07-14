@@ -6,11 +6,11 @@ namespace Eventix.Modules.Events.Domain.TicketTypes.DomainEvents
     {
         public TicketTypePriceChangedDomainEvent(Guid ticketId, decimal price) : base(ticketId)
         {
-            TicketId = ticketId;
+            TicketTypeId = ticketId;
             Price = price;
         }
 
-        public Guid TicketId { get; }
+        public Guid TicketTypeId { get; }
         public decimal Price { get; }
     }
 }

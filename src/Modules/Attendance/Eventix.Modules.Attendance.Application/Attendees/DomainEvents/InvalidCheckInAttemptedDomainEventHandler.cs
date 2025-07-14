@@ -7,9 +7,9 @@ using System.Data;
 
 namespace Eventix.Modules.Attendance.Application.Attendees.DomainEvents
 {
-    internal sealed class InvalidCheckInAttemptedDomainEventHandler(ISqlConnectionFactory sqlConnectionFactory) : DomainEventHandler<InvalidCheckInAttemptedDomainEvent>
+    internal sealed class InvalidCheckInAttemptedDomainEventHandler(ISqlConnectionFactory sqlConnectionFactory) : DomainEventHandler<InvalidCheckInAttemptDomainEvent>
     {
-        public override async Task ExecuteAsync(InvalidCheckInAttemptedDomainEvent domainEvent, CancellationToken cancellationToken = default)
+        public override async Task ExecuteAsync(InvalidCheckInAttemptDomainEvent domainEvent, CancellationToken cancellationToken = default)
         {
             using var connection = sqlConnectionFactory.Create();
 
@@ -34,7 +34,7 @@ namespace Eventix.Modules.Attendance.Application.Attendees.DomainEvents
             await connection.ExecuteAsync(sql, new { invalidCheckInTicket.EventId, invalidCheckInTicket.Code, invalidCheckInTicket.Count });
         }
 
-        private static async Task CreateCheckInTicketsAsync(InvalidCheckInAttemptedDomainEvent domainEvent, IDbConnection connection)
+        private static async Task CreateCheckInTicketsAsync(InvalidCheckInAttemptDomainEvent domainEvent, IDbConnection connection)
         {
             const string sql = @"
                 INSERT INTO attendance.InvalidCheckInTickets (EventId, Code, Count)

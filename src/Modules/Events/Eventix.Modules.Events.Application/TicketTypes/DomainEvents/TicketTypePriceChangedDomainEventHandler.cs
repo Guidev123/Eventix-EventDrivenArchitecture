@@ -12,7 +12,7 @@ namespace Eventix.Modules.Events.Application.TicketTypes.DomainEvents
             await eventBus.PublishAsync(new TicketTypePriceChangedIntegrationEvent(
                 domainEvent.CorrelationId,
                 domainEvent.OccurredOnUtc,
-                domainEvent.TicketId,
+                domainEvent.TicketTypeId,
                 domainEvent.Price
                 ), cancellationToken);
         }

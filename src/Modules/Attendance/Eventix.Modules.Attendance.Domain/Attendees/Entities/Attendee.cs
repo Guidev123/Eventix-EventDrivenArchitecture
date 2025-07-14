@@ -52,14 +52,14 @@ namespace Eventix.Modules.Attendance.Domain.Attendees.Entities
         {
             if (Id != ticket.AttendeeId)
             {
-                Raise(new InvalidCheckInAttemptedDomainEvent(Id, ticket.EventId, ticket.Id, ticket.Code));
+                Raise(new InvalidCheckInAttemptDomainEvent(Id, ticket.EventId, ticket.Id, ticket.Code));
 
                 return Result.Failure(TicketErrors.InvalidCheckIn);
             }
 
             if (ticket.UsedAtUtc.HasValue)
             {
-                Raise(new DuplicateCheckInAttemptedDomainEvent(Id, ticket.EventId, ticket.Id, ticket.Code));
+                Raise(new DuplicateCheckInAttemptDomainEvent(Id, ticket.EventId, ticket.Id, ticket.Code));
 
                 return Result.Failure(TicketErrors.DuplicateCheckIn);
             }

@@ -39,7 +39,7 @@ namespace Eventix.Modules.Attendance.Domain.Tickets.Entities
             return ticket;
         }
 
-        internal void MarkAsUsed()
+        public void MarkAsUsed()
         {
             UsedAtUtc = DateTime.UtcNow;
 

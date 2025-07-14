@@ -8,9 +8,9 @@ using System.Data;
 namespace Eventix.Modules.Attendance.Application.Attendees.DomainEvents
 {
     internal sealed class DuplicateCheckInAttemptedDomainEventHandler(ISqlConnectionFactory sqlConnectionFactory)
-        : DomainEventHandler<DuplicateCheckInAttemptedDomainEvent>
+        : DomainEventHandler<DuplicateCheckInAttemptDomainEvent>
     {
-        public override async Task ExecuteAsync(DuplicateCheckInAttemptedDomainEvent domainEvent, CancellationToken cancellationToken = default)
+        public override async Task ExecuteAsync(DuplicateCheckInAttemptDomainEvent domainEvent, CancellationToken cancellationToken = default)
         {
             using var connection = sqlConnectionFactory.Create();
 
@@ -35,7 +35,7 @@ namespace Eventix.Modules.Attendance.Application.Attendees.DomainEvents
             await connection.ExecuteAsync(sql, new { duplicateCheckInTicket.EventId, duplicateCheckInTicket.Code, duplicateCheckInTicket.Count });
         }
 
-        private static async Task CreateCheckInTicketsAsync(DuplicateCheckInAttemptedDomainEvent domainEvent, IDbConnection connection)
+        private static async Task CreateCheckInTicketsAsync(DuplicateCheckInAttemptDomainEvent domainEvent, IDbConnection connection)
         {
             const string sql = @"
                 INSERT INTO attendance.DuplicateCheckInTickets (EventId, Code, Count)

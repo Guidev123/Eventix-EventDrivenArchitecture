@@ -2,10 +2,10 @@
 
 namespace Eventix.Modules.Attendance.Domain.Attendees.DomainEvents
 {
-    public sealed record InvalidCheckInAttemptedDomainEvent(
+    public sealed record DuplicateCheckInAttemptDomainEvent(
         Guid AttendeeId,
         Guid EventId,
         Guid TicketId,
         string TicketCode
-        ) : DomainEvent(EventId);
+        ) : DomainEvent(AttendeeId);
 }

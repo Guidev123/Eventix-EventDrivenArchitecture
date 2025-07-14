@@ -40,6 +40,8 @@ namespace Eventix.Modules.Ticketing.Domain.Events.Entities
             if (DateRange.StartsAtUtc == startsAtUtc
                 && DateRange.EndsAtUtc == endsAtUtc) return;
 
+            Raise(new EventRescheduledDomainEvent(Id));
+
             DateRange = (startsAtUtc, endsAtUtc);
         }
 
@@ -49,6 +51,8 @@ namespace Eventix.Modules.Ticketing.Domain.Events.Entities
                 return Result.Failure(EventErrors.AlreadyCanceled);
 
             IsCanceled = true;
+
+            Raise(new EventCancelledDomainEvent(Id));
 
             return Result.Success();
         }
