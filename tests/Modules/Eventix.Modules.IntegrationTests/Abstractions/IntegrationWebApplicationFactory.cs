@@ -48,8 +48,6 @@ namespace Eventix.Modules.IntegrationTests.Abstractions
                 .WithImage("rabbitmq:3-management")
                 .WithUsername("guest")
                 .WithPassword("guest")
-                .WithPortBinding(5672, 5672)
-                .WithPortBinding(15672, 15672)
                 .Build();
 
         protected override void ConfigureWebHost(IWebHostBuilder builder)
