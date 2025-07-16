@@ -85,12 +85,6 @@ namespace Eventix.Modules.IntegrationTests.Abstractions
             });
         }
 
-        protected override IHost CreateHost(IHostBuilder builder)
-        {
-            builder.UseEnvironment("Testing");
-            return base.CreateHost(builder);
-        }
-
         public async Task InitializeAsync()
         {
             await _sqlServerContainer.StartAsync();

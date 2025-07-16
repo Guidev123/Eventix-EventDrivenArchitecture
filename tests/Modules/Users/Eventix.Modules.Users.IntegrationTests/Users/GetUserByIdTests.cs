@@ -11,7 +11,6 @@ namespace Eventix.Modules.Users.IntegrationTests.Users
         public GetUserByIdTests(IntegrationWebApplicationFactory factory)
             : base(factory)
         {
-            factory.SeedRoleDataAsync().GetAwaiter().GetResult();
         }
 
         [Fact(DisplayName = "Should Return Error When User Does Not Exist")]
@@ -33,6 +32,7 @@ namespace Eventix.Modules.Users.IntegrationTests.Users
         public async Task Should_ReturnUser_WhenUserExist()
         {
             // Arrange
+            await _factory.SeedRoleDataAsync();
             var command = new RegisterUserCommand(
                 _faker.Person.FirstName,
                 _faker.Person.LastName,

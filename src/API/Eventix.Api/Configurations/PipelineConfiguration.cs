@@ -22,13 +22,10 @@ namespace Eventix.Api.Configurations
 
             app.MapEndpoints();
 
-            if (!app.Environment.IsEnvironment("Testing"))
+            app.MapHealthChecks("healthz", new HealthCheckOptions
             {
-                app.MapHealthChecks("healthz", new HealthCheckOptions
-                {
-                    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
-                });
-            }
+                ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+            });
 
             app.UseSerilogRequestLogging();
 
