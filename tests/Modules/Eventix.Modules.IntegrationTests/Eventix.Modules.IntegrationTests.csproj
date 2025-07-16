@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<TargetFramework>net9.0</TargetFramework>
@@ -31,8 +31,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\..\..\..\src\API\Eventix.Api\Eventix.Api.csproj" />
-	  <ProjectReference Include="..\..\..\..\src\Modules\Users\Eventix.Modules.Users.Infrastructure\Eventix.Modules.Users.Infrastructure.csproj" />
+	  <ProjectReference Include="..\..\..\src\API\Eventix.Api\Eventix.Api.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -40,14 +39,12 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <None Update="Abstractions\Files\RolesSeedData.sql">
-	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  </None>
 	  <None Update="Abstractions\Files\eventix-realm-export.json">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </None>
+	  <None Update="Abstractions\Files\RolesSeedData.sql">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
 	</ItemGroup>
-
-	<ProjectExtensions><VisualStudio><UserProperties /></VisualStudio></ProjectExtensions>
 
 </Project>

@@ -1,7 +1,7 @@
 ﻿using DotNet.Testcontainers.Builders;
 using DotNet.Testcontainers.Networks;
+using Eventix.Modules.IntegrationTests.Abstractions.Files;
 using Eventix.Modules.Users.Infrastructure.Identity;
-using Eventix.Modules.Users.IntegrationTests.Abstractions.Files;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
@@ -13,7 +13,7 @@ using Testcontainers.MsSql;
 using Testcontainers.RabbitMq;
 using Testcontainers.Redis;
 
-namespace Eventix.Modules.Users.IntegrationTests.Abstractions
+namespace Eventix.Modules.IntegrationTests.Abstractions
 {
     public class IntegrationWebApplicationFactory : WebApplicationFactory<Program>, IAsyncLifetime
     {

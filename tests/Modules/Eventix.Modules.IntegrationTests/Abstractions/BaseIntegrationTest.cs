@@ -7,7 +7,7 @@ using Microsoft.Extensions.Options;
 using System.Net.Http.Json;
 using System.Text.Json.Serialization;
 
-namespace Eventix.Modules.Users.IntegrationTests.Abstractions
+namespace Eventix.Modules.IntegrationTests.Abstractions
 {
     [Collection(nameof(IntegrationTestCollection))]
     public class BaseIntegrationTest : IDisposable
@@ -16,7 +16,6 @@ namespace Eventix.Modules.Users.IntegrationTests.Abstractions
         protected readonly IMediatorHandler _mediatorHandler;
         protected static readonly Faker _faker = new();
         protected readonly IntegrationWebApplicationFactory _factory;
-        protected readonly UsersDbContext _dbContext;
         protected readonly HttpClient _httpClient;
         private readonly KeyCloakOptions _options;
 
@@ -27,7 +26,6 @@ namespace Eventix.Modules.Users.IntegrationTests.Abstractions
             _httpClient = factory.CreateClient();
             _mediatorHandler = _serviceScope.ServiceProvider.GetRequiredService<IMediatorHandler>();
             _options = _serviceScope.ServiceProvider.GetRequiredService<IOptions<KeyCloakOptions>>().Value;
-            _dbContext = _serviceScope.ServiceProvider.GetRequiredService<UsersDbContext>();
         }
 
         protected async Task LoginAsync(string email, string password)

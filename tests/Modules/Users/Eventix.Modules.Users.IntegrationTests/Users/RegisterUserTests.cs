@@ -20,10 +20,10 @@ namespace Eventix.Modules.Users.IntegrationTests.Users
             { _faker.Internet.Email(), _faker.Internet.Password(), " ", _faker.Name.FirstName(), "" }
         };
 
-        [Theory(DisplayName = "Should Return Failure When Request Is Not Valid")]
+        [Theory(DisplayName = "Should Return Failure When Command Is Not Valid")]
         [Trait("Users Integration Tests", "Use Cases Tests")]
         [MemberData(nameof(InvalidRequests))]
-        public async Task Should_ReturnBadRequest_WhenRequestIsNotValid(
+        public async Task Should_ReturnBadRequest_WhenCommandIsNotValid(
             string email,
             string password,
             string confirmPassword,
@@ -32,9 +32,6 @@ namespace Eventix.Modules.Users.IntegrationTests.Users
             )
         {
             // Arrange
-            if (!RoleDataWasSeed)
-                RoleDataWasSeed = await _factory.SeedRoleDataAsync();
-
             var command = new RegisterUserCommand(firstName, lastName, email, password, confirmPassword);
 
             // Act
@@ -44,6 +41,31 @@ namespace Eventix.Modules.Users.IntegrationTests.Users
             result.Error.Should().NotBeNull();
             result.IsFailure.Should().BeTrue();
             result.IsSuccess.Should().BeFalse();
+        }
+
+        [Fact(DisplayName = "Should Return Success When Command Is Valid")]
+        [Trait("Users Integration Tests", "Use Cases Tests")]
+        public async Task Should_ReturnSuccess_WhenCommandIsValid()
+        {
+            // Arrange
+            await _factory.SeedRoleDataAsync();
+
+            var command = new RegisterUserCommand(
+                _faker.Person.FirstName,
+                _faker.Person.LastName,
+                _faker.Internet.Email(),
+                "Admin@123",
+                "Admin@123"
+                );
+
+            // Act
+            var result = await _mediatorHandler.DispatchAsync(command);
+
+            // Assert
+            result.Error.Should().BeNull();
+            result.IsFailure.Should().BeFalse();
+            result.IsSuccess.Should().BeTrue();
+            result.Value.Should().NotBeNull();
         }
 
         private static bool RoleDataWasSeed = false;
