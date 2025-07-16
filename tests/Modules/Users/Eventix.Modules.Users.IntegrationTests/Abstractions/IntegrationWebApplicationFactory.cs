@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Testcontainers.EventStoreDb;
 using Testcontainers.Keycloak;
 using Testcontainers.MsSql;
@@ -82,6 +83,12 @@ namespace Eventix.Modules.Users.IntegrationTests.Abstractions
                     o.PublicClientSecret = "0rp1cjOHp5SZH0ovMUiVOvDJMz52MeIt";
                 });
             });
+        }
+
+        protected override IHost CreateHost(IHostBuilder builder)
+        {
+            builder.UseEnvironment("Testing");
+            return base.CreateHost(builder);
         }
 
         public async Task InitializeAsync()

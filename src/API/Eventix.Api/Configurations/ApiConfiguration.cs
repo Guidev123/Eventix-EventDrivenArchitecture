@@ -39,7 +39,8 @@ namespace Eventix.Api.Configurations
 
             builder.AddExceptionHandler();
 
-            builder.AddCustomHealthChecks(dbConnectionString, messageBusConnectionString, redisConnectionString, eventStoreString);
+            if (!builder.Environment.IsEnvironment("Testing"))
+                builder.AddCustomHealthChecks(dbConnectionString, messageBusConnectionString, redisConnectionString, eventStoreString);
 
             builder.AddAllModules(dbConnectionString, messageBusConnectionString, redisConnectionString);
 
