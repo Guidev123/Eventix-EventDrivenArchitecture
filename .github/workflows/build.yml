@@ -6,18 +6,15 @@ on:
     branches: [ "main" ]
 
 env:
-    DOTNET_VERSION: "9.x"
+  DOTNET_VERSION: "9.x"
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
-    defaults:
-     run:
-      working-directory: Eventix
-
     steps:
-    - uses: actions/checkout@v4
+    - name: Checkout
+      uses: actions/checkout@v4
   
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
