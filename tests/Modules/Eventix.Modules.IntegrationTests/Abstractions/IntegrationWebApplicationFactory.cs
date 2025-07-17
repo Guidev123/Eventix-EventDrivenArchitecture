@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Testcontainers.EventStoreDb;
 using Testcontainers.Keycloak;
 using Testcontainers.MsSql;
@@ -50,15 +49,22 @@ namespace Eventix.Modules.IntegrationTests.Abstractions
                 .WithPassword("guest")
                 .Build();
 
+        private string _sqlServerConnectionString = string.Empty;
+        private string _redisConnectionString = string.Empty;
+        private string _eventStoreConnectionString = string.Empty;
+        private string _messageBusConnectionString = string.Empty;
+        private string _keycloakAddress = string.Empty;
+
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
-            Environment.SetEnvironmentVariable("ConnectionStrings:Database", SqlServerConnectionString);
-            Environment.SetEnvironmentVariable("ConnectionStrings:Cache", RedisConnectionString);
-            Environment.SetEnvironmentVariable("ConnectionStrings:EventStore", EventStoreConnectionString);
-            Environment.SetEnvironmentVariable("ConnectionStrings:MessageBus", MessageBusConnectionString);
+            EnsureContainersInitialized();
 
-            string keycloakAddress = _keycloakContainer.GetBaseAddress();
-            string keyCloakRealmUrl = $"{keycloakAddress}realms/Eventix";
+            Environment.SetEnvironmentVariable("ConnectionStrings:Database", _sqlServerConnectionString);
+            Environment.SetEnvironmentVariable("ConnectionStrings:Cache", _redisConnectionString);
+            Environment.SetEnvironmentVariable("ConnectionStrings:EventStore", _eventStoreConnectionString);
+            Environment.SetEnvironmentVariable("ConnectionStrings:MessageBus", _messageBusConnectionString);
+
+            string keyCloakRealmUrl = $"{_keycloakAddress}realms/Eventix";
 
             Environment.SetEnvironmentVariable(
                 "Authentication:MetadataAddress",
@@ -72,9 +78,9 @@ namespace Eventix.Modules.IntegrationTests.Abstractions
             {
                 services.Configure<KeyCloakOptions>(o =>
                 {
-                    o.AdminUrl = $"{keycloakAddress}admin/realms/";
+                    o.AdminUrl = $"{_keycloakAddress}admin/realms/";
                     o.CurrentRealm = "Eventix";
-                    o.BaseUrl = $"{keycloakAddress}realms/";
+                    o.BaseUrl = $"{_keycloakAddress}realms/";
                     o.ConfidentialClientId = "eventix-confidential-client";
                     o.ConfidentialClientSecret = "Zbt0t6NLctfilE0XKDiz1VmSRqRtV9uk";
                     o.PublicClientId = "eventix-public-client";
@@ -90,6 +96,46 @@ namespace Eventix.Modules.IntegrationTests.Abstractions
             await _keycloakContainer.StartAsync();
             await _eventStoreDbContainer.StartAsync();
             await _rabbitMqContainer.StartAsync();
+
+            await Task.Delay(2000);
+
+            _sqlServerConnectionString = _sqlServerContainer.GetConnectionString();
+            _redisConnectionString = _redisContainer.GetConnectionString();
+            _eventStoreConnectionString = _eventStoreDbContainer.GetConnectionString();
+            _messageBusConnectionString = _rabbitMqContainer.GetConnectionString();
+            _keycloakAddress = _keycloakContainer.GetBaseAddress();
+
+            ValidateConnectionStrings();
+        }
+
+        private void EnsureContainersInitialized()
+        {
+            if (string.IsNullOrEmpty(_sqlServerConnectionString) ||
+                string.IsNullOrEmpty(_redisConnectionString) ||
+                string.IsNullOrEmpty(_eventStoreConnectionString) ||
+                string.IsNullOrEmpty(_messageBusConnectionString) ||
+                string.IsNullOrEmpty(_keycloakAddress))
+                throw new InvalidOperationException("Containers not properly initialized. Make sure InitializeAsync was called before ConfigureWebHost.");
+        }
+
+        private void ValidateConnectionStrings()
+        {
+            var connectionStrings = new Dictionary<string, string>
+            {
+                { "SQL Server", _sqlServerConnectionString },
+                { "Redis", _redisConnectionString },
+                { "EventStore", _eventStoreConnectionString },
+                { "MessageBus", _messageBusConnectionString },
+                { "Keycloak", _keycloakAddress }
+            };
+
+            foreach (var (name, connectionString) in connectionStrings)
+            {
+                if (string.IsNullOrWhiteSpace(connectionString))
+                {
+                    throw new InvalidOperationException($"{name} connection string is null or empty. Container might not be properly initialized.");
+                }
+            }
         }
 
         public new async Task DisposeAsync()
@@ -102,13 +148,13 @@ namespace Eventix.Modules.IntegrationTests.Abstractions
             await _network.DisposeAsync();
         }
 
-        protected string SqlServerConnectionString => _sqlServerContainer.GetConnectionString();
-        protected string RedisConnectionString => _redisContainer.GetConnectionString();
-        protected string EventStoreConnectionString => _eventStoreDbContainer.GetConnectionString();
-        protected string MessageBusConnectionString => _rabbitMqContainer.GetConnectionString();
+        protected string SqlServerConnectionString => _sqlServerConnectionString;
+        protected string RedisConnectionString => _redisConnectionString;
+        protected string EventStoreConnectionString => _eventStoreConnectionString;
+        protected string MessageBusConnectionString => _messageBusConnectionString;
 
         public async Task<bool> SeedRoleDataAsync()
-            => await ExecuteSqlScriptAsync(SqlServerConnectionString, Paths.RolesSeedDataSql);
+            => await ExecuteSqlScriptAsync(_sqlServerConnectionString, Paths.RolesSeedDataSql);
 
         private static async Task<bool> ExecuteSqlScriptAsync(string connectionString, string scriptPath)
         {
