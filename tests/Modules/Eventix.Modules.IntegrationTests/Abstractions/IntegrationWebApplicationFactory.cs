@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Testcontainers.EventStoreDb;
 using Testcontainers.Keycloak;
 using Testcontainers.MsSql;
@@ -18,8 +19,6 @@ namespace Eventix.Modules.IntegrationTests.Abstractions
     public class IntegrationWebApplicationFactory : WebApplicationFactory<Program>, IAsyncLifetime
     {
         private static readonly INetwork _network = new NetworkBuilder().Build();
-        private static readonly SemaphoreSlim _initializationSemaphore = new(1, 1);
-        private static bool _isInitialized = false;
 
         private readonly MsSqlContainer _sqlServerContainer = new MsSqlBuilder()
                 .WithImage("mcr.microsoft.com/mssql/server:2022-latest")
@@ -42,7 +41,6 @@ namespace Eventix.Modules.IntegrationTests.Abstractions
 
         private readonly EventStoreDbContainer _eventStoreDbContainer = new EventStoreDbBuilder()
                 .WithImage("eventstore/eventstore:latest")
-                .WithEnvironment("EVENTSTORE_INSECURE", "true")
                 .Build();
 
         private readonly RabbitMqContainer _rabbitMqContainer = new RabbitMqBuilder()
@@ -51,23 +49,15 @@ namespace Eventix.Modules.IntegrationTests.Abstractions
                 .WithPassword("guest")
                 .Build();
 
-        private string _sqlServerConnectionString = string.Empty;
-
-        private string _redisConnectionString = string.Empty;
-        private string _eventStoreConnectionString = string.Empty;
-        private string _messageBusConnectionString = string.Empty;
-        private string _keycloakAddress = string.Empty;
-
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
-            EnsureContainersInitializedSync();
+            Environment.SetEnvironmentVariable("ConnectionStrings:Database", SqlServerConnectionString);
+            Environment.SetEnvironmentVariable("ConnectionStrings:Cache", RedisConnectionString);
+            Environment.SetEnvironmentVariable("ConnectionStrings:EventStore", EventStoreConnectionString);
+            Environment.SetEnvironmentVariable("ConnectionStrings:MessageBus", MessageBusConnectionString);
 
-            Environment.SetEnvironmentVariable("ConnectionStrings:Database", _sqlServerConnectionString);
-            Environment.SetEnvironmentVariable("ConnectionStrings:Cache", _redisConnectionString);
-            Environment.SetEnvironmentVariable("ConnectionStrings:EventStore", _eventStoreConnectionString);
-            Environment.SetEnvironmentVariable("ConnectionStrings:MessageBus", _messageBusConnectionString);
-
-            string keyCloakRealmUrl = $"{_keycloakAddress}realms/Eventix";
+            string keycloakAddress = _keycloakContainer.GetBaseAddress();
+            string keyCloakRealmUrl = $"{keycloakAddress}realms/Eventix";
 
             Environment.SetEnvironmentVariable(
                 "Authentication:MetadataAddress",
@@ -81,9 +71,9 @@ namespace Eventix.Modules.IntegrationTests.Abstractions
             {
                 services.Configure<KeyCloakOptions>(o =>
                 {
-                    o.AdminUrl = $"{_keycloakAddress}admin/realms/";
+                    o.AdminUrl = $"{keycloakAddress}admin/realms/";
                     o.CurrentRealm = "Eventix";
-                    o.BaseUrl = $"{_keycloakAddress}realms/";
+                    o.BaseUrl = $"{keycloakAddress}realms/";
                     o.ConfidentialClientId = "eventix-confidential-client";
                     o.ConfidentialClientSecret = "Zbt0t6NLctfilE0XKDiz1VmSRqRtV9uk";
                     o.PublicClientId = "eventix-public-client";
@@ -92,90 +82,20 @@ namespace Eventix.Modules.IntegrationTests.Abstractions
             });
         }
 
-        private void EnsureContainersInitializedSync()
+        protected override IHost CreateHost(IHostBuilder builder)
         {
-            if (_isInitialized) return;
+            builder.UseEnvironment("Testing");
 
-            _initializationSemaphore.Wait();
-            try
-            {
-                if (_isInitialized) return;
-
-                _sqlServerContainer.StartAsync().GetAwaiter().GetResult();
-                _redisContainer.StartAsync().GetAwaiter().GetResult();
-                _keycloakContainer.StartAsync().GetAwaiter().GetResult();
-                _eventStoreDbContainer.StartAsync().GetAwaiter().GetResult();
-                _rabbitMqContainer.StartAsync().GetAwaiter().GetResult();
-
-                Task.Delay(3000).GetAwaiter().GetResult();
-
-                _sqlServerConnectionString = _sqlServerContainer.GetConnectionString();
-                _redisConnectionString = _redisContainer.GetConnectionString();
-                _eventStoreConnectionString = _eventStoreDbContainer.GetConnectionString();
-                _messageBusConnectionString = _rabbitMqContainer.GetConnectionString();
-                _keycloakAddress = _keycloakContainer.GetBaseAddress();
-
-                ValidateConnectionStrings();
-
-                _isInitialized = true;
-            }
-            finally
-            {
-                _initializationSemaphore.Release();
-            }
+            return base.CreateHost(builder);
         }
 
         public async Task InitializeAsync()
         {
-            if (_isInitialized) return;
-
-            await _initializationSemaphore.WaitAsync();
-            try
-            {
-                if (_isInitialized) return;
-
-                await _sqlServerContainer.StartAsync();
-                await _redisContainer.StartAsync();
-                await _keycloakContainer.StartAsync();
-                await _eventStoreDbContainer.StartAsync();
-                await _rabbitMqContainer.StartAsync();
-
-                await Task.Delay(3000);
-
-                _sqlServerConnectionString = _sqlServerContainer.GetConnectionString();
-                _redisConnectionString = _redisContainer.GetConnectionString();
-                _eventStoreConnectionString = _eventStoreDbContainer.GetConnectionString();
-                _messageBusConnectionString = _rabbitMqContainer.GetConnectionString();
-                _keycloakAddress = _keycloakContainer.GetBaseAddress();
-
-                ValidateConnectionStrings();
-
-                _isInitialized = true;
-            }
-            finally
-            {
-                _initializationSemaphore.Release();
-            }
-        }
-
-        private void ValidateConnectionStrings()
-        {
-            var connectionStrings = new Dictionary<string, string>
-        {
-            { "SQL Server", _sqlServerConnectionString },
-            { "Redis", _redisConnectionString },
-            { "EventStore", _eventStoreConnectionString },
-            { "MessageBus", _messageBusConnectionString },
-            { "Keycloak", _keycloakAddress }
-        };
-
-            foreach (var (name, connectionString) in connectionStrings)
-            {
-                if (string.IsNullOrWhiteSpace(connectionString))
-                {
-                    throw new InvalidOperationException($"{name} connection string is null or empty. Container might not be properly initialized.");
-                }
-            }
+            await _sqlServerContainer.StartAsync();
+            await _redisContainer.StartAsync();
+            await _keycloakContainer.StartAsync();
+            await _eventStoreDbContainer.StartAsync();
+            await _rabbitMqContainer.StartAsync();
         }
 
         public new async Task DisposeAsync()
@@ -188,13 +108,13 @@ namespace Eventix.Modules.IntegrationTests.Abstractions
             await _network.DisposeAsync();
         }
 
-        protected string SqlServerConnectionString => _sqlServerConnectionString;
-        protected string RedisConnectionString => _redisConnectionString;
-        protected string EventStoreConnectionString => _eventStoreConnectionString;
-        protected string MessageBusConnectionString => _messageBusConnectionString;
+        protected string SqlServerConnectionString => _sqlServerContainer.GetConnectionString();
+        protected string RedisConnectionString => _redisContainer.GetConnectionString();
+        protected string EventStoreConnectionString => _eventStoreDbContainer.GetConnectionString();
+        protected string MessageBusConnectionString => _rabbitMqContainer.GetConnectionString();
 
         public async Task<bool> SeedRoleDataAsync()
-            => await ExecuteSqlScriptAsync(_sqlServerConnectionString, Paths.RolesSeedDataSql);
+            => await ExecuteSqlScriptAsync(SqlServerConnectionString, Paths.RolesSeedDataSql);
 
         private static async Task<bool> ExecuteSqlScriptAsync(string connectionString, string scriptPath)
         {

@@ -34,14 +34,17 @@ namespace Eventix.Api.Configurations
 
             builder.AddSwaggerConfig();
 
-            builder.Host.UseSerilog((context, loggerConfig)
-                => loggerConfig.ReadFrom.Configuration(context.Configuration));
-
             builder.AddExceptionHandler();
 
-            builder.AddCustomHealthChecks(dbConnectionString, messageBusConnectionString, redisConnectionString, eventStoreString);
-
             builder.AddAllModules(dbConnectionString, messageBusConnectionString, redisConnectionString);
+
+            if (!builder.Environment.IsEnvironment("Testing"))
+            {
+                builder.Host.UseSerilog((context, loggerConfig)
+                    => loggerConfig.ReadFrom.Configuration(context.Configuration));
+
+                builder.AddCustomHealthChecks(dbConnectionString, messageBusConnectionString, redisConnectionString, eventStoreString);
+            }
 
             return builder;
         }
