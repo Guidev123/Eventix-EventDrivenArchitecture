@@ -18,6 +18,8 @@ namespace Eventix.Modules.IntegrationTests.Abstractions
     public class IntegrationWebApplicationFactory : WebApplicationFactory<Program>, IAsyncLifetime
     {
         private static readonly INetwork _network = new NetworkBuilder().Build();
+        private static readonly SemaphoreSlim _initializationSemaphore = new(1, 1);
+        private static bool _isInitialized = false;
 
         private readonly MsSqlContainer _sqlServerContainer = new MsSqlBuilder()
                 .WithImage("mcr.microsoft.com/mssql/server:2022-latest")
@@ -50,6 +52,7 @@ namespace Eventix.Modules.IntegrationTests.Abstractions
                 .Build();
 
         private string _sqlServerConnectionString = string.Empty;
+
         private string _redisConnectionString = string.Empty;
         private string _eventStoreConnectionString = string.Empty;
         private string _messageBusConnectionString = string.Empty;
@@ -57,7 +60,7 @@ namespace Eventix.Modules.IntegrationTests.Abstractions
 
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
-            EnsureContainersInitialized();
+            EnsureContainersInitializedSync();
 
             Environment.SetEnvironmentVariable("ConnectionStrings:Database", _sqlServerConnectionString);
             Environment.SetEnvironmentVariable("ConnectionStrings:Cache", _redisConnectionString);
@@ -89,45 +92,82 @@ namespace Eventix.Modules.IntegrationTests.Abstractions
             });
         }
 
-        public async Task InitializeAsync()
+        private void EnsureContainersInitializedSync()
         {
-            await _sqlServerContainer.StartAsync();
-            await _redisContainer.StartAsync();
-            await _keycloakContainer.StartAsync();
-            await _eventStoreDbContainer.StartAsync();
-            await _rabbitMqContainer.StartAsync();
+            if (_isInitialized) return;
 
-            await Task.Delay(2000);
+            _initializationSemaphore.Wait();
+            try
+            {
+                if (_isInitialized) return;
 
-            _sqlServerConnectionString = _sqlServerContainer.GetConnectionString();
-            _redisConnectionString = _redisContainer.GetConnectionString();
-            _eventStoreConnectionString = _eventStoreDbContainer.GetConnectionString();
-            _messageBusConnectionString = _rabbitMqContainer.GetConnectionString();
-            _keycloakAddress = _keycloakContainer.GetBaseAddress();
+                _sqlServerContainer.StartAsync().GetAwaiter().GetResult();
+                _redisContainer.StartAsync().GetAwaiter().GetResult();
+                _keycloakContainer.StartAsync().GetAwaiter().GetResult();
+                _eventStoreDbContainer.StartAsync().GetAwaiter().GetResult();
+                _rabbitMqContainer.StartAsync().GetAwaiter().GetResult();
 
-            ValidateConnectionStrings();
+                Task.Delay(3000).GetAwaiter().GetResult();
+
+                _sqlServerConnectionString = _sqlServerContainer.GetConnectionString();
+                _redisConnectionString = _redisContainer.GetConnectionString();
+                _eventStoreConnectionString = _eventStoreDbContainer.GetConnectionString();
+                _messageBusConnectionString = _rabbitMqContainer.GetConnectionString();
+                _keycloakAddress = _keycloakContainer.GetBaseAddress();
+
+                ValidateConnectionStrings();
+
+                _isInitialized = true;
+            }
+            finally
+            {
+                _initializationSemaphore.Release();
+            }
         }
 
-        private void EnsureContainersInitialized()
+        public async Task InitializeAsync()
         {
-            if (string.IsNullOrEmpty(_sqlServerConnectionString) ||
-                string.IsNullOrEmpty(_redisConnectionString) ||
-                string.IsNullOrEmpty(_eventStoreConnectionString) ||
-                string.IsNullOrEmpty(_messageBusConnectionString) ||
-                string.IsNullOrEmpty(_keycloakAddress))
-                throw new InvalidOperationException("Containers not properly initialized. Make sure InitializeAsync was called before ConfigureWebHost.");
+            if (_isInitialized) return;
+
+            await _initializationSemaphore.WaitAsync();
+            try
+            {
+                if (_isInitialized) return;
+
+                await _sqlServerContainer.StartAsync();
+                await _redisContainer.StartAsync();
+                await _keycloakContainer.StartAsync();
+                await _eventStoreDbContainer.StartAsync();
+                await _rabbitMqContainer.StartAsync();
+
+                await Task.Delay(3000);
+
+                _sqlServerConnectionString = _sqlServerContainer.GetConnectionString();
+                _redisConnectionString = _redisContainer.GetConnectionString();
+                _eventStoreConnectionString = _eventStoreDbContainer.GetConnectionString();
+                _messageBusConnectionString = _rabbitMqContainer.GetConnectionString();
+                _keycloakAddress = _keycloakContainer.GetBaseAddress();
+
+                ValidateConnectionStrings();
+
+                _isInitialized = true;
+            }
+            finally
+            {
+                _initializationSemaphore.Release();
+            }
         }
 
         private void ValidateConnectionStrings()
         {
             var connectionStrings = new Dictionary<string, string>
-            {
-                { "SQL Server", _sqlServerConnectionString },
-                { "Redis", _redisConnectionString },
-                { "EventStore", _eventStoreConnectionString },
-                { "MessageBus", _messageBusConnectionString },
-                { "Keycloak", _keycloakAddress }
-            };
+        {
+            { "SQL Server", _sqlServerConnectionString },
+            { "Redis", _redisConnectionString },
+            { "EventStore", _eventStoreConnectionString },
+            { "MessageBus", _messageBusConnectionString },
+            { "Keycloak", _keycloakAddress }
+        };
 
             foreach (var (name, connectionString) in connectionStrings)
             {
