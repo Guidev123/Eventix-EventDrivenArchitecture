@@ -28,7 +28,7 @@ namespace Eventix.Modules.IntegrationTests.Abstractions
             var result = await mediatorHandler.DispatchAsync(new CreateEventCommand(
                 eventId,
                 faker.Music.Genre(),
-                faker.Lorem.Paragraph(),
+                faker.Lorem.Letter(50),
                 null,
                 DateTime.UtcNow.AddDays(1),
                 null,

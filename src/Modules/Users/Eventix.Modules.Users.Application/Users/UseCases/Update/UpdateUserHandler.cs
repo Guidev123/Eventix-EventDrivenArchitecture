@@ -22,7 +22,7 @@ namespace Eventix.Modules.Users.Application.Users.UseCases.Update
 
         private void UpdateUserName(User user, UpdateUserCommand command)
         {
-            user.UpdateName(command.FirstName!, command.LastName!);
+            user.UpdateName(command.FirstName, command.LastName);
             userRepository.Update(user);
         }
     }

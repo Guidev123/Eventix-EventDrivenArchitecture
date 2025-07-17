@@ -33,7 +33,7 @@ public class AttendeeTests : BaseTest
             Guid.NewGuid(),
             attendee.Id,
             @event.Id,
-            "tc_" + _faker.Random.String(27),
+            $"tc_{_faker.Random.String(27)}",
             DateTime.UtcNow);
 
         // Act
@@ -69,7 +69,7 @@ public class AttendeeTests : BaseTest
             Guid.NewGuid(),
             attendee.Id,
             @event.Id,
-            "tc_" + _faker.Random.String(27));
+            $"tc_{_faker.Random.String(27)}");
 
         ticket.MarkAsUsed();
 
@@ -106,7 +106,7 @@ public class AttendeeTests : BaseTest
             Guid.NewGuid(),
             attendee.Id,
             @event.Id,
-            "tc_" + _faker.Random.String(27));
+            $"tc_{_faker.Random.String(27)}");
 
         // Act
         attendee.CheckIn(ticket);
