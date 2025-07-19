@@ -17,9 +17,9 @@
 		<PackageReference Include="FluentAssertions" Version="8.5.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="9.0.7" />
 		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
+		<PackageReference Include="NSubstitute" Version="5.3.0" />
 		<PackageReference Include="Testcontainers" Version="4.6.0" />
 		<PackageReference Include="Testcontainers.EventStoreDb" Version="4.6.0" />
-		<PackageReference Include="Testcontainers.Keycloak" Version="4.6.0" />
 		<PackageReference Include="Testcontainers.MsSql" Version="4.6.0" />
 		<PackageReference Include="Testcontainers.RabbitMq" Version="4.6.0" />
 		<PackageReference Include="Testcontainers.Redis" Version="4.6.0" />
@@ -37,16 +37,5 @@
 	<ItemGroup>
 		<Using Include="Xunit" />
 	</ItemGroup>
-
-	<ItemGroup>
-	  <None Update="Abstractions\Files\RolesSeedData.sql">
-	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  </None>
-	  <None Update="Abstractions\Files\eventix-realm-export.json">
-	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  </None>
-	</ItemGroup>
-
-	<ProjectExtensions><VisualStudio><UserProperties /></VisualStudio></ProjectExtensions>
 
 </Project>

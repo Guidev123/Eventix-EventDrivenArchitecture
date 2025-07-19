@@ -1,13 +1,10 @@
-﻿using Bogus;
-using Eventix.Modules.IntegrationTests.Abstractions;
+﻿using Eventix.Modules.IntegrationTests.Abstractions;
 using Eventix.Modules.Ticketing.Application.Carts.UseCases.AddItem;
 using Eventix.Modules.Ticketing.Application.Customers.UseCases.GetById;
-using Eventix.Modules.Ticketing.Domain.Orders.ValueObjects;
 using Eventix.Modules.Users.Application.Users.UseCases.Register;
-using Eventix.Shared.Domain.Responses;
 using FluentAssertions;
 
-namespace Eventix.Modules.IntegrationTests.RegisterUser
+namespace Eventix.Modules.IntegrationTests.Ticketing.Carts
 {
     public class AddItemToCartTests : BaseIntegrationTest
     {

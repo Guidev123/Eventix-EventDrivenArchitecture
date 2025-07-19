@@ -5,7 +5,7 @@ using Eventix.Modules.Users.IntegrationTests.Abstractions;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 
-namespace Eventix.Modules.Users.IntegrationTests.Users
+namespace Eventix.Modules.Users.IntegrationTests.Users.UseCases
 {
     public class GetUserPermissionTests : BaseIntegrationTest
     {

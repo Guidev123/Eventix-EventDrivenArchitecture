@@ -23,6 +23,9 @@ namespace Eventix.Modules.Ticketing.Application.Carts.UseCases.AddItem
             if (ticketType is null)
                 return Result.Failure(TicketTypeErrors.NotFound(request.TicketTypeId));
 
+            if (ticketType.Specification.Quantity < request.Quantity)
+                return Result.Failure(TicketTypeErrors.NotEnoughQuantity(ticketType.Specification.Quantity));
+
             var cartItem = new CartItem()
             {
                 TicketTypeId = ticketType.Id,

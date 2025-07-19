@@ -1,4 +1,5 @@
 ﻿using Eventix.Api.Extensions;
+using Eventix.Api.Middlewares;
 using Eventix.Shared.Presentation.Extensions;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
@@ -31,6 +32,8 @@ namespace Eventix.Api.Configurations
                 });
 
                 app.UseSerilogRequestLogging();
+
+                app.UseLogContextTraceLogging();
             }
 
             app.UseAuthentication();

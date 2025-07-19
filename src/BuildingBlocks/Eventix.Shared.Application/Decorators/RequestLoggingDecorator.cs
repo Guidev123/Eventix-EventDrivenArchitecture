@@ -19,6 +19,10 @@ namespace Eventix.Shared.Application.Decorators
             {
                 var requestName = typeof(TRequest).Name;
                 var requestModule = GetRequestModule(typeof(TRequest).FullName!);
+
+                Activity.Current?.SetTag("request.module", requestModule);
+                Activity.Current?.SetTag("request.name", requestName);
+
                 var stopwatch = Stopwatch.StartNew();
                 using (LogContext.PushProperty("Module", requestModule))
                 {

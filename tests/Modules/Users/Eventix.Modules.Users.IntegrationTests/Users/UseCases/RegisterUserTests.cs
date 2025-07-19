@@ -3,7 +3,7 @@ using Eventix.Modules.Users.IntegrationTests.Abstractions;
 using FluentAssertions;
 using Xunit;
 
-namespace Eventix.Modules.Users.IntegrationTests.Users
+namespace Eventix.Modules.Users.IntegrationTests.Users.UseCases
 {
     public class RegisterUserTests : BaseIntegrationTest
     {
@@ -67,7 +67,5 @@ namespace Eventix.Modules.Users.IntegrationTests.Users
             result.IsSuccess.Should().BeTrue();
             result.Value.Should().NotBeNull();
         }
-
-        private static bool RoleDataWasSeed = false;
     }
 }

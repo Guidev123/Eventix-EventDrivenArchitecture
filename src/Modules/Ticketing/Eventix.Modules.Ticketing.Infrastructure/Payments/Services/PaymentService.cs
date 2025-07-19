@@ -8,14 +8,15 @@ namespace Eventix.Modules.Ticketing.Infrastructure.Payments.Services
     {
         public async Task<Result<PaymentResponse>> ChargeAsync(decimal amount, string currency)
         {
-            // TODO: Integration with stripe
+            // Mock Integration with payment gateway
             await Task.Delay(500);
-            return Result.Success(new PaymentResponse(Guid.NewGuid(), decimal.Zero, string.Empty));
+
+            return Result.Success(new PaymentResponse(Guid.NewGuid(), amount, currency));
         }
 
         public async Task RefundAsync(Guid transactionId, decimal amount)
         {
-            // TODO: Integration with stripe
+            // Mock Integration with payment gateway
             await Task.Delay(500);
         }
     }

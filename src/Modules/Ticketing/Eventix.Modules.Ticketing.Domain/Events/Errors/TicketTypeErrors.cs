@@ -14,7 +14,7 @@ namespace Eventix.Modules.Ticketing.Domain.Events.Errors
         public static Error NotEnoughQuantity(decimal availableQuantity) =>
             Error.Problem(
                 "TicketTypes.NotEnoughQuantity",
-                $"The ticket type has {availableQuantity} quantity available");
+                $"The ticket type has {(int)availableQuantity} quantity available");
 
         public static readonly Error EventIdIsRequired = Error.Problem(
            "TicketType.EventIdIsRequired",

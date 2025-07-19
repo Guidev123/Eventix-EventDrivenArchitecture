@@ -4,7 +4,7 @@ using Eventix.Modules.Users.Domain.Users.Errors;
 using Eventix.Modules.Users.IntegrationTests.Abstractions;
 using FluentAssertions;
 
-namespace Eventix.Modules.Users.IntegrationTests.Users
+namespace Eventix.Modules.Users.IntegrationTests.Users.UseCases
 {
     public class GetUserByIdTests : BaseIntegrationTest
     {

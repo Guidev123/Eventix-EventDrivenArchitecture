@@ -7,7 +7,7 @@ using Eventix.Shared.Domain.Responses;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Eventix.Modules.Users.IntegrationTests.Users
+namespace Eventix.Modules.Users.IntegrationTests.Users.UseCases
 {
     public class UpdateUserTests : BaseIntegrationTest
     {

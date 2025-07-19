@@ -11,6 +11,10 @@ namespace Eventix.Modules.Events.Domain.Categories.Errors
             "Categories.AlreadyArchived",
             "The category was already archived");
 
+        public static readonly Error CategoryMinLength = Error.Problem(
+            "Categories.CategoryMinLength",
+            "Category name must be more than 2 of length");
+
         public static readonly Error FailToCreate = Error.Problem(
             "Categories.Create",
             "An error occurred while creating the category");

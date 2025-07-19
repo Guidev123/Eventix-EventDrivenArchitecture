@@ -1,5 +1,6 @@
 ﻿using Eventix.Api.Extensions;
 using Eventix.Api.Middlewares;
+using Eventix.Api.OpenTelemetry;
 using Eventix.Modules.Attendance.Infrastructure;
 using Eventix.Modules.Events.Infrastructure;
 using Eventix.Modules.Ticketing.Infrastructure;
@@ -44,6 +45,8 @@ namespace Eventix.Api.Configurations
                     => loggerConfig.ReadFrom.Configuration(context.Configuration));
 
                 builder.AddCustomHealthChecks(dbConnectionString, messageBusConnectionString, redisConnectionString, eventStoreString);
+
+                builder.Services.AddTracing(builder.Configuration, DiagnosticConfig.ServiceName);
             }
 
             return builder;

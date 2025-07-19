@@ -4,7 +4,7 @@ using Eventix.Modules.Ticketing.Application.Customers.UseCases.GetById;
 using Eventix.Modules.Users.Application.Users.UseCases.Register;
 using FluentAssertions;
 
-namespace Eventix.Modules.IntegrationTests.RegisterUser
+namespace Eventix.Modules.IntegrationTests.Users
 {
     public class RegisterUserTests : BaseIntegrationTest
     {

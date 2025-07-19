@@ -1,22 +1,25 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net9.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
 
-  <ItemGroup>
-	  <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.6" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.6" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\BuildingBlocks\Eventix.Shared.Infrastructure\Eventix.Shared.Infrastructure.csproj" />
-    <ProjectReference Include="..\..\Events\Eventix.Modules.Events.IntegrationEvents\Eventix.Modules.Events.IntegrationEvents.csproj" />
-    <ProjectReference Include="..\..\Ticketing\Eventix.Modules.Ticketing.IntegrationEvents\Eventix.Modules.Ticketing.IntegrationEvents.csproj" />
-    <ProjectReference Include="..\..\Users\Eventix.Modules.Users.IntegrationEvents\Eventix.Modules.Users.IntegrationEvents.csproj" />
-    <ProjectReference Include="..\Eventix.Modules.Attendance.Application\Eventix.Modules.Attendance.Application.csproj" />
-    <ProjectReference Include="..\Eventix.Modules.Attendance.Presentation\Eventix.Modules.Attendance.Presentation.csproj" />
-  </ItemGroup>
-
+	<ItemGroup>
+		<ProjectReference Include="..\..\..\BuildingBlocks\Eventix.Shared.Infrastructure\Eventix.Shared.Infrastructure.csproj" />
+		<ProjectReference Include="..\..\Events\Eventix.Modules.Events.IntegrationEvents\Eventix.Modules.Events.IntegrationEvents.csproj" />
+		<ProjectReference Include="..\..\Ticketing\Eventix.Modules.Ticketing.IntegrationEvents\Eventix.Modules.Ticketing.IntegrationEvents.csproj" />
+		<ProjectReference Include="..\..\Users\Eventix.Modules.Users.IntegrationEvents\Eventix.Modules.Users.IntegrationEvents.csproj" />
+		<ProjectReference Include="..\Eventix.Modules.Attendance.Application\Eventix.Modules.Attendance.Application.csproj" />
+		<ProjectReference Include="..\Eventix.Modules.Attendance.Presentation\Eventix.Modules.Attendance.Presentation.csproj" />
+	</ItemGroup>
+	<ItemGroup>
+		<InternalsVisibleTo Include="Eventix.Modules.Attendance.IntegrationTests" />
+		<InternalsVisibleTo Include="Eventix.Modules.IntegrationTests" />
+	</ItemGroup>
 </Project>

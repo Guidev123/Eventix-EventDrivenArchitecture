@@ -7,6 +7,7 @@ namespace Eventix.Modules.Events.Domain.Categories.Entities
     public sealed class Category : Entity, IAggregateRoot
     {
         public const int MAX_NAME_LENGTH = 100;
+        public const int MIN_NAME_LENGTH = 2;
 
         private Category(string name)
         {

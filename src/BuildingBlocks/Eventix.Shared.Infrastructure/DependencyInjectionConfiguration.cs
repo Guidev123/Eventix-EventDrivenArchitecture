@@ -13,11 +13,14 @@ using Eventix.Shared.Infrastructure.EventSourcing;
 using Eventix.Shared.Infrastructure.Factories;
 using Eventix.Shared.Infrastructure.Outbox.Interceptors;
 using FluentValidation;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
 using MidR.DependencyInjection;
 using MidR.Interfaces;
+using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
 using Quartz;
 using StackExchange.Redis;
 using System.Reflection;
@@ -136,6 +139,27 @@ namespace Eventix.Shared.Infrastructure
         {
             services.AddSingleton<IEventStoreService, EventStoreService>();
             services.AddSingleton<IEventSourcingRepository, EventSourcingRepository>();
+
+            return services;
+        }
+
+        public static IServiceCollection AddTracing(this IServiceCollection services, IConfiguration configuration, string serviceName)
+        {
+            services
+                .AddOpenTelemetry()
+                .ConfigureResource(c => c.AddService(serviceName))
+                .WithTracing(tracing =>
+                {
+                    tracing
+                        .AddAspNetCoreInstrumentation()
+                        .AddHttpClientInstrumentation()
+                        .AddSqlClientInstrumentation()
+                        .AddEntityFrameworkCoreInstrumentation()
+                        .AddRabbitMQInstrumentation()
+                        .AddRedisInstrumentation();
+
+                    tracing.AddOtlpExporter();
+                });
 
             return services;
         }
