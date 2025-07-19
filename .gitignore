@@ -370,3 +370,4 @@ FodyWeavers.xsd
 /src/API/Eventix.Api/modules.attendance.Development.json
 /docker-compose.override.yml
 /launchSettings.json
+/src/API/Eventix.Gateway/appsettings.Development.json

@@ -8,14 +8,10 @@ namespace Eventix.Gateway.Configurations
 {
     public static class ApiConfiguration
     {
+        private const string SERVICE_NAME = "Eventix.Gateway";
+
         public static WebApplicationBuilder ConfigureServices(this WebApplicationBuilder builder)
         {
-            builder.Services.AddOpenApi();
-            builder.AddSwaggerConfig();
-
-            builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
-            builder.Services.AddProblemDetails();
-
             builder.Host.UseSerilog((context, loggerConfig)
                 => loggerConfig.ReadFrom.Configuration(context.Configuration));
 
@@ -24,7 +20,7 @@ namespace Eventix.Gateway.Configurations
 
             builder.Services
                 .AddOpenTelemetry()
-                .ConfigureResource(c => c.AddService("Eventix.Gateway"))
+                .ConfigureResource(c => c.AddService(SERVICE_NAME))
                 .WithTracing(tracing =>
                 {
                     tracing
@@ -44,16 +40,8 @@ namespace Eventix.Gateway.Configurations
 
         public static WebApplication UsePipelineConfig(this WebApplication app, WebApplicationBuilder builder)
         {
-            app.UseExceptionHandler();
-
             app.UseSerilogRequestLogging();
             app.UseLogContextTraceLogging();
-
-            if (app.Environment.IsDevelopment())
-            {
-                app.MapOpenApi();
-                app.UseSwaggerConfig(builder);
-            }
 
             app.UseAuthentication();
             app.UseAuthorization();
