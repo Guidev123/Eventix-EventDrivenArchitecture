@@ -1,7 +1,6 @@
 ﻿using Bogus;
 using Eventix.Shared.Application.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
-using System.Text.Json.Serialization;
 
 namespace Eventix.Modules.IntegrationTests.Abstractions
 {

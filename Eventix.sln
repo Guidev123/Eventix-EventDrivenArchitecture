@@ -113,6 +113,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eventix.Modules.Events.Inte
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eventix.Gateway", "src\API\Eventix.Gateway\Eventix.Gateway.csproj", "{9A52CDA9-32C8-436C-9B06-8BA91D2C19F6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eventix.Modules.Attendance.IntegrationTests", "tests\Modules\Attendance\Eventix.Modules.Attendance.IntegrationTests\Eventix.Modules.Attendance.IntegrationTests.csproj", "{84B5F871-1C5B-48D5-8D1A-A6C55CD480CF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -279,6 +281,10 @@ Global
 		{9A52CDA9-32C8-436C-9B06-8BA91D2C19F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9A52CDA9-32C8-436C-9B06-8BA91D2C19F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9A52CDA9-32C8-436C-9B06-8BA91D2C19F6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{84B5F871-1C5B-48D5-8D1A-A6C55CD480CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{84B5F871-1C5B-48D5-8D1A-A6C55CD480CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{84B5F871-1C5B-48D5-8D1A-A6C55CD480CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{84B5F871-1C5B-48D5-8D1A-A6C55CD480CF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -336,6 +342,7 @@ Global
 		{DC6AA485-7703-4BF7-B715-7CB7E21784B1} = {50926B92-BE81-4D9F-9EE3-8D9E5CB365A8}
 		{5B13268F-CC13-400C-986F-50B4083D6DD9} = {96F79087-9481-4C44-B7C1-25C3CF6D1732}
 		{9A52CDA9-32C8-436C-9B06-8BA91D2C19F6} = {862AB480-8FC9-49B0-8745-E77B55023B63}
+		{84B5F871-1C5B-48D5-8D1A-A6C55CD480CF} = {78A767BF-BE1B-4966-8DE8-B7DA5FFE4CC1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {148A9F60-4D1F-455F-9A54-21778D353BE0}

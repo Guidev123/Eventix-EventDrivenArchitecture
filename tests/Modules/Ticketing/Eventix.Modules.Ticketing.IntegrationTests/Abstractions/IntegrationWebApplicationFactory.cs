@@ -12,14 +12,10 @@ namespace Eventix.Modules.Ticketing.IntegrationTests.Abstractions
 {
     public class IntegrationWebApplicationFactory : WebApplicationFactory<Program>, IAsyncLifetime
     {
-        private static readonly INetwork _network = new NetworkBuilder().Build();
-
         private readonly MsSqlContainer _sqlServerContainer = new MsSqlBuilder()
-                .WithImage("mcr.microsoft.com/mssql/server:2022-latest")
-                .WithPassword("YourStrong@Passw0rd")
-                .WithNetwork(_network)
-                .WithNetworkAliases("sqlserver")
-                .Build();
+            .WithImage("mcr.microsoft.com/mssql/server:2019-latest")
+            .WithPassword("YourStrong@Passw0rd")
+            .Build();
 
         private readonly RedisContainer _redisContainer = new RedisBuilder()
                 .WithImage("redis:latest")
@@ -64,7 +60,6 @@ namespace Eventix.Modules.Ticketing.IntegrationTests.Abstractions
             await _redisContainer.StopAsync();
             await _eventStoreDbContainer.StopAsync();
             await _rabbitMqContainer.StopAsync();
-            await _network.DisposeAsync();
         }
 
         protected string SqlServerConnectionString => _sqlServerContainer.GetConnectionString();

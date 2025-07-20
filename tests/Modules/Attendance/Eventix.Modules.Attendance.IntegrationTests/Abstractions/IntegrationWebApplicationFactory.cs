@@ -1,22 +1,17 @@
-﻿using Eventix.Shared.Application.Clock;
+﻿using DotNet.Testcontainers.Builders;
+using DotNet.Testcontainers.Networks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.AspNetCore.TestHost;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
-using NSubstitute;
 using Testcontainers.EventStoreDb;
 using Testcontainers.MsSql;
 using Testcontainers.RabbitMq;
 using Testcontainers.Redis;
 
-namespace Eventix.Modules.Events.IntegrationTests.Abstractions
+namespace Eventix.Modules.Attendance.IntegrationTests.Abstractions
 {
     public class IntegrationWebApplicationFactory : WebApplicationFactory<Program>, IAsyncLifetime
     {
-        public readonly IDateTimeProvider DateTimeProviderMock = Substitute.For<IDateTimeProvider>();
-
         private readonly MsSqlContainer _sqlServerContainer = new MsSqlBuilder()
             .WithImage("mcr.microsoft.com/mssql/server:2019-latest")
             .WithPassword("YourStrong@Passw0rd")
@@ -42,13 +37,6 @@ namespace Eventix.Modules.Events.IntegrationTests.Abstractions
             Environment.SetEnvironmentVariable("ConnectionStrings:Cache", RedisConnectionString);
             Environment.SetEnvironmentVariable("ConnectionStrings:EventStore", EventStoreConnectionString);
             Environment.SetEnvironmentVariable("ConnectionStrings:MessageBus", MessageBusConnectionString);
-            builder.ConfigureTestServices(services =>
-            {
-                services.RemoveAll<IDateTimeProvider>();
-
-                DateTimeProviderMock.UtcNow.Returns(_ => DateTime.UtcNow);
-                services.AddSingleton(DateTimeProviderMock);
-            });
         }
 
         protected override IHost CreateHost(IHostBuilder builder)
