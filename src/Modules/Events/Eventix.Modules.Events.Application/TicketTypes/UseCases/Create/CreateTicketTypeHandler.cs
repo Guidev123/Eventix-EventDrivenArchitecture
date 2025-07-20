@@ -12,9 +12,9 @@ namespace Eventix.Modules.Events.Application.TicketTypes.UseCases.Create
     {
         public async Task<Result<CreateTicketTypeResponse>> ExecuteAsync(CreateTicketTypeCommand request, CancellationToken cancellationToken = default)
         {
-            var @event = eventRepository.GetByIdAsync(request.EventId, cancellationToken);
+            var @event = await eventRepository.GetByIdAsync(request.EventId, cancellationToken);
             if (@event is null)
-                return Result.Failure<CreateTicketTypeResponse>(EventErrors.NoTicketsFound);
+                return Result.Failure<CreateTicketTypeResponse>(EventErrors.NotFound(request.EventId));
 
             var ticketType = CreateTicketTypeCommand.ToTicketType(request);
 

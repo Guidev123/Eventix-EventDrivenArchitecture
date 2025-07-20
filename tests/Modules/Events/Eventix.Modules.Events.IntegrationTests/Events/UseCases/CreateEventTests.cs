@@ -1,12 +1,8 @@
 ﻿using Eventix.Modules.Events.Application.Events.UseCases.Create;
 using Eventix.Modules.Events.Domain.Categories.Errors;
-using Eventix.Modules.Events.Domain.Events.Errors;
 using Eventix.Modules.Events.IntegrationTests.Abstractions;
-using Eventix.Shared.Application.Abstractions;
 using Eventix.Shared.Domain.Responses;
-using Eventix.Shared.Domain.ValueObjects;
 using FluentAssertions;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace Eventix.Modules.Events.IntegrationTests.Events.UseCases
 {
