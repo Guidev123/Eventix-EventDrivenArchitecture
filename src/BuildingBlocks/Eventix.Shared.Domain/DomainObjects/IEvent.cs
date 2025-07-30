@@ -1,8 +1,6 @@
-﻿using MidR.Interfaces;
-
-namespace Eventix.Shared.Domain.DomainObjects
+﻿namespace Eventix.Shared.Domain.DomainObjects
 {
-    public interface IEvent : INotification
+    public interface IEvent
     {
         Guid CorrelationId { get; }
         DateTime OccurredOnUtc { get; }
