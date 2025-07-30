@@ -100,7 +100,7 @@ namespace Eventix.Shared.Infrastructure.EventBus
                 .Or<SocketException>()
                 .WaitAndRetryAsync(RETRY_COUNT, retry =>
                 {
-                    _logger.LogWarning("Attempting to connect to RabbitMQ. Retry {RetryCount}/{MaxRetries}.", retry + 1, RETRY_COUNT);
+                    _logger.LogWarning("Attempting to connect to RabbitMQ. Retry {RetryCount}/{MaxRetries}.", retry, RETRY_COUNT);
                     return TimeSpan.FromSeconds(Math.Pow(2, retry));
                 });
 
