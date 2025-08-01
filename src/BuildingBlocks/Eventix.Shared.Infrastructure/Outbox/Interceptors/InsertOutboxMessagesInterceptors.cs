@@ -37,7 +37,7 @@ namespace Eventix.Shared.Infrastructure.Outbox.Interceptors
                          Id = domainEvent.CorrelationId,
                          OccurredOnUtc = domainEvent.OccurredOnUtc,
                          Type = domainEvent.GetType().Name,
-                         Content = JsonConvert.SerializeObject(domainEvent, SerializerExtension.Instance)
+                         Content = JsonConvert.SerializeObject(domainEvent, SerializerExtensions.Instance)
                      })
                      .ToList();
 

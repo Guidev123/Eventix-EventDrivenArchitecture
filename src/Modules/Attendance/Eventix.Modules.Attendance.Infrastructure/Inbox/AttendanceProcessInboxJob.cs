@@ -36,7 +36,7 @@ namespace Eventix.Modules.Attendance.Infrastructure.Inbox
                 Exception? exception = null;
                 try
                 {
-                    var integrationEvent = JsonConvert.DeserializeObject<IIntegrationEvent>(inboxMessage.Content, SerializerExtension.Instance)!;
+                    var integrationEvent = JsonConvert.DeserializeObject<IIntegrationEvent>(inboxMessage.Content, SerializerExtensions.Instance)!;
 
                     using var scope = serviceScopeFactory.CreateScope();
 

@@ -9,6 +9,7 @@ using Eventix.Shared.Infrastructure.Extensions;
 using Eventix.Shared.Infrastructure.Inbox.Models;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
+using System.Data;
 
 namespace Eventix.Modules.Attendance.Infrastructure.Inbox
 {
@@ -24,14 +25,31 @@ namespace Eventix.Modules.Attendance.Infrastructure.Inbox
             return Task.CompletedTask;
         }
 
+        private void SetSubscribers(CancellationToken cancellationToken = default)
+        {
+            eventBus.SubscribeAsync<UserRegisteredIntegrationEvent>("attendance-user-registered", ConsumeAsync, cancellationToken);
+            eventBus.SubscribeAsync<UserUpdatedIntegrationEvent>("attendance-user-updated", ConsumeAsync, cancellationToken);
+
+            eventBus.SubscribeAsync<EventRescheduledIntegrationEvent>("attendance-event-rescheduled", ConsumeAsync, cancellationToken);
+            eventBus.SubscribeAsync<EventPublishedIntegrationEvent>("attendance-event-published", ConsumeAsync, cancellationToken);
+            eventBus.SubscribeAsync<EventCancelledIntegrationEvent>("attendance-event-cancelled", ConsumeAsync, cancellationToken);
+
+            eventBus.SubscribeAsync<TicketCreatedIntegrationEvent>("attendance-ticket-created", ConsumeAsync, cancellationToken);
+        }
+
         private async Task ConsumeAsync(IIntegrationEvent integrationEvent)
         {
             using var connection = sqlConnectionFactory.Create();
 
+            if (await MessageAlreadyExistsAsync(connection, integrationEvent.CorrelationId))
+            {
+                return;
+            }
+
             var inboxMessage = new InboxMessage
             {
                 Id = integrationEvent.CorrelationId,
-                Content = JsonConvert.SerializeObject(integrationEvent, SerializerExtension.Instance),
+                Content = JsonConvert.SerializeObject(integrationEvent, SerializerExtensions.Instance),
                 Type = integrationEvent.GetType().Name,
                 OccurredOnUtc = integrationEvent.OccurredOnUtc
             };
@@ -43,16 +61,19 @@ namespace Eventix.Modules.Attendance.Infrastructure.Inbox
             await connection.ExecuteAsync(sql, inboxMessage);
         }
 
-        private void SetSubscribers(CancellationToken cancellationToken = default)
+        private static async Task<bool> MessageAlreadyExistsAsync(IDbConnection connection, Guid CorrelationId)
         {
-            eventBus.SubscribeAsync<UserRegisteredIntegrationEvent>("attendance-user-registered", ConsumeAsync, cancellationToken);
-            eventBus.SubscribeAsync<UserUpdatedIntegrationEvent>("attendance-user-updated", ConsumeAsync, cancellationToken);
+            var sql = $""""
+                SELECT CASE WHEN EXISTS(
+                        SELECT 1
+                        FROM {Schemas.Attendance}.InboxMessages
+                        WHERE Id = @CorrelationId)
+                    THEN 1
+                    ELSE 0
+                END
+                """";
 
-            eventBus.SubscribeAsync<EventRescheduledIntegrationEvent>("attendance-event-rescheduled", ConsumeAsync, cancellationToken);
-            eventBus.SubscribeAsync<EventPublishedIntegrationEvent>("attendance-event-published", ConsumeAsync, cancellationToken);
-            eventBus.SubscribeAsync<EventCancelledIntegrationEvent>("attendance-event-cancelled", ConsumeAsync, cancellationToken);
-
-            eventBus.SubscribeAsync<TicketCreatedIntegrationEvent>("attendance-ticket-created", ConsumeAsync, cancellationToken);
+            return await connection.ExecuteScalarAsync<bool>(sql, new { CorrelationId });
         }
     }
 }

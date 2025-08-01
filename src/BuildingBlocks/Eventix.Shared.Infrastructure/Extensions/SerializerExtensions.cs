@@ -2,7 +2,7 @@
 
 namespace Eventix.Shared.Infrastructure.Extensions
 {
-    public static class SerializerExtension
+    public static class SerializerExtensions
     {
         public static readonly JsonSerializerSettings Instance = new()
         {

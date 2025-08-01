@@ -2,7 +2,7 @@
 
 namespace Eventix.Shared.Infrastructure.Extensions
 {
-    public static class BusNameConvetionsExtension
+    public static class BusNameConvetionsExtensions
     {
         public static string GetExchangeName<T>(this string @string) where T : IntegrationEvent
         {

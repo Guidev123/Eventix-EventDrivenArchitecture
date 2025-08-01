@@ -24,7 +24,7 @@ namespace Eventix.Shared.Infrastructure.EventSourcing
             await foreach (var resolvedEvent in events)
             {
                 var dataEncoded = Encoding.UTF8.GetString(resolvedEvent.Event.Data.Span);
-                var jsonData = JsonConvert.DeserializeObject<IDomainEvent>(dataEncoded, SerializerExtension.Instance)
+                var jsonData = JsonConvert.DeserializeObject<IDomainEvent>(dataEncoded, SerializerExtensions.Instance)
                     ?? throw new ArgumentNullException("Fail to Deserialize Domain Event");
 
                 var storedEvent = new StoredEvent(
@@ -47,7 +47,7 @@ namespace Eventix.Shared.Infrastructure.EventSourcing
             yield return new(
                 Uuid.NewUuid(),
                 @event.GetType().Name,
-                Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(@event, SerializerExtension.Instance)),
+                Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(@event, SerializerExtensions.Instance)),
                 null,
                 "application/json"
                 );

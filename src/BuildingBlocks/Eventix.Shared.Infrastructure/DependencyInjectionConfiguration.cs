@@ -9,6 +9,7 @@ using Eventix.Shared.Infrastructure.Authentication;
 using Eventix.Shared.Infrastructure.Authorization;
 using Eventix.Shared.Infrastructure.Cache;
 using Eventix.Shared.Infrastructure.Clock;
+using Eventix.Shared.Infrastructure.EventBus;
 using Eventix.Shared.Infrastructure.EventSourcing;
 using Eventix.Shared.Infrastructure.Factories;
 using Eventix.Shared.Infrastructure.Outbox.Interceptors;
@@ -126,10 +127,17 @@ namespace Eventix.Shared.Infrastructure
 
         private static IServiceCollection AddBus(this IServiceCollection services, string messageBusConnectionString)
         {
+            services.TryAddSingleton<IBusFailureHandlingService, BusFailureHandlingService>();
+
             services.TryAddSingleton<IEventBus>(serviceProvider =>
             {
                 var logger = serviceProvider.GetRequiredService<ILogger<EventBus.EventBus>>();
-                return new EventBus.EventBus(messageBusConnectionString, logger);
+                var busFailureHandlingService = serviceProvider.GetRequiredService<IBusFailureHandlingService>();
+
+                return new EventBus.EventBus(options =>
+                {
+                    options.ConnectionString = messageBusConnectionString;
+                }, logger, busFailureHandlingService);
             });
 
             return services;

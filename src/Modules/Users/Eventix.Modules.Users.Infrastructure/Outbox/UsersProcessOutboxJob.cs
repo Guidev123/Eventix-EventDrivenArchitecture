@@ -38,7 +38,7 @@ namespace Eventix.Modules.Users.Infrastructure.Outbox
                 Exception? exception = null;
                 try
                 {
-                    var domainEvent = JsonConvert.DeserializeObject<IDomainEvent>(outboxMessage.Content, SerializerExtension.Instance)!;
+                    var domainEvent = JsonConvert.DeserializeObject<IDomainEvent>(outboxMessage.Content, SerializerExtensions.Instance)!;
 
                     using var scope = serviceScopeFactory.CreateScope();
 
