@@ -48,15 +48,20 @@ namespace Eventix.Shared.Infrastructure.EventBus
             _busFailureHandlingService = busFailureHandlingService;
         }
 
-        public async Task PublishAsync<T>(T integrationEvent, CancellationToken cancellationToken = default)
-             where T : IntegrationEvent
+        public async Task PublishAsync<T>(T integrationEvent, CancellationToken cancellationToken = default) where T : IntegrationEvent
+        {
+            await PublishAsync(integrationEvent, ExchangeTypeEnum.Topic, cancellationToken);
+        }
+
+        public async Task PublishAsync<T>(T integrationEvent, ExchangeTypeEnum exchangeType, CancellationToken cancellationToken = default)
+            where T : IntegrationEvent
         {
             await EnsureConnectedAsync();
 
             var exchangeName = string.Empty.GetExchangeName<T>();
-            var routingKey = string.Empty.GetRoutingKey<T>();
+            var routingKey = string.Empty.GetRoutingKey<T>(exchangeType);
 
-            await _channel.ExchangeDeclareAsync(exchangeName, ExchangeType.Topic, true, cancellationToken: cancellationToken);
+            await _channel.ExchangeDeclareAsync(exchangeName, nameof(exchangeType), true, cancellationToken: cancellationToken);
 
             var body = JsonSerializer.SerializeToUtf8Bytes(integrationEvent);
             var properties = new BasicProperties
@@ -72,9 +77,15 @@ namespace Eventix.Shared.Infrastructure.EventBus
                 typeof(T).Name, integrationEvent.CorrelationId, exchangeName);
         }
 
+        public async Task SubscribeAsync<T>(string queueName, Func<T, Task> onMessage, CancellationToken cancellationToken = default) where T : IntegrationEvent
+        {
+            await SubscribeAsync(queueName, onMessage, ExchangeTypeEnum.Topic, cancellationToken);
+        }
+
         public async Task SubscribeAsync<T>(
             string queueName,
             Func<T, Task> onMessage,
+            ExchangeTypeEnum exchangeType,
             CancellationToken cancellationToken = default
             ) where T : IntegrationEvent
         {

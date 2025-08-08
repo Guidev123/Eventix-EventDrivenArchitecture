@@ -1,6 +1,4 @@
 ﻿using Eventix.Shared.Application.EventBus;
-using Eventix.Shared.Application.Exceptions;
-using Eventix.Shared.Domain.Responses;
 using Eventix.Shared.Infrastructure.Extensions;
 using Microsoft.Extensions.Logging;
 using RabbitMQ.Client;
@@ -13,13 +11,18 @@ namespace Eventix.Shared.Infrastructure.EventBus
         public async Task DeclareRetryInfrastructureAsync<T>(string queueName, IChannel channel, CancellationToken cancellationToken = default)
              where T : IntegrationEvent
         {
+            await DeclareRetryInfrastructureAsync<T>(queueName, channel, ExchangeTypeEnum.Topic, cancellationToken);
+        }
+
+        public async Task DeclareRetryInfrastructureAsync<T>(string queueName, IChannel channel, ExchangeTypeEnum exchangeType, CancellationToken cancellationToken = default) where T : IntegrationEvent
+        {
             var exchangeName = string.Empty.GetExchangeName<T>();
-            var routingKey = string.Empty.GetRoutingKey<T>();
+            var routingKey = string.Empty.GetRoutingKey<T>(exchangeType);
             var retryQueueName = $"{queueName}.retry";
             var deadLetterQueueName = $"{queueName}.deadletter";
 
             await Task.WhenAll(
-                channel.ExchangeDeclareAsync(exchangeName, ExchangeType.Topic, true, cancellationToken: cancellationToken),
+                channel.ExchangeDeclareAsync(exchangeName, nameof(exchangeType), true, cancellationToken: cancellationToken),
                 channel.QueueDeclareAsync(queueName, true, false, false, cancellationToken: cancellationToken),
                 channel.QueueDeclareAsync(deadLetterQueueName, true, false, false, cancellationToken: cancellationToken)
                 );
@@ -82,7 +85,7 @@ namespace Eventix.Shared.Infrastructure.EventBus
             var deadLetterQueueName = $"{queueName}.deadletter";
 
             var originalHeaders = eventArgs.BasicProperties.Headers
-                ?? throw new EventixException(nameof(SendToDeadLetterQueueAsync), Error.NullValue);
+                ?? throw new ArgumentNullException(nameof(queueName), "Message headers are required for dead letter processing.");
 
             var headers = new Dictionary<string, object?>(originalHeaders);
 

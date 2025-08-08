@@ -1,4 +1,5 @@
 ﻿using Eventix.Shared.Application.EventBus;
+using Eventix.Shared.Infrastructure.EventBus;
 
 namespace Eventix.Shared.Infrastructure.Extensions
 {
@@ -6,7 +7,7 @@ namespace Eventix.Shared.Infrastructure.Extensions
     {
         public static string GetExchangeName<T>(this string @string) where T : IntegrationEvent
         {
-            var eventName = typeof(T).Name.Replace(nameof(IntegrationEvent), "").ToLowerInvariant();
+            var eventName = typeof(T).Name.Replace(nameof(IntegrationEvent), string.Empty).ToLowerInvariant();
 
             var @namespace = typeof(T).Namespace ?? string.Empty;
 
@@ -15,8 +16,20 @@ namespace Eventix.Shared.Infrastructure.Extensions
             return $"{context}.{eventName}";
         }
 
-        public static string GetRoutingKey<T>(this string @string) where T : IntegrationEvent
-            => typeof(T).Name.Replace(nameof(IntegrationEvent), string.Empty).ToLowerInvariant();
+        public static string GetRoutingKey<T>(this string _, ExchangeTypeEnum exchangeType = ExchangeTypeEnum.Topic)
+            where T : IntegrationEvent
+        {
+            var typeName = typeof(T).Name.Replace(nameof(IntegrationEvent), string.Empty).ToLowerInvariant();
+
+            return exchangeType switch
+            {
+                ExchangeTypeEnum.Direct => typeName,
+                ExchangeTypeEnum.Topic => $"{typeName}.#",
+                ExchangeTypeEnum.Fanout => string.Empty,
+                ExchangeTypeEnum.Headers => string.Empty,
+                _ => typeName
+            };
+        }
 
         private static string ExtractContextFromNamespace(string @namespace)
         {

@@ -9,6 +9,9 @@ namespace Eventix.Shared.Infrastructure.EventBus
         Task DeclareRetryInfrastructureAsync<T>(string queueName, IChannel channel, CancellationToken cancellationToken = default)
             where T : IntegrationEvent;
 
+        Task DeclareRetryInfrastructureAsync<T>(string queueName, IChannel channel, ExchangeTypeEnum exchangeType, CancellationToken cancellationToken = default)
+            where T : IntegrationEvent;
+
         int GetRetryCount(IReadOnlyBasicProperties? properties);
 
         Task SendToRetryQueueAsync(
