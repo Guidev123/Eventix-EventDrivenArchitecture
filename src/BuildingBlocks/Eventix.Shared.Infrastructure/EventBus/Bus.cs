@@ -36,7 +36,9 @@ namespace Eventix.Shared.Infrastructure.EventBus
 
             _connectionFactory = new ConnectionFactory()
             {
-                Uri = new Uri(_brokerOptions.ConnectionString),
+                UserName = _brokerOptions.Username,
+                Password = _brokerOptions.Password,
+                VirtualHost = _brokerOptions.VirtualHost,
                 AutomaticRecoveryEnabled = true,
                 NetworkRecoveryInterval = TimeSpan.FromSeconds(_brokerOptions.NetworkRecoveryIntervalInSeconds),
                 RequestedHeartbeat = TimeSpan.FromSeconds(_brokerOptions.HeartbeatIntervalSeconds),
@@ -92,25 +94,27 @@ namespace Eventix.Shared.Infrastructure.EventBus
 
                     if (message is null)
                     {
-                        _logger.LogError("Failed to deserialize message {CorrelationId} from queue {QueueName}.",
+                        _logger.LogError("Failed to deserialize message {CorrelationId} from queue {QueueName}",
                             correlationId, queueName);
+
                         await _channel.BasicAckAsync(deliveryTag, false);
+
                         return;
                     }
 
-                    _logger.LogInformation("Received integration event {EventName} with ID {CorrelationId} from queue {QueueName}.",
+                    _logger.LogInformation("Received integration event {EventName} with ID {CorrelationId} from queue {QueueName}",
                         typeof(T).Name, message.CorrelationId, queueName);
 
                     await onMessage(message);
 
                     await _channel.BasicAckAsync(deliveryTag, false);
 
-                    _logger.LogInformation("Processed integration event {EventName} with ID {CorrelationId} from queue {QueueName}.",
+                    _logger.LogInformation("Processed integration event {EventName} with ID {CorrelationId} from queue {QueueName}",
                         typeof(T).Name, message.CorrelationId, queueName);
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError(ex, "Error processing message {CorrelationId} from queue {QueueName}.",
+                    _logger.LogError(ex, "Error processing message {CorrelationId} from queue {QueueName}",
                         correlationId, queueName);
 
                     var retryCount = _busFailureHandlingService.GetRetryCount(eventArgs.BasicProperties);
@@ -127,12 +131,12 @@ namespace Eventix.Shared.Infrastructure.EventBus
 
                         await _channel.BasicAckAsync(deliveryTag, false);
 
-                        _logger.LogWarning("Message {CorrelationId} sent to retry queue. Attempt {RetryCount}/{MaxDeliveryRetryAttempts}.",
+                        _logger.LogWarning("Message {CorrelationId} sent to retry queue. Attempt {RetryCount}/{MaxDeliveryRetryAttempts}",
                             correlationId, retryCount + 1, _busResilienceOptions.MaxDeliveryRetryAttempts);
                     }
                     else
                     {
-                        _logger.LogError("Message {CorrelationId} from queue {QueueName} exceeded maximum retries ({MaxDeliveryRetryAttempts}). Message will be acknowledged and sent to Dead Letter Queue.",
+                        _logger.LogError("Message {CorrelationId} from queue {QueueName} exceeded maximum retries ({MaxDeliveryRetryAttempts}). Message will be acknowledged and sent to Dead Letter Queue",
                             correlationId, queueName, _busResilienceOptions.MaxDeliveryRetryAttempts);
 
                         await _busFailureHandlingService.SendToDeadLetterQueueAsync(
@@ -158,16 +162,18 @@ namespace Eventix.Shared.Infrastructure.EventBus
                 .Or<SocketException>()
                 .WaitAndRetryAsync(_brokerOptions.TryConnectMaxRetries, retry =>
                 {
-                    _logger.LogWarning("Attempting to connect to RabbitMQ. Retry {RetryCount}/{TryConnectMaxRetries}.",
+                    _logger.LogWarning("Attempting to connect to RabbitMQ. Retry {RetryCount}/{TryConnectMaxRetries}",
                         retry, _brokerOptions.TryConnectMaxRetries);
                     return TimeSpan.FromSeconds(Math.Pow(2, retry));
                 });
 
             await policy.ExecuteAsync(async () =>
             {
-                _connection = await _connectionFactory.CreateConnectionAsync();
+                var endpoints = _brokerOptions.Hosts.Select(host => new AmqpTcpEndpoint(host)).ToList();
+
+                _connection = await _connectionFactory.CreateConnectionAsync(endpoints);
                 _channel = await _connection.CreateChannelAsync();
-                _logger.LogInformation("Successfully connected to RabbitMQ.");
+                _logger.LogInformation("Successfully connected to RabbitMQ");
             });
         }
 

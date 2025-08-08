@@ -18,11 +18,11 @@ namespace Eventix.Shared.Infrastructure.EventBus
             var retryQueueName = $"{queueName}.retry";
             var deadLetterQueueName = $"{queueName}.deadletter";
 
-            await channel.ExchangeDeclareAsync(exchangeName, ExchangeType.Topic, true, cancellationToken: cancellationToken);
-
-            await channel.QueueDeclareAsync(queueName, true, false, false, cancellationToken: cancellationToken);
-
-            await channel.QueueDeclareAsync(deadLetterQueueName, true, false, false, cancellationToken: cancellationToken);
+            await Task.WhenAll(
+                channel.ExchangeDeclareAsync(exchangeName, ExchangeType.Topic, true, cancellationToken: cancellationToken),
+                channel.QueueDeclareAsync(queueName, true, false, false, cancellationToken: cancellationToken),
+                channel.QueueDeclareAsync(deadLetterQueueName, true, false, false, cancellationToken: cancellationToken)
+                );
 
             var retryQueueArgs = new Dictionary<string, object?>
             {
@@ -30,9 +30,10 @@ namespace Eventix.Shared.Infrastructure.EventBus
                 {"x-dead-letter-routing-key", routingKey}
             };
 
-            await channel.QueueDeclareAsync(retryQueueName, true, false, false, retryQueueArgs, cancellationToken: cancellationToken);
-
-            await channel.QueueBindAsync(queueName, exchangeName, routingKey, cancellationToken: cancellationToken);
+            await Task.WhenAll(
+                channel.QueueDeclareAsync(retryQueueName, true, false, false, retryQueueArgs, cancellationToken: cancellationToken),
+                channel.QueueBindAsync(queueName, exchangeName, routingKey, cancellationToken: cancellationToken)
+                );
         }
 
         public async Task SendToRetryQueueAsync(
@@ -65,7 +66,7 @@ namespace Eventix.Shared.Infrastructure.EventBus
 
             retryProperties.Headers["x-retry-count"] = retryCount;
 
-            await channel.BasicPublishAsync("", retryQueueName, false, retryProperties, eventArgs.Body, cancellationToken);
+            await channel.BasicPublishAsync(string.Empty, retryQueueName, false, retryProperties, eventArgs.Body, cancellationToken);
 
             logger.LogInformation("Message {CorrelationId} sent to retry queue {RetryQueueName} with delay {DelayMs}ms (max: {MaxDelayMs}ms). Retry count: {RetryCount}",
                 correlationId, retryQueueName, delayMs, maxDelayMs, retryCount);
@@ -97,7 +98,7 @@ namespace Eventix.Shared.Infrastructure.EventBus
             dlqProperties.Headers["x-failed-at"] = DateTimeOffset.UtcNow.ToString("O");
             dlqProperties.Headers["x-final-retry-count"] = GetRetryCount(eventArgs.BasicProperties);
 
-            await channel.BasicPublishAsync("", deadLetterQueueName, false, dlqProperties, eventArgs.Body, cancellationToken);
+            await channel.BasicPublishAsync(string.Empty, deadLetterQueueName, false, dlqProperties, eventArgs.Body, cancellationToken);
 
             logger.LogError("Message {CorrelationId} sent to dead letter queue {DeadLetterQueueName} after {RetryCount} failed attempts",
                 correlationId, deadLetterQueueName, GetRetryCount(eventArgs.BasicProperties));

@@ -32,7 +32,7 @@ namespace Eventix.Shared.Infrastructure
     {
         public static IServiceCollection AddInfrastructure(
             this IServiceCollection services,
-            string messageBusConnectionString,
+            IConfiguration configuration,
             string databaseConnectionString,
             string redisConnectionString)
         {
@@ -42,7 +42,7 @@ namespace Eventix.Shared.Infrastructure
                 .AddEventSourcing()
                 .AddData(databaseConnectionString)
                 .AddCacheService(redisConnectionString)
-                .AddBus(messageBusConnectionString)
+                .AddBus(configuration)
                 .AddBackgroundJobs();
 
             return services;
@@ -125,7 +125,7 @@ namespace Eventix.Shared.Infrastructure
             return services;
         }
 
-        private static IServiceCollection AddBus(this IServiceCollection services, string messageBusConnectionString)
+        private static IServiceCollection AddBus(this IServiceCollection services, IConfiguration configuration)
         {
             services.TryAddSingleton<IBusFailureHandlingService, BusFailureHandlingService>();
 
@@ -133,10 +133,14 @@ namespace Eventix.Shared.Infrastructure
             {
                 var logger = serviceProvider.GetRequiredService<ILogger<Bus>>();
                 var busFailureHandlingService = serviceProvider.GetRequiredService<IBusFailureHandlingService>();
+                var brokerOptions = configuration.GetSection(nameof(BrokerOptions)).Get<BrokerOptions>() ?? new();
 
                 return new Bus(options =>
                 {
-                    options.ConnectionString = messageBusConnectionString;
+                    options.Username = brokerOptions.Username;
+                    options.Password = brokerOptions.Password;
+                    options.VirtualHost = brokerOptions.VirtualHost;
+                    options.Hosts = brokerOptions.Hosts;
                 }, logger, busFailureHandlingService);
             });
 

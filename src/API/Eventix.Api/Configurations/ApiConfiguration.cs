@@ -6,11 +6,14 @@ using Eventix.Modules.Events.Infrastructure;
 using Eventix.Modules.Ticketing.Infrastructure;
 using Eventix.Modules.Users.Infrastructure;
 using Eventix.Shared.Infrastructure;
+using Eventix.Shared.Infrastructure.EventBus;
 using HealthChecks.RabbitMQ;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Identity.Client;
 using RabbitMQ.Client;
 using Serilog;
 using AttendanceAssembly = Eventix.Modules.Attendance.Application.AssemblyReference;
+using BrokerOptions = Eventix.Shared.Infrastructure.EventBus.BrokerOptions;
 using EventsAssembly = Eventix.Modules.Events.Application.AssemblyReference;
 using TicketingAssembly = Eventix.Modules.Ticketing.Application.AssemblyReference;
 using UsersAssembly = Eventix.Modules.Users.Application.AssemblyReference;
@@ -28,7 +31,6 @@ namespace Eventix.Api.Configurations
         {
             var dbConnectionString = builder.Configuration.GetConnectionString("Database") ?? string.Empty;
             var redisConnectionString = builder.Configuration.GetConnectionString("Cache") ?? string.Empty;
-            var messageBusConnectionString = builder.Configuration.GetConnectionString("MessageBus") ?? string.Empty;
             var eventStoreString = builder.Configuration.GetConnectionString("EventStore") ?? string.Empty;
 
             builder.Services.AddOpenApi();
@@ -37,14 +39,14 @@ namespace Eventix.Api.Configurations
 
             builder.AddExceptionHandler();
 
-            builder.AddAllModules(dbConnectionString, messageBusConnectionString, redisConnectionString);
+            builder.AddAllModules(dbConnectionString, redisConnectionString);
 
             if (!builder.Environment.IsEnvironment("Testing"))
             {
                 builder.Host.UseSerilog((context, loggerConfig)
                     => loggerConfig.ReadFrom.Configuration(context.Configuration));
 
-                builder.AddCustomHealthChecks(dbConnectionString, messageBusConnectionString, redisConnectionString, eventStoreString);
+                builder.AddCustomHealthChecks(dbConnectionString, redisConnectionString, eventStoreString);
 
                 builder.Services.AddTracing(builder.Configuration, DiagnosticConfig.ServiceName);
             }
@@ -63,14 +65,14 @@ namespace Eventix.Api.Configurations
         private static WebApplicationBuilder AddCustomHealthChecks(
             this WebApplicationBuilder builder,
             string dbConnectionString,
-            string messageBusConnectionString,
             string redisConnectionString,
             string eventStoreString
         )
         {
-            var appSettingsSection = builder.Configuration.GetSection(nameof(KeyCloakExtensions));
-            var appSettings = appSettingsSection.Get<KeyCloakExtensions>()
-                ?? throw new InvalidOperationException("Keycloak settings not found.");
+            var keycloakOptions = builder.Configuration.GetSection(nameof(KeyCloakExtensions)).Get<KeyCloakExtensions>()
+                ?? throw new InvalidOperationException("Keycloak settings not found");
+
+            var brokerOptions = builder.Configuration.GetSection(nameof(BrokerOptions)).Get<BrokerOptions>() ?? new();
 
             builder.Services
                 .AddHealthChecks()
@@ -81,13 +83,17 @@ namespace Eventix.Api.Configurations
                 {
                     var factory = new ConnectionFactory
                     {
-                        Uri = new Uri(messageBusConnectionString),
+                        UserName = brokerOptions.Username,
+                        Password = brokerOptions.Password,
+                        VirtualHost = brokerOptions.VirtualHost,
                         AutomaticRecoveryEnabled = true
                     };
 
-                    return factory.CreateConnectionAsync();
+                    var endpoints = brokerOptions.Hosts.Select(host => new AmqpTcpEndpoint(host)).ToList();
+
+                    return factory.CreateConnectionAsync(endpoints);
                 })
-                .AddUrlGroup(new Uri(appSettings.HealthUrl), HttpMethod.Get, "keycloak");
+                .AddUrlGroup(new Uri(keycloakOptions.HealthUrl), HttpMethod.Get, "keycloak");
 
             return builder;
         }
@@ -95,7 +101,6 @@ namespace Eventix.Api.Configurations
         private static WebApplicationBuilder AddAllModules(
             this WebApplicationBuilder builder,
             string dbConnectionString,
-            string messageBusConnectionString,
             string redisConnectionString
             )
         {
@@ -106,7 +111,7 @@ namespace Eventix.Api.Configurations
                     TicketingAssembly.Assembly,
                     AttendanceAssembly.Assembly
                 ])
-                .AddInfrastructure(messageBusConnectionString, dbConnectionString, redisConnectionString)
+                .AddInfrastructure(builder.Configuration, dbConnectionString, redisConnectionString)
                 .AddTicketingModule(builder.Configuration)
                 .AddEventsModule(builder.Configuration)
                 .AddUsersModule(builder.Configuration)
