@@ -10,7 +10,7 @@ using Eventix.Shared.Application.Messaging;
 
 namespace Eventix.Modules.Events.Application.Events.DomainEvents
 {
-    internal sealed class EventPublishedDomainEventHandler(IEventBus eventBus, IMediatorHandler mediator) : DomainEventHandler<EventPublishedDomainEvent>
+    internal sealed class EventPublishedDomainEventHandler(IBus eventBus, IMediatorHandler mediator) : DomainEventHandler<EventPublishedDomainEvent>
     {
         public override async Task ExecuteAsync(EventPublishedDomainEvent notification, CancellationToken cancellationToken = default)
         {

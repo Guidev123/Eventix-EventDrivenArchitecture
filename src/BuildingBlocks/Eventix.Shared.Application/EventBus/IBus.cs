@@ -3,7 +3,7 @@
 /// <summary>
 /// Represents a generic messaging service interface for publishing and subscribing integration events.
 /// </summary>
-public interface IEventBus : IDisposable
+public interface IBus : IDisposable
 {
     /// <summary>
     /// Publishes the specified integration event to the message bus.

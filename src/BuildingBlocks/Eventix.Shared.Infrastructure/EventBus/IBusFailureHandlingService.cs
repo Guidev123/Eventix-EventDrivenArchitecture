@@ -19,5 +19,12 @@ namespace Eventix.Shared.Infrastructure.EventBus
             BusResilienceConfiguration busResilience,
             IChannel channel,
             CancellationToken cancellationToken = default);
+
+        Task SendToDeadLetterQueueAsync(
+            BasicDeliverEventArgs eventArgs,
+            string queueName,
+            string correlationId,
+            IChannel channel,
+            CancellationToken cancellationToken);
     }
 }

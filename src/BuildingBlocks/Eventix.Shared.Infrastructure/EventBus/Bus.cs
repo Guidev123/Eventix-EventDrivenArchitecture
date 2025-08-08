@@ -10,21 +10,21 @@ using System.Text.Json;
 
 namespace Eventix.Shared.Infrastructure.EventBus
 {
-    internal sealed class EventBus : IEventBus
+    internal sealed class Bus : IBus
     {
         private readonly BrokerOptions _brokerOptions = new();
         private readonly BusResilienceConfiguration _busResilienceOptions = new();
 
-        private readonly ILogger<EventBus> _logger;
+        private readonly ILogger<Bus> _logger;
         private readonly IBusFailureHandlingService _busFailureHandlingService;
 
         private readonly ConnectionFactory _connectionFactory;
         private IConnection _connection = default!;
         private IChannel _channel = default!;
 
-        public EventBus(
+        public Bus(
             Action<BrokerOptions> configureBroker,
-            ILogger<EventBus> logger,
+            ILogger<Bus> logger,
             IBusFailureHandlingService busFailureHandlingService,
             Action<BusResilienceConfiguration>? configureResilience = null)
         {
@@ -38,7 +38,8 @@ namespace Eventix.Shared.Infrastructure.EventBus
             {
                 Uri = new Uri(_brokerOptions.ConnectionString),
                 AutomaticRecoveryEnabled = true,
-                NetworkRecoveryInterval = TimeSpan.FromSeconds(_brokerOptions.NetworkRecoveryIntervalInSeconds)
+                NetworkRecoveryInterval = TimeSpan.FromSeconds(_brokerOptions.NetworkRecoveryIntervalInSeconds),
+                RequestedHeartbeat = TimeSpan.FromSeconds(_brokerOptions.HeartbeatIntervalSeconds),
             };
 
             _logger = logger;
@@ -131,8 +132,15 @@ namespace Eventix.Shared.Infrastructure.EventBus
                     }
                     else
                     {
-                        _logger.LogError("Message {CorrelationId} from queue {QueueName} exceeded maximum retries ({MaxDeliveryRetryAttempts}). Message will be acknowledged and discarded.",
+                        _logger.LogError("Message {CorrelationId} from queue {QueueName} exceeded maximum retries ({MaxDeliveryRetryAttempts}). Message will be acknowledged and sent to Dead Letter Queue.",
                             correlationId, queueName, _busResilienceOptions.MaxDeliveryRetryAttempts);
+
+                        await _busFailureHandlingService.SendToDeadLetterQueueAsync(
+                            eventArgs,
+                            queueName,
+                            correlationId,
+                            _channel,
+                            cancellationToken);
 
                         await _channel.BasicAckAsync(deliveryTag, false);
                     }
@@ -163,17 +171,34 @@ namespace Eventix.Shared.Infrastructure.EventBus
             });
         }
 
+        private readonly SemaphoreSlim _connectionSemaphore = new(1, 1);
+
         private async Task EnsureConnectedAsync()
         {
             if (!IsConnected)
-                await TryConnect();
+            {
+                await _connectionSemaphore.WaitAsync();
+                try
+                {
+                    if (!IsConnected) await TryConnect();
+                }
+                finally
+                {
+                    _connectionSemaphore.Release();
+                }
+            }
         }
 
         private bool IsConnected
-            => _connection is not null && _connection.IsOpen && _channel is not null && _channel.IsOpen;
+            => _connection?.IsOpen == true && _channel?.IsOpen == true && !_channel.IsClosed;
 
         public void Dispose()
         {
+            _connectionSemaphore?.Dispose();
+
+            try { _channel?.CloseAsync(); } catch { }
+            try { _connection?.CloseAsync(); } catch { }
+
             _channel?.Dispose();
             _connection?.Dispose();
         }

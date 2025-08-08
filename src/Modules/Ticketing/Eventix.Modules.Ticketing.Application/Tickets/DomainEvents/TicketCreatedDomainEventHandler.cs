@@ -8,7 +8,7 @@ using Eventix.Shared.Application.Messaging;
 
 namespace Eventix.Modules.Ticketing.Application.Tickets.DomainEvents
 {
-    internal sealed class TicketCreatedDomainEventHandler(IEventBus eventBus, IMediatorHandler mediator) : DomainEventHandler<TicketCreatedDomainEvent>
+    internal sealed class TicketCreatedDomainEventHandler(IBus eventBus, IMediatorHandler mediator) : DomainEventHandler<TicketCreatedDomainEvent>
     {
         public override async Task ExecuteAsync(TicketCreatedDomainEvent domainEvent, CancellationToken cancellationToken = default)
         {

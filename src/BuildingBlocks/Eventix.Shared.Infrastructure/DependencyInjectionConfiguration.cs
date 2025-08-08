@@ -129,12 +129,12 @@ namespace Eventix.Shared.Infrastructure
         {
             services.TryAddSingleton<IBusFailureHandlingService, BusFailureHandlingService>();
 
-            services.TryAddSingleton<IEventBus>(serviceProvider =>
+            services.TryAddSingleton<IBus>(serviceProvider =>
             {
-                var logger = serviceProvider.GetRequiredService<ILogger<EventBus.EventBus>>();
+                var logger = serviceProvider.GetRequiredService<ILogger<Bus>>();
                 var busFailureHandlingService = serviceProvider.GetRequiredService<IBusFailureHandlingService>();
 
-                return new EventBus.EventBus(options =>
+                return new Bus(options =>
                 {
                     options.ConnectionString = messageBusConnectionString;
                 }, logger, busFailureHandlingService);

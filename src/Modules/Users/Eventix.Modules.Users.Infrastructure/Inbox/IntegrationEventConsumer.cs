@@ -11,7 +11,7 @@ using System.Data;
 namespace Eventix.Modules.Users.Infrastructure.Inbox
 {
     internal sealed class IntegrationEventConsumer(
-        IEventBus eventBus,
+        IBus eventBus,
         ISqlConnectionFactory sqlConnectionFactory
         ) : BackgroundService
     {

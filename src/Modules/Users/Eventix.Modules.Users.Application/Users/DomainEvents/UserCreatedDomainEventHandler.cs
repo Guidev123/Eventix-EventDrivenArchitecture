@@ -8,7 +8,7 @@ using Eventix.Shared.Application.Messaging;
 
 namespace Eventix.Modules.Users.Application.Users.DomainEvents
 {
-    internal sealed class UserCreatedDomainEventHandler(IEventBus eventBus, IMediatorHandler mediator) : DomainEventHandler<UserCreatedDomainEvent>
+    internal sealed class UserCreatedDomainEventHandler(IBus eventBus, IMediatorHandler mediator) : DomainEventHandler<UserCreatedDomainEvent>
     {
         public override async Task ExecuteAsync(UserCreatedDomainEvent notification, CancellationToken cancellationToken = default)
         {

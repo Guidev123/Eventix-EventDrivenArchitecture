@@ -5,7 +5,7 @@ using Eventix.Shared.Application.Messaging;
 
 namespace Eventix.Modules.Events.Application.TicketTypes.DomainEvents
 {
-    internal sealed class TicketTypePriceChangedDomainEventHandler(IEventBus eventBus) : DomainEventHandler<TicketTypePriceChangedDomainEvent>
+    internal sealed class TicketTypePriceChangedDomainEventHandler(IBus eventBus) : DomainEventHandler<TicketTypePriceChangedDomainEvent>
     {
         public override async Task ExecuteAsync(TicketTypePriceChangedDomainEvent domainEvent, CancellationToken cancellationToken = default)
         {

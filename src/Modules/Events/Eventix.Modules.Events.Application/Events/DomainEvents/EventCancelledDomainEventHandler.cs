@@ -5,7 +5,7 @@ using Eventix.Shared.Application.Messaging;
 
 namespace Eventix.Modules.Events.Application.Events.DomainEvents
 {
-    internal sealed class EventCancelledDomainEventHandler(IEventBus eventBus) : DomainEventHandler<EventCancelledDomainEvent>
+    internal sealed class EventCancelledDomainEventHandler(IBus eventBus) : DomainEventHandler<EventCancelledDomainEvent>
     {
         public override async Task ExecuteAsync(EventCancelledDomainEvent domainEvent, CancellationToken cancellationToken = default)
         {

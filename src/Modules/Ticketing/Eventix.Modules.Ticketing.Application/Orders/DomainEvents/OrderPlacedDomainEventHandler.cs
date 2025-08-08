@@ -5,7 +5,7 @@ using Eventix.Shared.Application.Messaging;
 
 namespace Eventix.Modules.Ticketing.Application.Orders.DomainEvents
 {
-    internal sealed class OrderPlacedDomainEventHandler(IEventBus eventBus) : DomainEventHandler<OrderPlacedDomainEvent>
+    internal sealed class OrderPlacedDomainEventHandler(IBus eventBus) : DomainEventHandler<OrderPlacedDomainEvent>
     {
         public override async Task ExecuteAsync(OrderPlacedDomainEvent domainEvent, CancellationToken cancellationToken = default)
         {
