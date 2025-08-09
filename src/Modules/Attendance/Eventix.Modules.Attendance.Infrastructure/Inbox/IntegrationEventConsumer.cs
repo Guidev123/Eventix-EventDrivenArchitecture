@@ -27,7 +27,7 @@ namespace Eventix.Modules.Attendance.Infrastructure.Inbox
 
         private void SetSubscribers(CancellationToken cancellationToken = default)
         {
-            eventBus.SubscribeAsync<UserRegisteredIntegrationEvent>("attendance-user-registered", ConsumeAsync, cancellationToken);
+            eventBus.SubscribeAsync<UserRegisteredIntegrationEvent>("attendance-user-registered", ConsumeAsync, ExchangeTypeEnum.Direct, cancellationToken);
             eventBus.SubscribeAsync<UserUpdatedIntegrationEvent>("attendance-user-updated", ConsumeAsync, cancellationToken);
 
             eventBus.SubscribeAsync<EventRescheduledIntegrationEvent>("attendance-event-rescheduled", ConsumeAsync, cancellationToken);

@@ -28,7 +28,7 @@ namespace Eventix.Modules.Ticketing.Infrastructure.Inbox
 
         private void SetSubscribers(CancellationToken cancellationToken = default)
         {
-            eventBus.SubscribeAsync<UserRegisteredIntegrationEvent>("ticketing-user-registered", ConsumeAsync, cancellationToken);
+            eventBus.SubscribeAsync<UserRegisteredIntegrationEvent>("ticketing-user-registered", ConsumeAsync, ExchangeTypeEnum.Direct, cancellationToken);
             eventBus.SubscribeAsync<UserUpdatedIntegrationEvent>("ticketing-user-updated", ConsumeAsync, cancellationToken);
 
             eventBus.SubscribeAsync<EventCancelledIntegrationEvent>("ticketing-event-cancelled", ConsumeAsync, cancellationToken);

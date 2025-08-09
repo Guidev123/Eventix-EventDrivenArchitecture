@@ -1,10 +1,16 @@
-﻿namespace Eventix.Shared.Infrastructure.EventBus
+﻿using System.ComponentModel;
+
+namespace Eventix.Shared.Application.EventBus
 {
     public enum ExchangeTypeEnum
     {
+        [Description("direct")]
         Direct,
+
+        [Description("fanout")]
         Fanout,
-        Headers,
+
+        [Description("topic")]
         Topic
     }
 }

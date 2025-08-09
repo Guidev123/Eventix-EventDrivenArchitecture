@@ -1,5 +1,4 @@
 ﻿using Eventix.Shared.Application.EventBus;
-using Eventix.Shared.Infrastructure.EventBus;
 
 namespace Eventix.Shared.Infrastructure.Extensions
 {
@@ -26,7 +25,6 @@ namespace Eventix.Shared.Infrastructure.Extensions
                 ExchangeTypeEnum.Direct => typeName,
                 ExchangeTypeEnum.Topic => $"{typeName}.#",
                 ExchangeTypeEnum.Fanout => string.Empty,
-                ExchangeTypeEnum.Headers => string.Empty,
                 _ => typeName
             };
         }

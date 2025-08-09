@@ -22,7 +22,7 @@ namespace Eventix.Shared.Infrastructure.EventBus
             var deadLetterQueueName = $"{queueName}.deadletter";
 
             await Task.WhenAll(
-                channel.ExchangeDeclareAsync(exchangeName, nameof(exchangeType), true, cancellationToken: cancellationToken),
+                channel.ExchangeDeclareAsync(exchangeName, exchangeType.GetEnumDescription(), true, cancellationToken: cancellationToken),
                 channel.QueueDeclareAsync(queueName, true, false, false, cancellationToken: cancellationToken),
                 channel.QueueDeclareAsync(deadLetterQueueName, true, false, false, cancellationToken: cancellationToken)
                 );

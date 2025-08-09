@@ -61,7 +61,7 @@ namespace Eventix.Shared.Infrastructure.EventBus
             var exchangeName = string.Empty.GetExchangeName<T>();
             var routingKey = string.Empty.GetRoutingKey<T>(exchangeType);
 
-            await _channel.ExchangeDeclareAsync(exchangeName, nameof(exchangeType), true, cancellationToken: cancellationToken);
+            await _channel.ExchangeDeclareAsync(exchangeName, exchangeType.GetEnumDescription(), true, cancellationToken: cancellationToken);
 
             var body = JsonSerializer.SerializeToUtf8Bytes(integrationEvent);
             var properties = new BasicProperties
@@ -90,7 +90,7 @@ namespace Eventix.Shared.Infrastructure.EventBus
             ) where T : IntegrationEvent
         {
             await EnsureConnectedAsync();
-            await _busFailureHandlingService.DeclareRetryInfrastructureAsync<T>(queueName, _channel, cancellationToken);
+            await _busFailureHandlingService.DeclareRetryInfrastructureAsync<T>(queueName, _channel, exchangeType, cancellationToken);
 
             var consumer = new AsyncEventingBasicConsumer(_channel);
             consumer.ReceivedAsync += async (model, eventArgs) =>

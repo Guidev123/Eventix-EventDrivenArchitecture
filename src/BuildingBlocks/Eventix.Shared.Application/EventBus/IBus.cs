@@ -1,6 +1,4 @@
-﻿using Eventix.Shared.Infrastructure.EventBus;
-
-namespace Eventix.Shared.Application.EventBus;
+﻿namespace Eventix.Shared.Application.EventBus;
 
 /// <summary>
 /// Represents a generic messaging service interface for publishing and subscribing integration events.

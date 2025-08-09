@@ -24,7 +24,7 @@ namespace Eventix.Modules.Users.Application.Users.DomainEvents
                 userResult.Value.Email,
                 userResult.Value.FirstName,
                 userResult.Value.LastName
-                ), cancellationToken);
+                ), ExchangeTypeEnum.Direct, cancellationToken);
         }
     }
 }
